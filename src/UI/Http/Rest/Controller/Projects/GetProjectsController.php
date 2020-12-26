@@ -1,0 +1,37 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\UI\Http\Rest\Controller\Projects;
+
+use App\Application\UseCase\Project\GetProjects\GetProjectsQuery;
+use App\UI\Http\Rest\Controller\AbstractQueryController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
+
+/**
+ * @Symfony\Component\Routing\Annotation\Route("/api/clients", methods={"GET"})
+ *
+ * @OpenApi\Annotations\Get (
+ *     path="/api/clients"
+ * )
+ */
+class GetProjectsController extends AbstractQueryController
+{
+    /**
+     * @return JsonResponse
+     * @throws ExceptionInterface
+     */
+    public function __invoke()
+    {
+        $results = $this->dispatch(new GetProjectsQuery(
+            intval($this->request->query->get('page', 0)),
+            intval($this->request->query->get('page_size', 0)),
+            $this->request->query->get('sort_by'),
+            $this->request->query->get('sort_order'),
+            $this->request->query->all('filters')
+        ));
+
+        return new JsonResponse($this->normalizer->normalize($results));
+    }
+}

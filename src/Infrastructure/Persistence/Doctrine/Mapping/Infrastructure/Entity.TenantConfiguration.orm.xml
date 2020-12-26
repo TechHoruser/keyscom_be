@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity repository-class="App\Infrastructure\Tenant\Repository\TenantConfigurationRepository"
+            name="App\Infrastructure\Tenant\Entity\TenantConfiguration"
+            table="tenant_infrastructure_configuration">
+
+        <id name="host" type="string" column="host" length="100"/>
+        <field name="userDb" type="string" column="user_db" length="100" nullable="false"/>
+        <field name="passwordDb" type="string" column="password_db" nullable="false"/>
+
+        <field name="createdAt" type="datetime" column="created_at" nullable="false"/>
+        <field name="updatedAt" type="datetime" column="updated_at" nullable="true"/>
+    </entity>
+</doctrine-mapping>
