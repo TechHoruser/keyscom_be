@@ -60,3 +60,7 @@ services:
     App\Application\Shared\Helper\SecurityHelper:
         arguments:
             $secret: '%app.secret%'
+
+    App\Infrastructure\EventSubscriber\AuditableEntitySubscriber:
+        tags:
+            - { name: 'doctrine.event_subscriber' }
