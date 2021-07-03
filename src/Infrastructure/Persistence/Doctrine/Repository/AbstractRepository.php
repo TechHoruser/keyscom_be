@@ -46,8 +46,9 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
     public function countAll($filters = []): int
     {
+        // REVIEW: %s.uuid by %s.* but error in DTO library
         $queryBuilder = $this->createQueryBuilder($this->getAliasTable())
-            ->select(sprintf('count(%s.*)', $this->getAliasTable()));
+            ->select(sprintf('count(%s.uuid)', $this->getAliasTable()));
 
         foreach ($filters as $fieldName => $fieldValue) {
             $this->addWhere($queryBuilder, $fieldName, $fieldValue);
