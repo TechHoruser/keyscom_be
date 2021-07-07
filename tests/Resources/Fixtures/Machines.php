@@ -2,14 +2,13 @@
 
 namespace App\Tests\Resources\Fixtures;
 
-use App\Domain\Client\Entity\Client;
 use App\Domain\Project\Entity\Project;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
 class Machines extends AbstractFixture implements DependentFixtureInterface
 {
-    public const PREFIX_REFERENCE = "machine-";
+    public const PREFIX_REFERENCE = "machine-%s-%s";
 
     public function getDependencies()
     {
@@ -18,17 +17,23 @@ class Machines extends AbstractFixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager)
     {
-        for ($clientIndex = 0; $clientIndex < $this->fixtureValues->getNumberOfClients(); ++$clientIndex) {
-            /** @var Client $client */
-            $client = $this->getReference(Clients::PREFIX_REFERENCE . $clientIndex);
-            foreach ($client->getProjects() as $project) {
-                $numberOfMachines = rand(1, $this->fixtureValues->getMaxMachinesPerProject());
-                for ($machineIndex = 0; $machineIndex < $numberOfMachines; ++$machineIndex) {
-                    $machine = $this->fakerFactory->newMachine($project);
+        $allowReference = explode("-", Projects::PREFIX_REFERENCE, 2)[0];
+        foreach (array_keys($this->referenceRepository->getIdentities()) as $savedReference) {
+            if (!str_starts_with($savedReference, $allowReference)) continue;
 
-                    $manager->persist($machine);
-                    $manager->flush();
-                }
+            $numberOfMachines = rand(1, $this->fixtureValues->getMaxMachinesPerProject());
+            for ($machineIndex = 0; $machineIndex < $numberOfMachines; ++$machineIndex) {
+                /** @var Project $project */
+                $project = $this->getReference($savedReference);
+                $machine = $this->fakerFactory->newMachine($project);
+
+                $manager->persist($machine);
+                $manager->flush();
+
+                $this->addReference(
+                    sprintf(self::PREFIX_REFERENCE, explode('-', $savedReference, 2)[1], $machineIndex),
+                    $machine
+                );
             }
         }
     }

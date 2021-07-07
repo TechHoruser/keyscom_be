@@ -30,12 +30,13 @@ class Tenants extends AbstractFixture implements FixtureInterface
             $tenant = new Tenant($tenantHost, $tenantConfig);
 
             $manager->persist($tenantConfig);
+            $manager->flush();
             $manager->persist($tenant);
             $manager->flush();
 
             $this->createUserInDb($manager, $tenantString, $tenantString);
 
-            $this->addReference(self::PREFIX_REFERENCE . $tenantIndex, $tenantConfig);
+            $this->addReference(self::PREFIX_REFERENCE . $tenantIndex, $tenant);
         }
     }
 

@@ -8,7 +8,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class Clients extends AbstractFixture implements DependentFixtureInterface
 {
-    public const PREFIX_REFERENCE = "client-";
+    public const PREFIX_REFERENCE = "client-%s-%s";
 
     public function getDependencies()
     {
@@ -21,12 +21,12 @@ class Clients extends AbstractFixture implements DependentFixtureInterface
             for ($clientIndex = 0; $clientIndex < $this->fixtureValues->getNumberOfClients(); ++$clientIndex) {
                 /** @var Tenant $tenant */
                 $tenant = $this->getReference(Tenants::PREFIX_REFERENCE . $tenantIndex);
-                $contract = $this->fakerFactory->newClient($tenant);
+                $client = $this->fakerFactory->newClient($tenant);
 
-                $manager->persist($contract);
+                $manager->persist($client);
                 $manager->flush();
 
-                $this->addReference(self::PREFIX_REFERENCE . $clientIndex, $contract);
+                $this->addReference(sprintf(self::PREFIX_REFERENCE, $tenantIndex, $clientIndex), $client);
             }
         }
     }

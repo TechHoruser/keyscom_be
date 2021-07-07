@@ -20,8 +20,8 @@ class FixtureValues implements FixtureValuesInterface
             ) :
             parse_ini_file('IniFiles/default_values.ini');
 
-        $this->numberOfClients = intval($ini['NUMBER_OF_WORKERS']);
-        $this->maxProjectsPerClient = intval($ini['MAX_NUMBER_OF_CONTRACTS_PER_WORKER']);
+        $this->numberOfClients = intval($ini['NUMBER_OF_CLIENTS']);
+        $this->maxProjectsPerClient = intval($ini['MAX_NUMBER_OF_PROJECTS_PER_CLIENT']);
         $this->maxMachinesPerProject = intval($ini['MAX_NUMBER_OF_MACHINES_PER_PROJECT']);
         $this->numberOfTenants = intval($ini['NUMBER_OF_TENANTS']);
     }

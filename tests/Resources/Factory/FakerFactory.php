@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Resources\Factory;
 
+use App\Domain\Client\Repository\ClientRepositoryInterface;
 use App\Domain\Machine\Entity\Machine;
 use App\Domain\Project\Entity\Project;
 use App\Domain\Client\Entity\Client;
@@ -14,10 +15,13 @@ use Faker\Generator;
 class FakerFactory implements FakerFactoryInterface
 {
     private Generator $faker;
+    private ClientRepositoryInterface $clientRepository;
 
-    public function __construct()
-    {
+    public function __construct(
+        ClientRepositoryInterface $clientRepository
+    ) {
         $this->faker = Factory::create();
+        $this->clientRepository = $clientRepository;
     }
 
     public function newClient(?Tenant $tenant = null): Client
@@ -33,9 +37,10 @@ class FakerFactory implements FakerFactoryInterface
 
     public function newProject(?Client $client = null): Project
     {
-        if (is_null($client)) {
-            $client = $this->newClient();
-        }
+        $client = is_null($client) ?
+            $this->newClient() :
+            $this->clientRepository->getByUuid($client->getUuid())
+        ;
 
         $startDate = $this->faker->dateTime;
         $contract = new Project(
