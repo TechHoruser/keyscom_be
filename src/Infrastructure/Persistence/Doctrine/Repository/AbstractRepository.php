@@ -19,6 +19,14 @@ abstract class AbstractRepository extends ServiceEntityRepository
         parent::__construct($registry, $this->getEntityRepositoryClass());
     }
 
+    public function getByUuid(string $uuid)
+    {
+        return $this->createQueryBuilder($this->getAliasTable())
+            ->where($this->getAliasTable().'.uuid = :uuid')
+            ->setParameter('uuid', $uuid)
+            ->getQuery()->getOneOrNullResult();
+    }
+
     public function complexFind(
         int $page = 0,
         int $pageSize = 0,
