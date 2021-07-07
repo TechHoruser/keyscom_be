@@ -16,7 +16,7 @@ class TenantRepository extends AbstractRepository implements TenantRepositoryInt
 
     protected function getEntityRepositoryClass(): string
     {
-        return Tenant ::class;
+        return Tenant::class;
     }
 
     public function findByHost(string $host): ?Tenant
