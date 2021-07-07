@@ -6,3 +6,7 @@ services:
     resource: '../../tests/Resources/Fixtures/*'
     tags: [ 'doctrine.fixture.orm' ]
     autowire: true
+
+  App\Tests\Resources\Factory\:
+    resource: '../../tests/Resources/Factory/*'
+    autowire: true
