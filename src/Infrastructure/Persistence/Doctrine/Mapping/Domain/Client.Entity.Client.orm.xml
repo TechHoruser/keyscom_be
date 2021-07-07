@@ -5,6 +5,10 @@
             <generator strategy="UUID"/>
         </id>
 
+        <field name="name" column="name"/>
+
+        <one-to-many field="projects" target-entity="App\Domain\Project\Entity\Project" mapped-by="client"/>
+
         <field name="createdAt" type="datetime" column="created_at" nullable="false"/>
         <field name="updatedAt" type="datetime" column="updated_at" nullable="true"/>
 

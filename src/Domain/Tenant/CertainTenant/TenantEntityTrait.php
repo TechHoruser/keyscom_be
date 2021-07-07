@@ -16,7 +16,7 @@ trait TenantEntityTrait
      */
     public function setTenant(?Tenant $tenant): self
     {
-        $this->tenantName = $tenant->getInfrastructureConfiguration()->getName();
+        $this->tenantName = $tenant->getHost();
 
         return $this;
     }

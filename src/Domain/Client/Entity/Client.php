@@ -17,7 +17,7 @@ class Client
     private string $name;
 
     /** @var Project[] $projects */
-    private array $projects;
+    private iterable $projects;
 
     /**
      * Client constructor.
@@ -73,7 +73,7 @@ class Client
     /**
      * @return Project[]
      */
-    public function getProjects(): array
+    public function getProjects(): iterable
     {
         return $this->projects;
     }
@@ -81,7 +81,7 @@ class Client
     /**
      * @param Project[] $projects
      */
-    public function setProjects(array $projects): void
+    public function setProjects(iterable $projects): void
     {
         $this->projects = $projects;
     }

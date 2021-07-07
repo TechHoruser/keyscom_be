@@ -5,6 +5,17 @@
             <generator strategy="UUID"/>
         </id>
 
+        <field name="name" column="name"/>
+
+        <field name="startDate" type="datetime" column="start_date" nullable="true"/>
+        <field name="endDate" type="datetime" column="end_date" nullable="true"/>
+
+        <one-to-many field="machines" target-entity="App\Domain\Machine\Entity\Machine" mapped-by="project" index-by="uuid"/>
+
+        <many-to-one field="client" target-entity="App\Domain\Client\Entity\Client">
+            <join-column name="client_uuid" referenced-column-name="uuid"/>
+        </many-to-one>
+
         <field name="createdAt" type="datetime" column="created_at" nullable="false"/>
         <field name="updatedAt" type="datetime" column="updated_at" nullable="true"/>
 

@@ -5,6 +5,16 @@
             <generator strategy="UUID"/>
         </id>
 
+        <field name="ip" column="ip"/>
+
+        <field name="domain" column="domain" nullable="true"/>
+
+        <field name="type" column="type" nullable="true"/>
+
+        <many-to-one field="project" target-entity="App\Domain\Project\Entity\Project">
+            <join-column name="project_uuid" referenced-column-name="uuid"/>
+        </many-to-one>
+
         <field name="createdAt" type="datetime" column="created_at" nullable="false"/>
         <field name="updatedAt" type="datetime" column="updated_at" nullable="true"/>
 

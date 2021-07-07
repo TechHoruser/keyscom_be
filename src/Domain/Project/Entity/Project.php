@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Domain\Project\Entity;
 
 use App\Domain\Client\Entity\Client;
+use App\Domain\Machine\Entity\Machine;
 use App\Domain\Shared\Auditable\AuditableEntityTrait;
 use App\Domain\Tenant\CertainTenant\TenantEntityTrait;
 
@@ -19,6 +20,9 @@ class Project
     private ?\DateTime $endDate;
 
     private Client $client;
+
+    /** @var Machine[] $machines */
+    private iterable $machines;
 
     /**
      * Project constructor.
@@ -115,5 +119,29 @@ class Project
     public function setClient(Client $client): void
     {
         $this->client = $client;
+    }
+
+    /**
+     * @param Machine $machine
+     */
+    public function addMachine(Machine $machine): void
+    {
+        $this->machines[] = $machine;
+    }
+
+    /**
+     * @return Machine[]
+     */
+    public function getMachines(): iterable
+    {
+        return $this->machines;
+    }
+
+    /**
+     * @param Machine[] $machines
+     */
+    public function setMachines(iterable $machines): void
+    {
+        $this->machines = $machines;
     }
 }
