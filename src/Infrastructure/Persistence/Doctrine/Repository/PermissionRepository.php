@@ -178,11 +178,7 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
             implode(' OR ', $additionalConditions)
         ));
 
-        try {
-            return $queryBuilder->getQuery()->getSingleResult();
-        } catch (\Exception $exception) {
-            return null;
-        }
+        return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
     /**
@@ -194,28 +190,33 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
      */
     public function save(Permission $permission): Permission
     {
-        $permissions = $this->getChildPermissionsOfUser(
+        if (!is_null($this->getParentOrSamePermissionOfUser(
             $permission->getUser()->getUuid(),
             $permission->getUserPermissionType(),
             $permission->getRelatedEntity(),
             $permission->getFilterTypeOfMachine(),
             $permission->getRelatedEntityUuid()
-        );
-        if (count($permissions) > 0)
-            throw new \Exception('Hay que revocar los permisos hijos');
+        ))) {
+            throw new \Exception('The user already have this permission.');
+        }
 
-        $value = $this->getParentOrSamePermissionOfUser(
-            $permission->getUser()->getUuid(),
-            $permission->getUserPermissionType(),
-            $permission->getRelatedEntity(),
-            $permission->getFilterTypeOfMachine(),
-            $permission->getRelatedEntityUuid()
-        );
-        if (!is_null($value))
-            throw new \Exception('Ya dispones de estos permisos');
+        return $this->_em->transactional(function($em) use ($permission) {
+            $childrenPermissions = $this->getChildPermissionsOfUser(
+                $permission->getUser()->getUuid(),
+                $permission->getUserPermissionType(),
+                $permission->getRelatedEntity(),
+                $permission->getFilterTypeOfMachine(),
+                $permission->getRelatedEntityUuid()
+            );
+            if (count($childrenPermissions) > 0) {
+                foreach ($childrenPermissions as $childrenPermission) {
+                    $em->remove($childrenPermission);
+                }
+            }
 
-        $this->_em->persist($permission);
-        $this->_em->flush();
-        return $permission;
+            $em->persist($permission);
+            $em->flush();
+            return $permission;
+        });
     }
 }

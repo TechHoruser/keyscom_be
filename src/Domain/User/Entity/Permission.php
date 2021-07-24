@@ -22,6 +22,9 @@ class Permission
     private ?string $typeOfMachine;
     private ?string $relatedEntityUuid;
 
+    public const PERMISSION_ADMIN = 'admin';
+    public const PERMISSION_SSH = 'ssh';
+
     /**
      * Permission constructor.
      * @param string|null $uuid

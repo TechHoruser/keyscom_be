@@ -12,7 +12,7 @@ class AssignmentPermissionCommand implements CommandInterface
     private string $userUuid;
     private string $userPermissionType;
     /** @var null|string('machine', 'project', 'client') $relatedEntity */
-    private ?string $relatedEntity;
+    private ?string $typeRelatedEntity;
     private ?string $typeOfMachine;
     private ?string $relatedEntityUuid;
 
@@ -21,7 +21,7 @@ class AssignmentPermissionCommand implements CommandInterface
      * @param string $uuidOfUserWhoGivesPermissions
      * @param string $userUuid
      * @param string $userPermissionType
-     * @param string|null $relatedEntity
+     * @param string|null $typeRelatedEntity
      * @param string|null $typeOfMachine
      * @param string|null $relatedEntityUuid
      */
@@ -29,14 +29,14 @@ class AssignmentPermissionCommand implements CommandInterface
         string $uuidOfUserWhoGivesPermissions,
         string $userUuid,
         string $userPermissionType,
-        ?string $relatedEntity,
+        ?string $typeRelatedEntity,
         ?string $typeOfMachine,
         ?string $relatedEntityUuid
     ) {
         $this->uuidOfUserWhoGivesPermissions = $uuidOfUserWhoGivesPermissions;
         $this->userUuid = $userUuid;
         $this->userPermissionType = $userPermissionType;
-        $this->relatedEntity = $relatedEntity;
+        $this->typeRelatedEntity = $typeRelatedEntity;
         $this->typeOfMachine = $typeOfMachine;
         $this->relatedEntityUuid = $relatedEntityUuid;
     }
@@ -68,9 +68,9 @@ class AssignmentPermissionCommand implements CommandInterface
     /**
      * @return string|null
      */
-    public function getRelatedEntity(): ?string
+    public function getTypeRelatedEntity(): ?string
     {
-        return $this->relatedEntity;
+        return $this->typeRelatedEntity;
     }
 
     /**

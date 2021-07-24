@@ -138,7 +138,8 @@ class PermissionRepositoryTest extends WebTestCase
     }
 
     public function testIfGetChildPermissionsWhitThatOfUserReturnSuccessfullyV1()
-    {        $this->permissionRepository->save(
+    {
+        $this->permissionRepository->save(
             new Permission(
                 null,
                 $this->user,
@@ -163,7 +164,8 @@ class PermissionRepositoryTest extends WebTestCase
     }
 
     public function testIfGetChildPermissionsWhitThatOfUserReturnSuccessfullyV2()
-    {        $this->permissionRepository->save(
+    {
+        $this->permissionRepository->save(
             new Permission(
                 null,
                 $this->user,
@@ -198,7 +200,8 @@ class PermissionRepositoryTest extends WebTestCase
     }
 
     public function testIfGetChildPermissionsWhitThatOfUserReturnSuccessfullyV3()
-    {        $this->permissionRepository->save(
+    {
+        $permission = $this->permissionRepository->save(
             new Permission(
                 null,
                 $this->user,
@@ -223,7 +226,8 @@ class PermissionRepositoryTest extends WebTestCase
     }
 
     public function testIfGetChildPermissionsWhitThatOfUserReturnSuccessfullyV4()
-    {        $this->permissionRepository->save(
+    {
+        $permission = $this->permissionRepository->save(
             new Permission(
                 null,
                 $this->user,
@@ -274,6 +278,7 @@ class PermissionRepositoryTest extends WebTestCase
 
     public function testIfGetChildPermissionsWhitThatOfUserReturnSuccessfullyV6()
     {
+        // GIVE
         $this->permissionRepository->save(
             new Permission(
                 null,
@@ -285,10 +290,6 @@ class PermissionRepositoryTest extends WebTestCase
             )
         );
 
-        // EXPECT
-        $this->expectException(\Exception::class);
-
-        // WHEN
         $this->permissionRepository->save(
             new Permission(
                 null,
@@ -299,6 +300,18 @@ class PermissionRepositoryTest extends WebTestCase
                 $this->projects['project_1_1']->getUuid()
             )
         );
+
+        // WHEN
+        $results = $this->permissionRepository->getChildPermissionsOfUser(
+            $this->user->getUuid(),
+            'ssh',
+            'client',
+            null,
+            $this->clients['client_1']->getUuid()
+        );
+
+        // THEN
+        $this->assertEquals(1, count($results));
     }
 
     public function testIfGetParentPermissionWithoutParentPermissionV1()
