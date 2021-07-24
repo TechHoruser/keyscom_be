@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Http\Rest\Controller\Projects;
+namespace App\UI\Http\Rest\Controller\Machines;
 
-use App\Application\UseCase\Project\GetProjects\GetProjectsQuery;
+use App\Application\UseCase\Machine\GetMachines\GetMachinesQuery;
 use App\UI\Http\Rest\Controller\AbstractQueryController;
 use OpenApi\Annotations as OA;
 use Symfony\Component\Routing\Annotation\Route as Route;
@@ -12,12 +12,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 /**
- * @Route("/projects", methods={"GET"})
+ * @Route("/machines", methods={"GET"})
  *
  * @OA\Get (
- *     path="/projects",
- *     summary="Get Projects",
- *     tags={"projects"},
+ *     path="/machines",
+ *     summary="Get Machines",
+ *     tags={"machines"},
  *     @OA\Parameter (
  *         name="page",
  *         in="query",
@@ -25,7 +25,7 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface;
  *     )
  * )
  */
-class GetProjectsController extends AbstractQueryController
+class GetMachinesController extends AbstractQueryController
 {
     /**
      * @return JsonResponse
@@ -33,7 +33,7 @@ class GetProjectsController extends AbstractQueryController
      */
     public function __invoke()
     {
-        $results = $this->dispatch(new GetProjectsQuery(
+        $results = $this->dispatch(new GetMachinesQuery(
             intval($this->request->query->get('page', 0)),
             intval($this->request->query->get('page_size', 0)),
             $this->request->query->get('sort_by'),

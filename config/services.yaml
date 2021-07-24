@@ -53,7 +53,17 @@ services:
             tags:
                 - { name: messenger.message_handler, bus: event.bus }
 
+    Symfony\Component\DependencyInjection\ContainerInterface: '@service_container'
+
+    App\Infrastructure\Tenant\TenantSwitcher:
+        arguments:
+            - '@doctrine'
+            - '@service_container'
+            - '@App\Application\Shared\Helper\SecurityHelper'
+
     App\Infrastructure\EventSubscriber\DoctrineSetTenantSubscriber:
+        arguments:
+            - '@service_container'
         tags:
             - { name: 'doctrine.event_subscriber' }
 

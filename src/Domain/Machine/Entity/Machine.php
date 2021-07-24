@@ -7,14 +7,16 @@ namespace App\Domain\Machine\Entity;
 use App\Domain\Project\Entity\Project;
 use App\Domain\Shared\Auditable\AuditableEntityTrait;
 use App\Domain\Tenant\CertainTenant\TenantEntityTrait;
+use Ramsey\Uuid\Uuid;
 
 class Machine
 {
     use AuditableEntityTrait;
     use TenantEntityTrait;
 
-    private ?string $uuid;
+    private string $uuid;
     private string $ip;
+    private ?string $name;
     private ?string $domain;
     private ?string $type;
 
@@ -24,31 +26,33 @@ class Machine
      * Machine constructor.
      * @param string|null $uuid
      * @param string $ip
+     * @param string|null $name
      * @param string|null $domain
      * @param string|null $type
      * @param Project $project
      */
-    public function __construct(?string $uuid, string $ip, ?string $domain, ?string $type, Project $project)
+    public function __construct(?string $uuid, string $ip, ?string $name, ?string $domain, ?string $type, Project $project)
     {
-        $this->uuid = $uuid;
+        $this->uuid = $uuid ?? Uuid::uuid4()->toString();
         $this->ip = $ip;
+        $this->name = $name;
         $this->domain = $domain;
         $this->type = $type;
         $this->project = $project;
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getUuid(): ?string
+    public function getUuid(): string
     {
         return $this->uuid;
     }
 
     /**
-     * @param string|null $uuid
+     * @param string $uuid
      */
-    public function setUuid(?string $uuid): void
+    public function setUuid(string $uuid): void
     {
         $this->uuid = $uuid;
     }
@@ -67,6 +71,22 @@ class Machine
     public function setIp(string $ip): void
     {
         $this->ip = $ip;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string|null $name
+     */
+    public function setName(?string $name): void
+    {
+        $this->name = $name;
     }
 
     /**

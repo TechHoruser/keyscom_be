@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity repository-class="App\Infrastructure\Persistence\Doctrine\Repository\Machine\MachineRepository" name="App\Domain\Machine\Entity\Machine" table="machines">
+    <entity repository-class="App\Infrastructure\Persistence\Doctrine\Repository\User\PermissionRepository" name="App\Domain\User\Entity\Permission" table="permissions">
         <id name="uuid" type="guid" column="uuid">
             <generator strategy="UUID"/>
         </id>
 
-        <field name="ip" column="ip"/>
+        <field name="userPermissionType" column="user_permission_type" nullable="false"/>
+        <field name="relatedEntity" column="related_entity" nullable="true"/>
+        <field name="typeOfMachine" column="type_of_machine" nullable="true"/>
+        <field name="relatedEntityUuid" type="guid" column="related_entity_uuid" nullable="true"/>
 
-        <field name="name" column="name" nullable="true"/>
-
-        <field name="domain" column="domain" nullable="true"/>
-
-        <field name="type" column="type" nullable="true"/>
-
-        <many-to-one field="project" target-entity="App\Domain\Project\Entity\Project">
-            <join-column name="project_uuid" referenced-column-name="uuid"/>
+        <many-to-one field="user" target-entity="App\Domain\User\Entity\User">
+            <join-column name="user_uuid" referenced-column-name="uuid"/>
         </many-to-one>
 
         <field name="createdAt" type="datetime" column="created_at" nullable="false"/>

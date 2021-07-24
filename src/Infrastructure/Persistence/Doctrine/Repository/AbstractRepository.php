@@ -33,8 +33,8 @@ abstract class AbstractRepository extends ServiceEntityRepository
         ?string $sortBy = null,
         ?string $sortOrder = null,
         array $filters = []
-    ): iterable {
-        $queryBuilder = $this->createQueryBuilder($this->getAliasTable());
+        ): iterable {
+            $queryBuilder = $this->createQueryBuilder($this->getAliasTable());
 
         if ($page > 0 && $pageSize > 0) {
             $queryBuilder->setFirstResult($pageSize * ($page - 1))
@@ -87,12 +87,12 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
         $classMetadata = $classMetadata ?? $this->_em->getClassMetadata($this->getEntityRepositoryClass());
 
-        $separatedFieldNames = explode('.', $fieldName);
+        $separatedFieldNames = explode('.', $fieldName, 2);
         $parentField = $separatedFieldNames[0];
         if (!isset($classMetadata->associationMappings[$parentField])) {
             $callbackMethod(
                 $queryBuilder,
-                $fieldName,
+                $separatedFieldNames[1] ?? $separatedFieldNames[0],
                 $value,
                 $alias,
                 $classMetadata
@@ -110,14 +110,14 @@ abstract class AbstractRepository extends ServiceEntityRepository
         $this->addRecursiveJoin(
             $callbackMethod,
             $queryBuilder,
-            implode('.', array_slice($separatedFieldNames, 1)),
+            $separatedFieldNames[1],
             $value,
             $parentField,
             $classMetadata
         );
     }
 
-    private function callbackWhere(
+    private function _callbackWhere(
         QueryBuilder $queryBuilder,
         string $fieldName,
         $fieldValue,
@@ -133,9 +133,15 @@ abstract class AbstractRepository extends ServiceEntityRepository
         if ($fieldMapping['type'] === 'string') {
             $this->addWhereString($queryBuilder, $fieldName, $fieldValue);
         }
+        if ($fieldMapping['type'] === 'guid') {
+            $this->addWhereUuid($queryBuilder, $fieldName, $fieldValue);
+        }
+        if ($fieldMapping['type'] == 'integer') {
+            $this->addWhereInteger($queryBuilder, $fieldName, $fieldValue);
+        }
     }
 
-    private function callbackOrder(
+    private function _callbackOrder(
         QueryBuilder $queryBuilder,
         string $fieldName,
         $value,
@@ -155,15 +161,17 @@ abstract class AbstractRepository extends ServiceEntityRepository
         $dateTimes = explode('/', $fieldValue);
 
         $fromDate = $dateTimes[0];
-        $fromOperator = count($dateTimes) > 1 ? '>=' : '=';
-        $queryBuilder->andWhere(
-            sprintf(
-                "%s %s '%s'",
-                $fieldName,
-                $fromOperator,
-                $fromDate
-            )
-        );
+        if ($fromDate) {
+            $fromOperator = count($dateTimes) > 1 ? '>=' : '=';
+            $queryBuilder->andWhere(
+                sprintf(
+                    "%s %s '%s'",
+                    $fieldName,
+                    $fromOperator,
+                    $fromDate
+                )
+            );
+        }
         $toDate = count($dateTimes) > 1 ? $dateTimes[1] : null;
         if ($toDate) {
             $queryBuilder->andWhere(sprintf("%s <= '%s'", $fieldName, $toDate));
@@ -179,4 +187,25 @@ abstract class AbstractRepository extends ServiceEntityRepository
     {
         $queryBuilder->andWhere(sprintf('LOWER(%s) LIKE \'%%%s%%\'', $fieldName, mb_strtolower($fieldValue)));
     }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param string $fieldName
+     * @param $fieldValue
+     */
+    protected function addWhereUuid(QueryBuilder $queryBuilder, string $fieldName, $fieldValue): void
+    {
+        $queryBuilder->andWhere(sprintf('%s = \'%s\'', $fieldName, mb_strtolower($fieldValue)));
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param string $fieldName
+     * @param $fieldValue
+     */
+    protected function addWhereInteger(QueryBuilder $queryBuilder, string $fieldName, $fieldValue): void
+    {
+        $queryBuilder->andWhere(sprintf('%s = %s', $fieldName, intval($fieldValue)));
+    }
+
 }

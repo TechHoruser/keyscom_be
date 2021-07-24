@@ -8,13 +8,14 @@ use App\Domain\Client\Entity\Client;
 use App\Domain\Machine\Entity\Machine;
 use App\Domain\Shared\Auditable\AuditableEntityTrait;
 use App\Domain\Tenant\CertainTenant\TenantEntityTrait;
+use Ramsey\Uuid\Uuid;
 
 class Project
 {
     use AuditableEntityTrait;
     use TenantEntityTrait;
 
-    private ?string $uuid;
+    private string $uuid;
     private string $name;
     private ?\DateTime $startDate;
     private ?\DateTime $endDate;
@@ -34,7 +35,7 @@ class Project
      */
     public function __construct(?string $uuid, string $name, ?\DateTime $startDate, ?\DateTime $endDate, Client $client)
     {
-        $this->uuid = $uuid;
+        $this->uuid = $uuid ?? Uuid::uuid4()->toString();
         $this->name = $name;
         $this->startDate = $startDate;
         $this->endDate = $endDate;
@@ -42,17 +43,17 @@ class Project
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getUuid(): ?string
+    public function getUuid(): string
     {
         return $this->uuid;
     }
 
     /**
-     * @param string|null $uuid
+     * @param string $uuid
      */
-    public function setUuid(?string $uuid): void
+    public function setUuid(string $uuid): void
     {
         $this->uuid = $uuid;
     }

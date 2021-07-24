@@ -7,13 +7,14 @@ namespace App\Domain\Client\Entity;
 use App\Domain\Project\Entity\Project;
 use App\Domain\Shared\Auditable\AuditableEntityTrait;
 use App\Domain\Tenant\CertainTenant\TenantEntityTrait;
+use Ramsey\Uuid\Uuid;
 
 class Client
 {
     use AuditableEntityTrait;
     use TenantEntityTrait;
 
-    private ?string $uuid;
+    private string $uuid;
     private string $name;
 
     /** @var Project[] $projects */
@@ -26,22 +27,22 @@ class Client
      */
     public function __construct(?string $uuid, string $name)
     {
-        $this->uuid = $uuid;
+        $this->uuid = $uuid ?? Uuid::uuid4()->toString();
         $this->name = $name;
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getUuid(): ?string
+    public function getUuid(): string
     {
         return $this->uuid;
     }
 
     /**
-     * @param string|null $uuid
+     * @param string $uuid
      */
-    public function setUuid(?string $uuid): void
+    public function setUuid(string $uuid): void
     {
         $this->uuid = $uuid;
     }
