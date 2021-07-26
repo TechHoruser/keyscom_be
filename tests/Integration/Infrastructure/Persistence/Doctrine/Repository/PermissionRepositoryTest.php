@@ -24,12 +24,13 @@ class PermissionRepositoryTest extends WebTestCase
     private DateTimeHelperInterface $dateTimeHelper;
 
     private User $user;
+    private User $adminUser;
     /** @var Client[] $clients */
-    private $clients;
+    private array $clients;
     /** @var Project[] $projects */
-    private $projects;
+    private array $projects;
     /** @var Machine[] $machines */
-    private $machines;
+    private array $machines;
 
     protected function setUp(): void
     {
@@ -53,7 +54,14 @@ class PermissionRepositoryTest extends WebTestCase
             null,
             ['email' => 'developer@keyscom.com']
         )[0];
+        $this->adminUser = $userRepository->complexFind(0,
+            0,
+            null,
+            null,
+            ['email' => 'admin@keyscom.com']
+        )[0];
 
+        /** @var Client|Machine|Project $v */
         $createAssociativeArrayByName = fn($array) => array_column(
             array_map(
                 fn ($k, $v) => [$v->getName(), $v],
@@ -142,6 +150,7 @@ class PermissionRepositoryTest extends WebTestCase
         $this->permissionRepository->save(
             new Permission(
                 null,
+                $this->adminUser,
                 $this->user,
                 'ssh',
                 'client',
@@ -168,6 +177,7 @@ class PermissionRepositoryTest extends WebTestCase
         $this->permissionRepository->save(
             new Permission(
                 null,
+                $this->adminUser,
                 $this->user,
                 'ssh',
                 'project',
@@ -178,6 +188,7 @@ class PermissionRepositoryTest extends WebTestCase
         $this->permissionRepository->save(
             new Permission(
                 null,
+                $this->adminUser,
                 $this->user,
                 'ssh',
                 'project',
@@ -201,9 +212,10 @@ class PermissionRepositoryTest extends WebTestCase
 
     public function testIfGetChildPermissionsWhitThatOfUserReturnSuccessfullyV3()
     {
-        $permission = $this->permissionRepository->save(
+        $this->permissionRepository->save(
             new Permission(
                 null,
+                $this->adminUser,
                 $this->user,
                 'ssh',
                 'project',
@@ -227,9 +239,10 @@ class PermissionRepositoryTest extends WebTestCase
 
     public function testIfGetChildPermissionsWhitThatOfUserReturnSuccessfullyV4()
     {
-        $permission = $this->permissionRepository->save(
+        $this->permissionRepository->save(
             new Permission(
                 null,
+                $this->adminUser,
                 $this->user,
                 'ssh',
                 'machine',
@@ -240,6 +253,7 @@ class PermissionRepositoryTest extends WebTestCase
         $this->permissionRepository->save(
             new Permission(
                 null,
+                $this->adminUser,
                 $this->user,
                 'ssh',
                 'project',
@@ -282,6 +296,7 @@ class PermissionRepositoryTest extends WebTestCase
         $this->permissionRepository->save(
             new Permission(
                 null,
+                $this->adminUser,
                 $this->user,
                 'ssh',
                 'machine',
@@ -293,6 +308,7 @@ class PermissionRepositoryTest extends WebTestCase
         $this->permissionRepository->save(
             new Permission(
                 null,
+                $this->adminUser,
                 $this->user,
                 'ssh',
                 'project',
@@ -379,6 +395,7 @@ class PermissionRepositoryTest extends WebTestCase
         $this->permissionRepository->save(
             new Permission(
                 null,
+                $this->adminUser,
                 $this->user,
                 'ssh',
                 'project',
@@ -394,6 +411,7 @@ class PermissionRepositoryTest extends WebTestCase
         $this->permissionRepository->save(
             new Permission(
                 null,
+                $this->adminUser,
                 $this->user,
                 'ssh',
                 'machine',

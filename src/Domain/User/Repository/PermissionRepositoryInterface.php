@@ -8,6 +8,8 @@ use App\Domain\User\Entity\Permission;
 
 interface PermissionRepositoryInterface
 {
+    public function getByUuid(string $uuid): ?Permission;
+
     public function permissionsOfUser(string $userUuid): iterable;
 
     /**

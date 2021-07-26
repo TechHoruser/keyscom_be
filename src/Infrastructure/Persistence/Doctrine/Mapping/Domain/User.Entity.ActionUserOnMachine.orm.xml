@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity repository-class="App\Infrastructure\Persistence\Doctrine\Repository\User\ActionUserOnMachineRepository" name="App\Domain\User\Entity\ActionUserOnMachine" table="action_user_on_machine">
+        <id name="uuid" type="guid" column="uuid">
+            <generator strategy="UUID"/>
+        </id>
+
+        <field name="actionToDo" column="action_to_do"/>
+        <field name="processed" column="processed" type="boolean"/>
+        <field name="canceled" column="canceled" type="boolean"/>
+
+        <many-to-one field="permission" target-entity="App\Domain\User\Entity\Permission">
+            <join-column name="permission_uuid" referenced-column-name="uuid"/>
+        </many-to-one>
+
+        <many-to-one field="machine" target-entity="App\Domain\Machine\Entity\Machine">
+            <join-column name="machine_uuid" referenced-column-name="uuid"/>
+        </many-to-one>
+
+        <field name="createdAt" type="datetime" column="created_at"/>
+        <field name="updatedAt" type="datetime" column="updated_at" nullable="true"/>
+
+        <field name="tenantName" column="tenant_name" length="100" nullable="true"/>
+
+        <indexes>
+            <index columns="created_at"/>
+            <index columns="updated_at"/>
+            <index columns="action_to_do"/>
+            <index columns="processed"/>
+            <index columns="canceled"/>
+        </indexes>
+    </entity>
+</doctrine-mapping>

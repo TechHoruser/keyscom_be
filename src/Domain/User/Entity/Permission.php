@@ -14,6 +14,7 @@ class Permission
     use TenantEntityTrait;
 
     private string $uuid;
+    private User $createdBy;
     private User $user;
     /** @var string('admin','ssh') $userPermissionType */
     private string $userPermissionType;
@@ -21,6 +22,10 @@ class Permission
     private ?string $relatedEntity;
     private ?string $typeOfMachine;
     private ?string $relatedEntityUuid;
+    private bool $reverted;
+
+    /** @var ActionUserOnMachine[] $actions */
+    private iterable $actions;
 
     public const PERMISSION_ADMIN = 'admin';
     public const PERMISSION_SSH = 'ssh';
@@ -28,6 +33,8 @@ class Permission
     /**
      * Permission constructor.
      * @param string|null $uuid
+     * @param User $created
+     *By
      * @param User $user
      * @param string $userPermissionType
      * @param string|null $relatedEntity
@@ -36,6 +43,7 @@ class Permission
      */
     public function __construct(
         ?string $uuid,
+        User $createdBy,
         User $user,
         string $userPermissionType,
         ?string $relatedEntity,
@@ -43,11 +51,13 @@ class Permission
         ?string $relatedEntityUuid
     ) {
         $this->uuid = $uuid ?? Uuid::uuid4()->toString();
+        $this->createdBy = $createdBy;
         $this->user = $user;
         $this->userPermissionType = $userPermissionType;
         $this->relatedEntity = $relatedEntity;
         $this->typeOfMachine = $typeOfMachine;
         $this->relatedEntityUuid = $relatedEntityUuid;
+        $this->reverted = false;
     }
 
     /**
@@ -64,6 +74,22 @@ class Permission
     public function setUuid(string $uuid): void
     {
         $this->uuid = $uuid;
+    }
+
+    /**
+     * @return User
+     */
+    public function getCreatedBy(): User
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * @param User $createdBy
+     */
+    public function setCreatedBy(User $createdBy): void
+    {
+        $this->createdBy = $createdBy;
     }
 
     /**
@@ -117,7 +143,7 @@ class Permission
     /**
      * @return string|null
      */
-    public function getFilterTypeOfMachine(): ?string
+    public function getTypeOfMachine(): ?string
     {
         return $this->typeOfMachine;
     }
@@ -125,7 +151,7 @@ class Permission
     /**
      * @param string|null $typeOfMachine
      */
-    public function setFilterTypeOfMachine(?string $typeOfMachine): void
+    public function setTypeOfMachine(?string $typeOfMachine): void
     {
         $this->typeOfMachine = $typeOfMachine;
     }
@@ -144,5 +170,45 @@ class Permission
     public function setRelatedEntityUuid(?string $relatedEntityUuid): void
     {
         $this->relatedEntityUuid = $relatedEntityUuid;
+    }
+
+    /**
+     * @param ActionUserOnMachine $action
+     */
+    public function addAction(ActionUserOnMachine $action): void
+    {
+        $this->actions[] = $action;
+    }
+
+    /**
+     * @return ActionUserOnMachine[]
+     */
+    public function getActions(): iterable
+    {
+        return $this->actions;
+    }
+
+    /**
+     * @param ActionUserOnMachine[] $actions
+     */
+    public function setActions(iterable $actions): void
+    {
+        $this->actions = $actions;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isReverted(): bool
+    {
+        return $this->reverted;
+    }
+
+    /**
+     * @param bool $reverted
+     */
+    public function setReverted(bool $reverted): void
+    {
+        $this->reverted = $reverted;
     }
 }

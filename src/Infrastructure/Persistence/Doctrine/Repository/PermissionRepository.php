@@ -8,7 +8,6 @@ use App\Domain\Machine\Entity\Machine;
 use App\Domain\Project\Entity\Project;
 use App\Domain\User\Entity\Permission;
 use App\Domain\User\Repository\PermissionRepositoryInterface;
-use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 class PermissionRepository extends AbstractRepository implements PermissionRepositoryInterface
@@ -26,6 +25,11 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry);
+    }
+
+    public function getByUuid(string $uuid): ?Permission
+    {
+        return parent::getByUuid($uuid);
     }
 
     public function permissionsOfUser(string $userUuid): iterable
@@ -194,29 +198,27 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
             $permission->getUser()->getUuid(),
             $permission->getUserPermissionType(),
             $permission->getRelatedEntity(),
-            $permission->getFilterTypeOfMachine(),
+            $permission->getTypeOfMachine(),
             $permission->getRelatedEntityUuid()
         ))) {
             throw new \Exception('The user already have this permission.');
         }
 
-        return $this->_em->transactional(function($em) use ($permission) {
-            $childrenPermissions = $this->getChildPermissionsOfUser(
-                $permission->getUser()->getUuid(),
-                $permission->getUserPermissionType(),
-                $permission->getRelatedEntity(),
-                $permission->getFilterTypeOfMachine(),
-                $permission->getRelatedEntityUuid()
-            );
-            if (count($childrenPermissions) > 0) {
-                foreach ($childrenPermissions as $childrenPermission) {
-                    $em->remove($childrenPermission);
-                }
+        $childrenPermissions = $this->getChildPermissionsOfUser(
+            $permission->getUser()->getUuid(),
+            $permission->getUserPermissionType(),
+            $permission->getRelatedEntity(),
+            $permission->getTypeOfMachine(),
+            $permission->getRelatedEntityUuid()
+        );
+        if (count($childrenPermissions) > 0) {
+            foreach ($childrenPermissions as $childrenPermission) {
+                $this->_em->remove($childrenPermission);
             }
+        }
 
-            $em->persist($permission);
-            $em->flush();
-            return $permission;
-        });
+        $this->_em->persist($permission);
+        $this->_em->flush();
+        return $permission;
     }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\UI\Http\Rest\Controller\Users;
 
-use App\Application\UseCase\User\AssignmentPermission\AssignmentPermissionCommand;
+use App\Application\UseCase\User\RollbackPermission\RollbackPermissionCommand;
 use App\UI\Http\Rest\Controller\AbstractCommandController;
 use OpenApi\Annotations as OA;
 use Symfony\Component\Routing\Annotation\Route as Route;
@@ -38,13 +38,9 @@ class AssignmentPermissionController extends AbstractCommandController
      */
     public function __invoke()
     {
-        $results = $this->dispatch(new AssignmentPermissionCommand(
+        $results = $this->dispatch(new RollbackPermissionCommand(
             '5c1f1b27-ff41-43a9-95b3-6db79de86903',
-            $this->request->request->get('userUuid'),
-            $this->request->request->get('userPermissionType'),
-            $this->request->request->get('relatedEntity'),
-            $this->request->request->get('typeOfMachine'),
-            $this->request->request->get('relatedEntityUuid')
+            '5c1f1b27-ff41-43a9-95b3-6db79de86903'
         ));
 
         return new JsonResponse($this->normalizer->normalize($results));
