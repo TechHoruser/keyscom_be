@@ -14,8 +14,8 @@ interface PermissionRepositoryInterface
 
     /**
      * @param string $userUuid
-     * @param string('admin','ssh') $userType
-     * @param null|string('machine', 'project', 'client') $relatedEntity
+     * @param string('admin','ssh') $userPermissionType
+     * @param null|string('machine', 'project', 'client') $typeRelatedEntity
      * @param string|null $typeOfMachine
      * @param string|null $relatedEntityUuid
      * @return iterable
@@ -30,8 +30,8 @@ interface PermissionRepositoryInterface
 
     /**
      * @param string $userUuid
-     * @param string('admin','ssh') $userType
-     * @param null|string('machine', 'project', 'client') $relatedEntity
+     * @param string('admin','ssh') $userPermissionType
+     * @param null|string('machine', 'project', 'client') $typeRelatedEntity
      * @param string|null $typeOfMachine
      * @param string|null $relatedEntityUuid
      * @return Permission|null
