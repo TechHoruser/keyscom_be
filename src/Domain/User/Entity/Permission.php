@@ -6,6 +6,8 @@ namespace App\Domain\User\Entity;
 
 use App\Domain\Shared\Auditable\AuditableEntityTrait;
 use App\Domain\Tenant\CertainTenant\TenantEntityTrait;
+use App\Domain\User\Enums\PermissionRelatedEntity;
+use App\Domain\User\Enums\PermissionType;
 use Ramsey\Uuid\Uuid;
 
 class Permission
@@ -16,10 +18,8 @@ class Permission
     private string $uuid;
     private User $createdBy;
     private User $user;
-    /** @var string('admin','ssh') $userPermissionType */
-    private string $userPermissionType;
-    /** @var null|string('machine', 'project', 'client') $relatedEntity */
-    private ?string $relatedEntity;
+    private PermissionType $userPermissionType;
+    private ?PermissionRelatedEntity $relatedEntity;
     private ?string $typeOfMachine;
     private ?string $relatedEntityUuid;
     private bool $reverted;
@@ -30,23 +30,12 @@ class Permission
     public const PERMISSION_ADMIN = 'admin';
     public const PERMISSION_SSH = 'ssh';
 
-    /**
-     * Permission constructor.
-     * @param string|null $uuid
-     * @param User $created
-     *By
-     * @param User $user
-     * @param string $userPermissionType
-     * @param string|null $relatedEntity
-     * @param string|null $typeOfMachine
-     * @param string|null $relatedEntityUuid
-     */
     public function __construct(
         ?string $uuid,
         User $createdBy,
         User $user,
-        string $userPermissionType,
-        ?string $relatedEntity,
+        PermissionType $userPermissionType,
+        ?PermissionRelatedEntity $relatedEntity,
         ?string $typeOfMachine,
         ?string $relatedEntityUuid
     ) {
@@ -108,34 +97,22 @@ class Permission
         $this->user = $user;
     }
 
-    /**
-     * @return string
-     */
-    public function getUserPermissionType(): string
+    public function getUserPermissionType(): PermissionType
     {
         return $this->userPermissionType;
     }
 
-    /**
-     * @param string $userPermissionType
-     */
-    public function setUserPermissionType(string $userPermissionType): void
+    public function setUserPermissionType(PermissionType $userPermissionType): void
     {
         $this->userPermissionType = $userPermissionType;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getRelatedEntity(): ?string
+    public function getRelatedEntity(): ?PermissionRelatedEntity
     {
         return $this->relatedEntity;
     }
 
-    /**
-     * @param string|null $relatedEntity
-     */
-    public function setRelatedEntity(?string $relatedEntity): void
+    public function setRelatedEntity(?PermissionRelatedEntity $relatedEntity): void
     {
         $this->relatedEntity = $relatedEntity;
     }

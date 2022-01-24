@@ -1,9 +1,11 @@
 App\Domain\User\Entity\User:
   user_admin:
     __construct: false
+    uuid: <uuid()>
     email: admin@keyscom.com
   user_developer:
     __construct: false
+    uuid: <uuid()>
     email: developer@keyscom.com
 
 App\Domain\Client\Entity\Client:
@@ -19,14 +21,17 @@ App\Domain\Client\Entity\Client:
 App\Domain\Project\Entity\Project:
   project_1_1:
     __construct: false
+    uuid: <uuid()>
     name: project_1_1
     client: "@client_1"
   project_1_2:
     __construct: false
+    uuid: <uuid()>
     name: project_1_2
     client: "@client_1"
   project_2_1:
     __construct: false
+    uuid: <uuid()>
     name: project_2_1
     client: "@client_1"
 

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Domain\User\Repository;
 
 use App\Domain\User\Entity\Permission;
+use App\Domain\User\Enums\PermissionRelatedEntity;
+use App\Domain\User\Enums\PermissionType;
 
 interface PermissionRepositoryInterface
 {
@@ -22,24 +24,16 @@ interface PermissionRepositoryInterface
      */
     public function getChildPermissionsOfUser(
         string $userUuid,
-        string $userPermissionType,
-        ?string $typeRelatedEntity,
+        PermissionType $userPermissionType,
+        ?PermissionRelatedEntity $typeRelatedEntity,
         ?string $typeOfMachine,
         ?string $relatedEntityUuid
     ): iterable;
 
-    /**
-     * @param string $userUuid
-     * @param string('admin','ssh') $userPermissionType
-     * @param null|string('machine', 'project', 'client') $typeRelatedEntity
-     * @param string|null $typeOfMachine
-     * @param string|null $relatedEntityUuid
-     * @return Permission|null
-     */
     public function getParentOrSamePermissionOfUser(
         string $userUuid,
-        string $userPermissionType,
-        ?string $typeRelatedEntity,
+        PermissionType $userPermissionType,
+        ?PermissionRelatedEntity $typeRelatedEntity,
         ?string $typeOfMachine,
         ?string $relatedEntityUuid
     ): ?Permission;

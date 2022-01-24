@@ -11,17 +11,17 @@ use App\Domain\Project\Entity\Project;
 use App\Domain\Project\Repository\ProjectRepositoryInterface;
 use App\Domain\User\Entity\Permission;
 use App\Domain\User\Entity\User;
+use App\Domain\User\Enums\PermissionRelatedEntity;
+use App\Domain\User\Enums\PermissionType;
 use App\Domain\User\Repository\PermissionRepositoryInterface;
 use App\Domain\User\Repository\UserRepositoryInterface;
 use Liip\FunctionalTestBundle\Test\WebTestCase;
-use Liip\TestFixturesBundle\Test\FixturesTrait;
+use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
+use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
 
 class PermissionRepositoryTest extends WebTestCase
 {
-    use FixturesTrait;
-
     private PermissionRepositoryInterface $permissionRepository;
-    private DateTimeHelperInterface $dateTimeHelper;
 
     private User $user;
     private User $adminUser;
@@ -35,10 +35,10 @@ class PermissionRepositoryTest extends WebTestCase
     protected function setUp(): void
     {
         self::bootKernel();
-        $this->permissionRepository = self::$container->get(PermissionRepositoryInterface::class);
-        $this->dateTimeHelper = self::$container->get(DateTimeHelperInterface::class);
+        $this->permissionRepository = static::getContainer()->get(PermissionRepositoryInterface::class);
+        $databaseTool = static::getContainer()->get(DatabaseToolCollection::class)->get();
 
-        $this->loadFixtureFiles([
+        $databaseTool->loadAliceFixture([
             '/var/www/html/tests/Resources/Fixtures/yml/UsersAndPermissions.yml',
         ]);
 
@@ -90,7 +90,7 @@ class PermissionRepositoryTest extends WebTestCase
         // WHEN
         $results = $this->permissionRepository->getChildPermissionsOfUser(
             $this->user->getUuid(),
-            'ssh',
+            PermissionType::SSH,
             null,
             null,
             null
@@ -105,8 +105,8 @@ class PermissionRepositoryTest extends WebTestCase
         // WHEN
         $results = $this->permissionRepository->getChildPermissionsOfUser(
             $this->user->getUuid(),
-            'ssh',
-            'client',
+            PermissionType::SSH,
+            PermissionRelatedEntity::CLIENT,
             null,
             $this->clients['client_1']->getUuid()
         );
@@ -120,8 +120,8 @@ class PermissionRepositoryTest extends WebTestCase
         // WHEN
         $results = $this->permissionRepository->getChildPermissionsOfUser(
             $this->user->getUuid(),
-            'ssh',
-            'project',
+            PermissionType::SSH,
+            PermissionRelatedEntity::PROJECT,
             null,
             $this->projects['project_1_1']->getUuid()
         );
@@ -135,8 +135,8 @@ class PermissionRepositoryTest extends WebTestCase
         // WHEN
         $results = $this->permissionRepository->getChildPermissionsOfUser(
             $this->user->getUuid(),
-            'ssh',
-            'machine',
+            PermissionType::SSH,
+            PermissionRelatedEntity::MACHINE,
             null,
             $this->machines['machine_1_1_1']->getUuid()
         );
@@ -152,8 +152,8 @@ class PermissionRepositoryTest extends WebTestCase
                 null,
                 $this->adminUser,
                 $this->user,
-                'ssh',
-                'client',
+                PermissionType::SSH,
+                PermissionRelatedEntity::CLIENT,
                 null,
                 $this->clients['client_1']->getUuid()
             )
@@ -162,7 +162,7 @@ class PermissionRepositoryTest extends WebTestCase
         // WHEN
         $results = $this->permissionRepository->getChildPermissionsOfUser(
             $this->user->getUuid(),
-            'ssh',
+            PermissionType::SSH,
             null,
             null,
             null
@@ -179,8 +179,8 @@ class PermissionRepositoryTest extends WebTestCase
                 null,
                 $this->adminUser,
                 $this->user,
-                'ssh',
-                'project',
+                PermissionType::SSH,
+                PermissionRelatedEntity::PROJECT,
                 null,
                 $this->projects['project_1_1']->getUuid()
             )
@@ -190,8 +190,8 @@ class PermissionRepositoryTest extends WebTestCase
                 null,
                 $this->adminUser,
                 $this->user,
-                'ssh',
-                'project',
+                PermissionType::SSH,
+                PermissionRelatedEntity::PROJECT,
                 null,
                 $this->projects['project_1_2']->getUuid()
             )
@@ -200,7 +200,7 @@ class PermissionRepositoryTest extends WebTestCase
         // WHEN
         $results = $this->permissionRepository->getChildPermissionsOfUser(
             $this->user->getUuid(),
-            'ssh',
+            PermissionType::SSH,
             null,
             null,
             null
@@ -217,8 +217,8 @@ class PermissionRepositoryTest extends WebTestCase
                 null,
                 $this->adminUser,
                 $this->user,
-                'ssh',
-                'project',
+                PermissionType::SSH,
+                PermissionRelatedEntity::PROJECT,
                 null,
                 $this->projects['project_1_1']->getUuid()
             )
@@ -227,8 +227,8 @@ class PermissionRepositoryTest extends WebTestCase
         // WHEN
         $results = $this->permissionRepository->getChildPermissionsOfUser(
             $this->user->getUuid(),
-            'ssh',
-            'client',
+            PermissionType::SSH,
+            PermissionRelatedEntity::CLIENT,
             null,
             $this->clients['client_1']->getUuid()
         );
@@ -244,8 +244,8 @@ class PermissionRepositoryTest extends WebTestCase
                 null,
                 $this->adminUser,
                 $this->user,
-                'ssh',
-                'machine',
+                PermissionType::SSH,
+                PermissionRelatedEntity::MACHINE,
                 null,
                 $this->machines['machine_1_1_1']->getUuid()
             )
@@ -255,8 +255,8 @@ class PermissionRepositoryTest extends WebTestCase
                 null,
                 $this->adminUser,
                 $this->user,
-                'ssh',
-                'project',
+                PermissionType::SSH,
+                PermissionRelatedEntity::PROJECT,
                 null,
                 $this->projects['project_1_2']->getUuid()
             )
@@ -265,8 +265,8 @@ class PermissionRepositoryTest extends WebTestCase
         // WHEN
         $results = $this->permissionRepository->getChildPermissionsOfUser(
             $this->user->getUuid(),
-            'ssh',
-            'client',
+            PermissionType::SSH,
+            PermissionRelatedEntity::CLIENT,
             null,
             $this->clients['client_1']->getUuid()
         );
@@ -280,8 +280,8 @@ class PermissionRepositoryTest extends WebTestCase
         // WHEN
         $results = $this->permissionRepository->getChildPermissionsOfUser(
             $this->user->getUuid(),
-            'ssh',
-            'machine',
+            PermissionType::SSH,
+            PermissionRelatedEntity::MACHINE,
             null,
             $this->machines['machine_1_1_1']->getUuid()
         );
@@ -298,8 +298,8 @@ class PermissionRepositoryTest extends WebTestCase
                 null,
                 $this->adminUser,
                 $this->user,
-                'ssh',
-                'machine',
+                PermissionType::SSH,
+                PermissionRelatedEntity::MACHINE,
                 null,
                 $this->machines['machine_1_1_1']->getUuid()
             )
@@ -310,8 +310,8 @@ class PermissionRepositoryTest extends WebTestCase
                 null,
                 $this->adminUser,
                 $this->user,
-                'ssh',
-                'project',
+                PermissionType::SSH,
+                PermissionRelatedEntity::PROJECT,
                 null,
                 $this->projects['project_1_1']->getUuid()
             )
@@ -320,8 +320,8 @@ class PermissionRepositoryTest extends WebTestCase
         // WHEN
         $results = $this->permissionRepository->getChildPermissionsOfUser(
             $this->user->getUuid(),
-            'ssh',
-            'client',
+            PermissionType::SSH,
+            PermissionRelatedEntity::CLIENT,
             null,
             $this->clients['client_1']->getUuid()
         );
@@ -335,8 +335,8 @@ class PermissionRepositoryTest extends WebTestCase
         // WHEN
         $result = $this->permissionRepository->getParentOrSamePermissionOfUser(
             $this->user->getUuid(),
-            'ssh',
-            'client',
+            PermissionType::SSH,
+            PermissionRelatedEntity::CLIENT,
             null,
             $this->clients['client_1']->getUuid()
         );
@@ -350,8 +350,8 @@ class PermissionRepositoryTest extends WebTestCase
         // WHEN
         $result = $this->permissionRepository->getParentOrSamePermissionOfUser(
             $this->user->getUuid(),
-            'ssh',
-            'project',
+            PermissionType::SSH,
+            PermissionRelatedEntity::PROJECT,
             null,
             $this->projects['project_1_1']->getUuid()
         );
@@ -365,8 +365,8 @@ class PermissionRepositoryTest extends WebTestCase
         // WHEN
         $result = $this->permissionRepository->getParentOrSamePermissionOfUser(
             $this->user->getUuid(),
-            'ssh',
-            'machine',
+            PermissionType::SSH,
+            PermissionRelatedEntity::MACHINE,
             null,
             $this->machines['machine_1_1_1']->getUuid()
         );
@@ -380,7 +380,7 @@ class PermissionRepositoryTest extends WebTestCase
         // WHEN
         $result = $this->permissionRepository->getParentOrSamePermissionOfUser(
             $this->user->getUuid(),
-            'ssh',
+            PermissionType::SSH,
             null,
             null,
             null
@@ -397,8 +397,8 @@ class PermissionRepositoryTest extends WebTestCase
                 null,
                 $this->adminUser,
                 $this->user,
-                'ssh',
-                'project',
+                PermissionType::SSH,
+                PermissionRelatedEntity::PROJECT,
                 null,
                 $this->projects['project_1_1']->getUuid()
             )
@@ -413,8 +413,8 @@ class PermissionRepositoryTest extends WebTestCase
                 null,
                 $this->adminUser,
                 $this->user,
-                'ssh',
-                'machine',
+                PermissionType::SSH,
+                PermissionRelatedEntity::MACHINE,
                 null,
                 $this->machines['machine_1_1_1']->getUuid()
             )

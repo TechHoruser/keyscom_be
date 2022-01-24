@@ -7,6 +7,8 @@ namespace App\Infrastructure\Persistence\Doctrine\Repository;
 use App\Domain\Machine\Entity\Machine;
 use App\Domain\Project\Entity\Project;
 use App\Domain\User\Entity\Permission;
+use App\Domain\User\Enums\PermissionRelatedEntity;
+use App\Domain\User\Enums\PermissionType;
 use App\Domain\User\Repository\PermissionRepositoryInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -45,20 +47,20 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
 
     public function getChildPermissionsOfUser(
         string $userUuid,
-        string $userPermissionType,
-        ?string $typeRelatedEntity,
+        PermissionType $userPermissionType,
+        ?PermissionRelatedEntity $typeRelatedEntity,
         ?string $typeOfMachine,
         ?string $relatedEntityUuid
     ): iterable
     {
         // Machine has no children
-        if ($typeRelatedEntity === 'machine') {
+        if ($typeRelatedEntity === PermissionRelatedEntity::MACHINE) {
             return [];
         }
 
         $queryBuilder = $this->createQueryBuilder($this->getAliasTable())
             ->andWhere(sprintf($this->getAliasTable() . '.user = \'%s\'', $userUuid))
-            ->andWhere(sprintf($this->getAliasTable() . '.userPermissionType = \'%s\'', $userPermissionType));
+            ->andWhere(sprintf($this->getAliasTable() . '.userPermissionType = \'%s\'', $userPermissionType->value));
 
         if (!is_null($typeOfMachine)) {
             $queryBuilder->andWhere(sprintf($this->getAliasTable() . '.typeOfMachine = \'%s\'', $typeOfMachine));
@@ -84,14 +86,14 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
         return $queryBuilder->getQuery()->getResult();
     }
 
-    private function getChildrenUuidRelatedWithCurrentEntity($typeOfEntity, $uuid): array
+    private function getChildrenUuidRelatedWithCurrentEntity(PermissionRelatedEntity $typeOfEntity, string $uuid): array
     {
         $extractUuid = fn($elementsArray) => array_map(
             fn($element) => $element['uuid'],
             $elementsArray
         );
 
-        if ($typeOfEntity === 'client') {
+        if ($typeOfEntity === PermissionRelatedEntity::CLIENT) {
             $projectsUuid = $extractUuid($this->_em->createQueryBuilder()
                 ->select('projects.uuid')
                 ->from(Project::class, 'projects')
@@ -111,7 +113,7 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
             return array_merge($projectsUuid, $machinesUuid);
         }
 
-        if ($typeOfEntity === 'project') {
+        if ($typeOfEntity === PermissionRelatedEntity::PROJECT) {
             return $extractUuid($this->_em->createQueryBuilder()
                 ->select('machines.uuid')
                 ->from(Machine::class, 'machines')
@@ -125,21 +127,21 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
 
     public function getParentOrSamePermissionOfUser(
         string $userUuid,
-        string $userPermissionType,
-        ?string $typeRelatedEntity,
+        PermissionType $userPermissionType,
+        ?PermissionRelatedEntity $typeRelatedEntity,
         ?string $typeOfMachine,
         ?string $relatedEntityUuid
     ): ?Permission {
         $queryBuilder = $this->createQueryBuilder($this->getAliasTable())
             ->andWhere(sprintf($this->getAliasTable() . '.user = \'%s\'', $userUuid))
-            ->andWhere(sprintf($this->getAliasTable() . '.userPermissionType = \'%s\'', $userPermissionType));
+            ->andWhere(sprintf($this->getAliasTable() . '.userPermissionType = \'%s\'', $userPermissionType->value));
 
         if (!is_null($typeOfMachine)) {
             $queryBuilder->andWhere(sprintf($this->getAliasTable() . '.typeOfMachine = \'%s\'', $typeOfMachine));
         }
 
         $additionalConditions = [];
-        if ($typeRelatedEntity === 'machine') {
+        if ($typeRelatedEntity === PermissionRelatedEntity::MACHINE) {
             $additionalConditions[] = sprintf(
                 '%s.relatedEntityUuid = \'%s\'',
                 $this->getAliasTable(),
@@ -150,10 +152,10 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
                 ->from(Machine::class, 'machines')
                 ->andWhere(sprintf('machines.uuid = \'%s\'', $relatedEntityUuid))
                 ->getQuery()->getSingleScalarResult();
-            $typeRelatedEntity = 'project';
+            $typeRelatedEntity = PermissionRelatedEntity::PROJECT;
         }
 
-        if ($typeRelatedEntity === 'project') {
+        if ($typeRelatedEntity === PermissionRelatedEntity::PROJECT) {
             $additionalConditions[] = sprintf(
                 '%s.relatedEntityUuid = \'%s\'',
                 $this->getAliasTable(),
@@ -164,10 +166,10 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
                 ->from(Project::class, 'projects')
                 ->andWhere(sprintf('projects.uuid = \'%s\'', $relatedEntityUuid))
                 ->getQuery()->getSingleScalarResult();
-            $typeRelatedEntity = 'client';
+            $typeRelatedEntity = PermissionRelatedEntity::CLIENT;
         }
 
-        if ($typeRelatedEntity === 'client') {
+        if ($typeRelatedEntity === PermissionRelatedEntity::CLIENT) {
             $additionalConditions[] = sprintf(
                 '%s.relatedEntityUuid = \'%s\'',
                 $this->getAliasTable(),

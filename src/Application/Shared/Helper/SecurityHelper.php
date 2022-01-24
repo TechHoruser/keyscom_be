@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Application\Shared\Helper;
 
-use App\Application\Shared\Config\ParametersConfigInterface;
-
 class SecurityHelper implements SecurityHelperInterface
 {
     private const METHOD = 'aes-256-cbc';

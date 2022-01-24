@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity repository-class="App\Infrastructure\Persistence\Doctrine\Repository\User\UserRepository" name="App\Domain\User\Entity\User" table="users">
-        <id name="uuid" type="guid" column="uuid">
-            <generator strategy="UUID"/>
-        </id>
+        <id name="uuid" type="guid" column="uuid"/>
 
-        <field name="email" column="email" nullable="false"/>
+        <field name="email" column="email"/>
         <field name="pubKey" column="pub_key" nullable="true"/>
 
-        <field name="createdAt" type="datetime" column="created_at" nullable="false"/>
+        <field name="createdAt" type="datetime" column="created_at"/>
         <field name="updatedAt" type="datetime" column="updated_at" nullable="true"/>
 
-        <field name="tenantName" type="string" column="tenant_name" length="100" nullable="true"/>
+        <field name="tenantName" column="tenant_name" length="100" nullable="true"/>
 
         <indexes>
             <index columns="created_at"/>
