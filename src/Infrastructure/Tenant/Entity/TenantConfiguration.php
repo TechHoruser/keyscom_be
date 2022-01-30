@@ -34,7 +34,7 @@ class TenantConfiguration implements TenantInfrastructureConfiguration
 
     public function getName(): string
     {
-        $this->getUserDb();
+        return $this->getUserDb();
     }
 
     /**

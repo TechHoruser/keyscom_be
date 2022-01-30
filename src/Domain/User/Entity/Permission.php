@@ -27,9 +27,6 @@ class Permission
     /** @var ActionUserOnMachine[] $actions */
     private iterable $actions;
 
-    public const PERMISSION_ADMIN = 'admin';
-    public const PERMISSION_SSH = 'ssh';
-
     public function __construct(
         ?string $uuid,
         User $createdBy,

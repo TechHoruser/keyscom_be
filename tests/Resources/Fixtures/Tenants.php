@@ -5,7 +5,6 @@ namespace App\Tests\Resources\Fixtures;
 use App\Domain\Tenant\Entity\Tenant;
 use App\Infrastructure\Tenant\Entity\TenantConfiguration;
 use Doctrine\Common\DataFixtures\FixtureInterface;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
 
 class Tenants extends AbstractFixture implements FixtureInterface
@@ -40,10 +39,7 @@ class Tenants extends AbstractFixture implements FixtureInterface
         }
     }
 
-    /**
-     * @param ObjectManager|EntityManagerInterface $manager
-     * @param TenantConfiguration $tenantConfiguration
-     */
+
     private function createUserInDb(ObjectManager $manager, string $userDb, string $passwordDb): void
     {
         $params = [
@@ -74,10 +70,6 @@ class Tenants extends AbstractFixture implements FixtureInterface
     }
 
 
-    /**
-     * @param ObjectManager|EntityManagerInterface $manager
-     * @param TenantConfiguration $tenantConfiguration
-     */
     private function removeUsersInDb(ObjectManager $manager): void
     {
         $getAllUsersQuery = sprintf(

@@ -5,31 +5,23 @@ declare(strict_types=1);
 namespace App\Application\UseCase\User\AssignmentPermission;
 
 use App\Application\Shared\Command\CommandInterface;
+use App\Domain\User\Enums\PermissionRelatedEntity;
+use App\Domain\User\Enums\PermissionType;
 
 class AssignmentPermissionCommand implements CommandInterface
 {
     private string $uuidOfUserWhoGivesPermissions;
     private string $userUuid;
-    private string $userPermissionType;
-    /** @var null|string('machine', 'project', 'client') $relatedEntity */
-    private ?string $typeRelatedEntity;
+    private PermissionType $userPermissionType;
+    private ?PermissionRelatedEntity $typeRelatedEntity;
     private ?string $typeOfMachine;
     private ?string $relatedEntityUuid;
 
-    /**
-     * AssignmentPermissionCommand constructor.
-     * @param string $uuidOfUserWhoGivesPermissions
-     * @param string $userUuid
-     * @param string $userPermissionType
-     * @param string|null $typeRelatedEntity
-     * @param string|null $typeOfMachine
-     * @param string|null $relatedEntityUuid
-     */
     public function __construct(
         string $uuidOfUserWhoGivesPermissions,
         string $userUuid,
-        string $userPermissionType,
-        ?string $typeRelatedEntity,
+        PermissionType $userPermissionType,
+        ?PermissionRelatedEntity $typeRelatedEntity,
         ?string $typeOfMachine,
         ?string $relatedEntityUuid
     ) {
@@ -58,19 +50,43 @@ class AssignmentPermissionCommand implements CommandInterface
     }
 
     /**
-     * @return string
+     * @return PermissionType
      */
-    public function getUserPermissionType(): string
+    public function getUserPermissionType(): PermissionType
     {
         return $this->userPermissionType;
     }
 
     /**
-     * @return string|null
+     * @param PermissionType $userPermissionType
+     *
+     * @return $this
      */
-    public function getTypeRelatedEntity(): ?string
+    public function setUserPermissionType(PermissionType $userPermissionType): static
+    {
+        $this->userPermissionType = $userPermissionType;
+
+        return $this;
+    }
+
+    /**
+     * @return PermissionRelatedEntity|null
+     */
+    public function getTypeRelatedEntity(): ?PermissionRelatedEntity
     {
         return $this->typeRelatedEntity;
+    }
+
+    /**
+     * @param PermissionRelatedEntity|null $typeRelatedEntity
+     *
+     * @return $this
+     */
+    public function setTypeRelatedEntity(?PermissionRelatedEntity $typeRelatedEntity): static
+    {
+        $this->typeRelatedEntity = $typeRelatedEntity;
+
+        return $this;
     }
 
     /**

@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace App\Application\UseCase\User\RollbackPermission;
 
 use App\Application\Shared\Command\CommandHandlerInterface;
-use App\Domain\Machine\Entity\Machine;
-use App\Domain\Machine\Repository\MachineRepositoryInterface;
 use App\Domain\User\Entity\ActionUserOnMachine;
-use App\Domain\User\Entity\Permission;
+use App\Domain\User\Enums\PermissionType;
 use App\Domain\User\Repository\ActionUserOnMachineRepositoryInterface;
 use App\Domain\User\Repository\PermissionRepositoryInterface;
 use App\Domain\User\Repository\UserRepositoryInterface;
@@ -17,37 +15,13 @@ use Symfony\Component\Lock\LockFactory;
 
 class RollbackPermissionHandler implements CommandHandlerInterface
 {
-    private PermissionRepositoryInterface $permissionRepository;
-    private UserRepositoryInterface $userRepository;
-    private MachineRepositoryInterface $machineRepository;
-    private ActionUserOnMachineRepositoryInterface $actionUserOnMachineRepository;
-    private EntityManagerInterface $entityManager;
-    private LockFactory $lockFactory;
-
-    /**
-     * RollbackPermissionHandler constructor.
-     * @param PermissionRepositoryInterface $permissionRepository
-     * @param UserRepositoryInterface $userRepository
-     * @param MachineRepositoryInterface $machineRepository
-     * @param ActionUserOnMachineRepositoryInterface $actionUserOnMachineRepository
-     * @param EntityManagerInterface $entityManager
-     * @param LockFactory $lockFactory
-     */
     public function __construct(
-        PermissionRepositoryInterface $permissionRepository,
-        UserRepositoryInterface $userRepository,
-        MachineRepositoryInterface $machineRepository,
-        ActionUserOnMachineRepositoryInterface $actionUserOnMachineRepository,
-        EntityManagerInterface $entityManager,
-        LockFactory $lockFactory
-    ) {
-        $this->permissionRepository = $permissionRepository;
-        $this->userRepository = $userRepository;
-        $this->machineRepository = $machineRepository;
-        $this->actionUserOnMachineRepository = $actionUserOnMachineRepository;
-        $this->entityManager = $entityManager;
-        $this->lockFactory = $lockFactory;
-    }
+        private PermissionRepositoryInterface $permissionRepository,
+        private UserRepositoryInterface $userRepository,
+        private ActionUserOnMachineRepositoryInterface $actionUserOnMachineRepository,
+        private EntityManagerInterface $entityManager,
+        private LockFactory $lockFactory,
+    ) {}
 
     public function __invoke(RollbackPermissionCommand $rollbackPermissionCommand)
     {
@@ -63,7 +37,7 @@ class RollbackPermissionHandler implements CommandHandlerInterface
 
         if (is_null($this->permissionRepository->getParentOrSamePermissionOfUser(
             $rollbackPermissionCommand->getUuidOfUserWhoRevokePermissions(),
-            Permission::PERMISSION_ADMIN,
+            PermissionType::ADMIN,
             $permission->getRelatedEntity(),
             $permission->getTypeOfMachine(),
             $permission->getRelatedEntityUuid()

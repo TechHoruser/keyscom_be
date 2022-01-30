@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace App\Application\UseCase\User\AssignmentPermission;
 
 use App\Application\Shared\Command\CommandHandlerInterface;
-use App\Domain\Machine\Entity\Machine;
 use App\Domain\Machine\Repository\MachineRepositoryInterface;
 use App\Domain\User\Entity\ActionUserOnMachine;
 use App\Domain\User\Entity\Permission;
+use App\Domain\User\Enums\PermissionRelatedEntity;
+use App\Domain\User\Enums\PermissionType;
 use App\Domain\User\Repository\ActionUserOnMachineRepositoryInterface;
 use App\Domain\User\Repository\PermissionRepositoryInterface;
 use App\Domain\User\Repository\UserRepositoryInterface;
@@ -24,15 +25,6 @@ class AssignmentPermissionHandler implements CommandHandlerInterface
     private EntityManagerInterface $entityManager;
     private LockFactory $lockFactory;
 
-    /**
-     * AssignmentPermissionHandler constructor.
-     * @param PermissionRepositoryInterface $permissionRepository
-     * @param UserRepositoryInterface $userRepository
-     * @param MachineRepositoryInterface $machineRepository
-     * @param ActionUserOnMachineRepositoryInterface $actionUserOnMachineRepository
-     * @param EntityManagerInterface $entityManager
-     * @param LockFactory $lockFactory
-     */
     public function __construct(
         PermissionRepositoryInterface $permissionRepository,
         UserRepositoryInterface $userRepository,
@@ -53,7 +45,7 @@ class AssignmentPermissionHandler implements CommandHandlerInterface
     {
         if (is_null($this->permissionRepository->getParentOrSamePermissionOfUser(
             $assignmentPermissionCommand->getUuidOfUserWhoGivesPermissions(),
-            Permission::PERMISSION_ADMIN,
+            PermissionType::ADMIN,
             $assignmentPermissionCommand->getTypeRelatedEntity(),
             $assignmentPermissionCommand->getTypeOfMachine(),
             $assignmentPermissionCommand->getRelatedEntityUuid()
@@ -84,7 +76,7 @@ class AssignmentPermissionHandler implements CommandHandlerInterface
             $lock = $this->lockFactory->createLock($permission->getUuid());
             $lock->acquire(true);
 
-            if ($assignmentPermissionCommand->getUserPermissionType() === Permission::PERMISSION_SSH) {
+            if ($assignmentPermissionCommand->getUserPermissionType() === PermissionType::SSH) {
                 $machinesLinkedToCurrentPermissions = $this->getMachines(
                     $assignmentPermissionCommand->getTypeRelatedEntity(),
                     $assignmentPermissionCommand->getRelatedEntityUuid()
@@ -113,20 +105,15 @@ class AssignmentPermissionHandler implements CommandHandlerInterface
         }
     }
 
-    /**
-     * @param string|null $typeRelatedEntity
-     * @param string|null $relatedEntityUuid
-     * @return Machine[]
-     */
-    private function getMachines(?string $typeRelatedEntity, ?string $relatedEntityUuid): iterable
+    private function getMachines(?PermissionRelatedEntity $typeRelatedEntity, ?string $relatedEntityUuid): iterable
     {
         $filters = [];
         if (!is_null($typeRelatedEntity)) {
-            if ($typeRelatedEntity === 'machine') {
+            if ($typeRelatedEntity === PermissionRelatedEntity::MACHINE) {
                 $filters['uuid'] = $relatedEntityUuid;
-            } elseif ($typeRelatedEntity === 'project') {
+            } elseif ($typeRelatedEntity === PermissionRelatedEntity::PROJECT) {
                 $filters['project.uuid'] = $relatedEntityUuid;
-            } elseif ($typeRelatedEntity === 'client') {
+            } elseif ($typeRelatedEntity === PermissionRelatedEntity::CLIENT) {
                 $filters['project.client.uuid'] = $relatedEntityUuid;
             }
         }

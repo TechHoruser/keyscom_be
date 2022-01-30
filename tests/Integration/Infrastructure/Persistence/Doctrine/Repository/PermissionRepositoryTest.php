@@ -59,10 +59,9 @@ class PermissionRepositoryTest extends WebTestCase
             ['email' => 'admin@keyscom.com']
         )[0];
 
-        /** @var Client|Machine|Project $v */
-        $createAssociativeArrayByName = fn($array) => array_column(
+        $createAssociativeArrayByName = static fn($array) => array_column(
             array_map(
-                fn ($k, $v) => [$v->getName(), $v],
+                static fn ($k, Client|Machine|Project $v) => [$v->getName(), $v],
                 array_keys($array),
                 $array
             ),
