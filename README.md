@@ -73,6 +73,29 @@ The application is running in `http://localhost:8080`
 
 ## Utils
 
+### Generate Migration
+
+```shell
+bin/console doctrine:migrations:diff
+```
+
+### Execute Migrations
+
+```shell
+bin/console doctrine:migrations:migrate
+```
+
+### Clear Database schema
+
+```shell
+bin/console doctrine:database:drop
+bin/console doctrine:database:create
+```
+
 ### Fill Database
+
+```shell
+bin/console doctrine:fixtures:load --env=dev
+```
 
 

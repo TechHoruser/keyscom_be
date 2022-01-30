@@ -5,6 +5,7 @@ namespace App\Tests\Resources\Fixtures;
 use App\Domain\Tenant\Entity\Tenant;
 use App\Domain\User\Entity\Permission;
 use App\Domain\User\Entity\User;
+use App\Domain\User\Enums\PermissionType;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Ramsey\Uuid\Uuid;
@@ -23,20 +24,21 @@ class Users extends AbstractFixture implements DependentFixtureInterface
         for ($tenantIndex = 0; $tenantIndex < $this->fixtureValues->getNumberOfTenants(); ++$tenantIndex) {
             /** @var Tenant $tenant */
             $tenant = $this->getReference(Tenants::PREFIX_REFERENCE . $tenantIndex);
-            $user = new User(
+            $adminUser = new User(
                 Uuid::uuid4(),
                 'admin@keyscom.com',
                 null
             );
-            $user->setTenantName($tenant->getHost());
+            $adminUser->setTenantName($tenant->getHost());
 
-            $manager->persist($user);
+            $manager->persist($adminUser);
             $manager->flush();
 
             $permission = new Permission(
                 Uuid::uuid4(),
-                $user,
-                'ssh',
+                null,
+                $adminUser,
+                PermissionType::ADMIN,
                 null,
                 null,
                 null
@@ -44,10 +46,21 @@ class Users extends AbstractFixture implements DependentFixtureInterface
             $manager->persist($permission);
             $manager->flush();
 
+            $sshUser = new User(
+                Uuid::uuid4(),
+                'ssh@keyscom.com',
+                null
+            );
+            $sshUser->setTenantName($tenant->getHost());
+
+            $manager->persist($sshUser);
+            $manager->flush();
+
             $permission = new Permission(
                 Uuid::uuid4(),
-                $user,
-                'admin',
+                $adminUser,
+                $sshUser,
+                PermissionType::SSH,
                 null,
                 null,
                 null
@@ -55,17 +68,7 @@ class Users extends AbstractFixture implements DependentFixtureInterface
             $manager->persist($permission);
             $manager->flush();
 
-            $user = new User(
-                Uuid::uuid4(),
-                'user@keyscom.com',
-                null
-            );
-            $user->setTenantName($tenant->getHost());
-
-            $manager->persist($user);
-            $manager->flush();
-
-            $this->addReference(sprintf(self::PREFIX_REFERENCE, $tenantIndex, 'user'), $user);
+            $this->addReference(sprintf(self::PREFIX_REFERENCE, $tenantIndex, 'user'), $sshUser);
         }
     }
 }

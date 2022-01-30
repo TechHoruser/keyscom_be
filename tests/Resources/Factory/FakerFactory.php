@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Resources\Factory;
 
+use App\Domain\Client\Entity\Client;
 use App\Domain\Client\Repository\ClientRepositoryInterface;
 use App\Domain\Machine\Entity\Machine;
 use App\Domain\Project\Entity\Project;
-use App\Domain\Client\Entity\Client;
 use App\Domain\Tenant\Entity\Tenant;
 use Faker\Factory;
 use Faker\Generator;
@@ -64,6 +64,7 @@ class FakerFactory implements FakerFactoryInterface
         $machine = new Machine(
             $this->faker->uuid,
             $this->faker->ipv4,
+            $this->faker->name,
             $this->faker->domainName,
             null,
             $project
