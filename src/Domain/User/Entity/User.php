@@ -14,67 +14,49 @@ class User
     use TenantEntityTrait;
 
     private string $uuid;
-    private string $email;
-    private ?string $pubKey;
 
-    /**
-     * User constructor.
-     * @param string|null $uuid
-     * @param string $email
-     * @param string|null $pubKey
-     */
-    public function __construct(?string $uuid, string $email, ?string $pubKey)
+    public function __construct(
+        ?string $uuid,
+        private string $email,
+        private ?string $pubKey,
+    )
     {
         $this->uuid = $uuid ?? Uuid::uuid4()->toString();
-        $this->email = $email;
-        $this->pubKey = $pubKey;
     }
 
-    /**
-     * @return string
-     */
     public function getUuid(): string
     {
         return $this->uuid;
     }
 
-    /**
-     * @param string $uuid
-     */
-    public function setUuid(string $uuid): void
+    public function setUuid(string $uuid): static
     {
         $this->uuid = $uuid;
+
+        return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getEmail(): string
     {
         return $this->email;
     }
 
-    /**
-     * @param string $email
-     */
-    public function setEmail(string $email): void
+    public function setEmail(string $email): static
     {
         $this->email = $email;
+
+        return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getPubKey(): ?string
     {
         return $this->pubKey;
     }
 
-    /**
-     * @param string|null $pubKey
-     */
-    public function setPubKey(?string $pubKey): void
+    public function setPubKey(?string $pubKey): static
     {
         $this->pubKey = $pubKey;
+
+        return $this;
     }
 }

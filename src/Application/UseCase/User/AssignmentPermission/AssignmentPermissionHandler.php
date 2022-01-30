@@ -8,6 +8,7 @@ use App\Application\Shared\Command\CommandHandlerInterface;
 use App\Domain\Machine\Repository\MachineRepositoryInterface;
 use App\Domain\User\Entity\ActionUserOnMachine;
 use App\Domain\User\Entity\Permission;
+use App\Domain\User\Enums\ActionOfUserOnMachine;
 use App\Domain\User\Enums\PermissionRelatedEntity;
 use App\Domain\User\Enums\PermissionType;
 use App\Domain\User\Repository\ActionUserOnMachineRepositoryInterface;
@@ -88,7 +89,7 @@ class AssignmentPermissionHandler implements CommandHandlerInterface
                             null,
                             $permission,
                             $machine,
-                            ActionUserOnMachine::ACTION_ADD
+                            ActionOfUserOnMachine::ADD
                         )
                     );
                 }

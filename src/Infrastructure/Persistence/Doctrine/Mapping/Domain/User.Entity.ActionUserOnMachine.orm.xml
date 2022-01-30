@@ -3,7 +3,7 @@
     <entity repository-class="App\Infrastructure\Persistence\Doctrine\Repository\User\ActionUserOnMachineRepository" name="App\Domain\User\Entity\ActionUserOnMachine" table="action_user_on_machine">
         <id name="uuid" type="guid" column="uuid"/>
 
-        <field name="actionToDo" column="action_to_do"/>
+        <field name="actionToDo" column="action_to_do" enum-type="App\Domain\User\Enums\ActionOfUserOnMachine"/>
         <field name="processed" column="processed" type="boolean"/>
         <field name="canceled" column="canceled" type="boolean"/>
 

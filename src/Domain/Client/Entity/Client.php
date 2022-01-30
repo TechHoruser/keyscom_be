@@ -15,75 +15,48 @@ class Client
     use TenantEntityTrait;
 
     private string $uuid;
-    private string $name;
 
-    /** @var Project[] $projects */
-    private iterable $projects;
-
-    /**
-     * Client constructor.
-     * @param string|null $uuid
-     * @param string $name
-     */
-    public function __construct(?string $uuid, string $name)
-    {
+    public function __construct(?string $uuid,
+        private string $name,
+        /** @var Project[] $projects */
+        private iterable $projects = [],
+    ) {
         $this->uuid = $uuid ?? Uuid::uuid4()->toString();
-        $this->name = $name;
     }
 
-    /**
-     * @return string
-     */
     public function getUuid(): string
     {
         return $this->uuid;
     }
 
-    /**
-     * @param string $uuid
-     */
-    public function setUuid(string $uuid): void
+    public function setUuid(string $uuid): static
     {
         $this->uuid = $uuid;
+
+        return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     */
-    public function setName(string $name): void
+    public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
     }
 
-    /**
-     * @param Project $project
-     */
-    public function addProject(Project $project): void
-    {
-        $this->projects[] = $project;
-    }
-
-    /**
-     * @return Project[]
-     */
     public function getProjects(): iterable
     {
         return $this->projects;
     }
 
-    /**
-     * @param Project[] $projects
-     */
-    public function setProjects(iterable $projects): void
+    public function setProjects(iterable $projects): static
     {
         $this->projects = $projects;
+
+        return $this;
     }
 }

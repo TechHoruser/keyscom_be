@@ -10,32 +10,16 @@ class Tenant
 {
     use AuditableEntityTrait;
 
-    private string $host;
-    private TenantInfrastructureConfiguration $infrastructureConfiguration;
+    public function __construct(
+        private string $host,
+        private TenantInfrastructureConfiguration $infrastructureConfiguration,
+    ) {}
 
-    /**
-     * Tenant constructor.
-     * @param string $host
-     * @param TenantInfrastructureConfiguration $infrastructureConfiguration
-     */
-    public function __construct(string $host, TenantInfrastructureConfiguration $infrastructureConfiguration)
-    {
-        $this->host = $host;
-        $this->infrastructureConfiguration = $infrastructureConfiguration;
-    }
-
-    /**
-     * @return string
-     */
     public function getHost(): string
     {
         return $this->host;
     }
 
-    /**
-     * @param string $host
-     * @return $this
-     */
     public function setHost(string $host): Tenant
     {
         $this->host = $host;
@@ -43,18 +27,11 @@ class Tenant
         return $this;
     }
 
-    /**
-     * @return TenantInfrastructureConfiguration
-     */
     public function getInfrastructureConfiguration(): TenantInfrastructureConfiguration
     {
         return $this->infrastructureConfiguration;
     }
 
-    /**
-     * @param TenantInfrastructureConfiguration $infrastructureConfiguration
-     * @return $this
-     */
     public function setInfrastructureConfiguration(
         TenantInfrastructureConfiguration $infrastructureConfiguration
     ): Tenant {

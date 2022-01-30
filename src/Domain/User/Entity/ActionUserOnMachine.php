@@ -7,6 +7,7 @@ namespace App\Domain\User\Entity;
 use App\Domain\Machine\Entity\Machine;
 use App\Domain\Shared\Auditable\AuditableEntityTrait;
 use App\Domain\Tenant\CertainTenant\TenantEntityTrait;
+use App\Domain\User\Enums\ActionOfUserOnMachine;
 use Ramsey\Uuid\Uuid;
 
 class ActionUserOnMachine
@@ -15,129 +16,100 @@ class ActionUserOnMachine
     use TenantEntityTrait;
 
     private string $uuid;
-    private Permission $permission;
-    private Machine $machine;
-    private string $actionToDo;
-    private bool $processed;
-    private bool $canceled;
 
-    public const ACTION_ADD = 'add';
-    public const ACTION_REMOVE = 'remove';
-
-    /**
-     * ActionUserOnMachine constructor.
-     * @param null|string $uuid
-     * @param Permission $permission
-     * @param Machine $machine
-     * @param string $actionToDo
-     */
     public function __construct(
         ?string $uuid,
-        Permission $permission,
-        Machine $machine,
-        string $actionToDo
+        private Permission $permission,
+        private Machine $machine,
+        private ActionOfUserOnMachine $actionToDo,
+        private bool $skipped = false,
+        private bool $processed = false,
+        private bool $canceled = false,
     ) {
         $this->uuid = $uuid ?? Uuid::uuid4()->toString();
-        $this->permission = $permission;
-        $this->machine = $machine;
-        $this->actionToDo = $actionToDo;
-        $this->processed = false;
-        $this->canceled = false;
     }
 
-    /**
-     * @return string
-     */
     public function getUuid(): string
     {
         return $this->uuid;
     }
 
-    /**
-     * @param string $uuid
-     */
-    public function setUuid(string $uuid): void
+    public function setUuid(string $uuid): static
     {
         $this->uuid = $uuid;
+
+        return $this;
     }
 
-    /**
-     * @return Permission
-     */
     public function getPermission(): Permission
     {
         return $this->permission;
     }
 
-    /**
-     * @param Permission $permission
-     */
-    public function setPermission(Permission $permission): void
+    public function setPermission(Permission $permission): static
     {
         $this->permission = $permission;
+
+        return $this;
     }
 
-    /**
-     * @return Machine
-     */
     public function getMachine(): Machine
     {
         return $this->machine;
     }
 
-    /**
-     * @param Machine $machine
-     */
-    public function setMachine(Machine $machine): void
+    public function setMachine(Machine $machine): static
     {
         $this->machine = $machine;
+
+        return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getActionToDo(): string
+    public function getActionToDo(): ActionOfUserOnMachine
     {
         return $this->actionToDo;
     }
 
-    /**
-     * @param string $actionToDo
-     */
-    public function setActionToDo(string $actionToDo): void
+    public function setActionToDo(ActionOfUserOnMachine $actionToDo): static
     {
         $this->actionToDo = $actionToDo;
+
+        return $this;
     }
 
-    /**
-     * @return bool
-     */
+    public function isSkipped(): bool
+    {
+        return $this->skipped;
+    }
+
+    public function setSkipped(bool $skipped): static
+    {
+        $this->skipped = $skipped;
+
+        return $this;
+    }
+
     public function isProcessed(): bool
     {
         return $this->processed;
     }
 
-    /**
-     * @param bool $processed
-     */
-    public function setProcessed(bool $processed): void
+    public function setProcessed(bool $processed): static
     {
         $this->processed = $processed;
+
+        return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isCanceled(): bool
     {
         return $this->canceled;
     }
 
-    /**
-     * @param bool $canceled
-     */
-    public function setCanceled(bool $canceled): void
+    public function setCanceled(bool $canceled): static
     {
         $this->canceled = $canceled;
+
+        return $this;
     }
 }

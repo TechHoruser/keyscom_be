@@ -16,49 +16,27 @@ class Permission
     use TenantEntityTrait;
 
     private string $uuid;
-    private ?User $createdBy;
-    private User $user;
-    private PermissionType $userPermissionType;
-    private ?PermissionRelatedEntity $relatedEntity;
-    private ?string $typeOfMachine;
-    private ?string $relatedEntityUuid;
-    private bool $reverted;
-
-    /** @var ActionUserOnMachine[] $actions */
-    private iterable $actions;
 
     public function __construct(
         ?string $uuid,
-        ?User $createdBy,
-        User $user,
-        PermissionType $userPermissionType,
-        ?PermissionRelatedEntity $relatedEntity,
-        ?string $typeOfMachine,
-        ?string $relatedEntityUuid
+        private ?User $createdBy,
+        private User $user,
+        private PermissionType $userPermissionType,
+        private ?PermissionRelatedEntity $relatedEntity,
+        private ?string $typeOfMachine,
+        private ?string $relatedEntityUuid,
+        private bool $reverted = false,
+        /** @var ActionUserOnMachine[] $actions */
+        private iterable $actions = [],
     ) {
         $this->uuid = $uuid ?? Uuid::uuid4()->toString();
-        $this->createdBy = $createdBy;
-        $this->user = $user;
-        $this->userPermissionType = $userPermissionType;
-        $this->relatedEntity = $relatedEntity;
-        $this->typeOfMachine = $typeOfMachine;
-        $this->relatedEntityUuid = $relatedEntityUuid;
-        $this->reverted = false;
     }
 
-    /**
-     * @return string
-     */
     public function getUuid(): string
     {
         return $this->uuid;
     }
 
-    /**
-     * @param string $uuid
-     *
-     * @return $this
-     */
     public function setUuid(string $uuid): static
     {
         $this->uuid = $uuid;
@@ -66,19 +44,11 @@ class Permission
         return $this;
     }
 
-    /**
-     * @return User|null
-     */
     public function getCreatedBy(): ?User
     {
         return $this->createdBy;
     }
 
-    /**
-     * @param User|null $createdBy
-     *
-     * @return $this
-     */
     public function setCreatedBy(?User $createdBy): static
     {
         $this->createdBy = $createdBy;
@@ -86,19 +56,11 @@ class Permission
         return $this;
     }
 
-    /**
-     * @return User
-     */
     public function getUser(): User
     {
         return $this->user;
     }
 
-    /**
-     * @param User $user
-     *
-     * @return $this
-     */
     public function setUser(User $user): static
     {
         $this->user = $user;
@@ -106,19 +68,11 @@ class Permission
         return $this;
     }
 
-    /**
-     * @return PermissionType
-     */
     public function getUserPermissionType(): PermissionType
     {
         return $this->userPermissionType;
     }
 
-    /**
-     * @param PermissionType $userPermissionType
-     *
-     * @return $this
-     */
     public function setUserPermissionType(PermissionType $userPermissionType): static
     {
         $this->userPermissionType = $userPermissionType;
@@ -126,19 +80,11 @@ class Permission
         return $this;
     }
 
-    /**
-     * @return PermissionRelatedEntity|null
-     */
     public function getRelatedEntity(): ?PermissionRelatedEntity
     {
         return $this->relatedEntity;
     }
 
-    /**
-     * @param PermissionRelatedEntity|null $relatedEntity
-     *
-     * @return $this
-     */
     public function setRelatedEntity(?PermissionRelatedEntity $relatedEntity): static
     {
         $this->relatedEntity = $relatedEntity;
@@ -146,19 +92,11 @@ class Permission
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getTypeOfMachine(): ?string
     {
         return $this->typeOfMachine;
     }
 
-    /**
-     * @param string|null $typeOfMachine
-     *
-     * @return $this
-     */
     public function setTypeOfMachine(?string $typeOfMachine): static
     {
         $this->typeOfMachine = $typeOfMachine;
@@ -166,19 +104,11 @@ class Permission
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getRelatedEntityUuid(): ?string
     {
         return $this->relatedEntityUuid;
     }
 
-    /**
-     * @param string|null $relatedEntityUuid
-     *
-     * @return $this
-     */
     public function setRelatedEntityUuid(?string $relatedEntityUuid): static
     {
         $this->relatedEntityUuid = $relatedEntityUuid;
@@ -186,19 +116,11 @@ class Permission
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isReverted(): bool
     {
         return $this->reverted;
     }
 
-    /**
-     * @param bool $reverted
-     *
-     * @return $this
-     */
     public function setReverted(bool $reverted): static
     {
         $this->reverted = $reverted;
@@ -206,20 +128,12 @@ class Permission
         return $this;
     }
 
-    /**
-     * @return ActionUserOnMachine[]
-     */
-    public function getActions(): array
+    public function getActions(): iterable
     {
         return $this->actions;
     }
 
-    /**
-     * @param ActionUserOnMachine[] $actions
-     *
-     * @return $this
-     */
-    public function setActions(array $actions): static
+    public function setActions(iterable $actions): static
     {
         $this->actions = $actions;
 

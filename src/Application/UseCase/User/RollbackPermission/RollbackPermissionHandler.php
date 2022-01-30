@@ -6,6 +6,7 @@ namespace App\Application\UseCase\User\RollbackPermission;
 
 use App\Application\Shared\Command\CommandHandlerInterface;
 use App\Domain\User\Entity\ActionUserOnMachine;
+use App\Domain\User\Enums\ActionOfUserOnMachine;
 use App\Domain\User\Enums\PermissionType;
 use App\Domain\User\Repository\ActionUserOnMachineRepositoryInterface;
 use App\Domain\User\Repository\PermissionRepositoryInterface;
@@ -58,9 +59,9 @@ class RollbackPermissionHandler implements CommandHandlerInterface
                         null,
                         $action->getPermission(),
                         $action->getMachine(),
-                        $action->getActionToDo() === ActionUserOnMachine::ACTION_ADD ?
-                            ActionUserOnMachine::ACTION_REMOVE :
-                            ActionUserOnMachine::ACTION_ADD
+                        $action->getActionToDo() === ActionOfUserOnMachine::ADD ?
+                            ActionOfUserOnMachine::REMOVE :
+                            ActionOfUserOnMachine::ADD
                     ));
                 } else {
                     $action->setCanceled(true);
