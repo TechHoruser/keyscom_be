@@ -8,6 +8,18 @@ This project is the backend app for the Keyscom. This application implements and
 
 Run `cp .env .env.local` and change the configuration settings in `.env.local`.
 
+If your machine use OS different to linux. You need replace the next line on `.docker/Dockerfile-php`:
+
+```shell
+    && echo "xdebug.client_host=172.17.0.1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+```
+
+To
+
+```shell
+    && echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+```
+
 Run `docker-compose up -d` to run app.
 
 Run `docker-compose exec php composer install` to install the vendors.
@@ -27,6 +39,15 @@ The application is running in `http://localhost:8080`
    2. Configuration File `./docker-compose.yml`
    3. Service `php`
    4. Automatic path mapping
+
+#### Debugger
+
+1. On PhpStorm Settings, access to `PHP>Debug`
+   1. Only available the port 9003.
+2. On PhpStorm Settings, access to `PHP>Servers`
+   1. Create a new server, **IMPORTANT** with the name `localhost`. *This is important cause of *
+   2. Fill the host with localhost too
+   3. Create a new Path Mapping to `/var/www/html`
 
 #### Tests
 
