@@ -2,7 +2,6 @@
 
 namespace App\Tests\Integration\Infrastructure\Persistence\Doctrine\Repository;
 
-use App\Application\Shared\Helper\DateTimeHelperInterface;
 use App\Domain\Client\Entity\Client;
 use App\Domain\Client\Repository\ClientRepositoryInterface;
 use App\Domain\Machine\Entity\Machine;
@@ -17,11 +16,10 @@ use App\Domain\User\Repository\PermissionRepositoryInterface;
 use App\Domain\User\Repository\UserRepositoryInterface;
 use Liip\FunctionalTestBundle\Test\WebTestCase;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
-use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
 
 class PermissionRepositoryTest extends WebTestCase
 {
-    private PermissionRepositoryInterface $permissionRepository;
+    private $permissionRepository;
 
     private User $user;
     private User $adminUser;
@@ -47,7 +45,7 @@ class PermissionRepositoryTest extends WebTestCase
 
     private function setTestVariables()
     {
-        $userRepository = self::$container->get(UserRepositoryInterface::class);
+        $userRepository = static::getContainer()->get(UserRepositoryInterface::class);
         $this->user = $userRepository->complexFind(0,
             0,
             null,
@@ -73,15 +71,15 @@ class PermissionRepositoryTest extends WebTestCase
         );
 
         $this->clients = $createAssociativeArrayByName(
-            (self::$container->get(ClientRepositoryInterface::class))->complexFind()
+            (static::getContainer()->get(ClientRepositoryInterface::class))->complexFind()
         );
 
         $this->projects = $createAssociativeArrayByName(
-            (self::$container->get(ProjectRepositoryInterface::class))->complexFind()
+            (static::getContainer()->get(ProjectRepositoryInterface::class))->complexFind()
         );
 
         $this->machines = $createAssociativeArrayByName(
-            (self::$container->get(MachineRepositoryInterface::class))->complexFind()
+            (static::getContainer()->get(MachineRepositoryInterface::class))->complexFind()
         );
     }
 

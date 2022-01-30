@@ -3,14 +3,11 @@
 namespace App\Tests\Integration\UI\Http\Rest\Controller;
 
 use Liip\FunctionalTestBundle\Test\WebTestCase;
-use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 abstract class AbstractControllerIntegrationTest extends WebTestCase
 {
-    use FixturesTrait;
-
     protected const GET = 'GET';
     protected const POST = 'POST';
     protected const PUT = 'PUT';
