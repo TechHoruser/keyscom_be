@@ -45,7 +45,11 @@ The application is running in `http://localhost:8080`
 1. On PhpStorm Settings, access to `PHP>Debug`
    1. Only available the port 9003.
 2. On PhpStorm Settings, access to `PHP>Servers`
-   1. Create a new server, **IMPORTANT** with the name `localhost`. *This is important cause of *
+   1. Create a new server, **IMPORTANT** with the name `localhost`. *This is important cause of `docker-compose.yml` config:*
+   ```
+   environment:
+   PHP_IDE_CONFIG: "serverName=localhost"
+   ```
    2. Fill the host with localhost too
    3. Create a new Path Mapping to `/var/www/html`
 
@@ -65,3 +69,10 @@ The application is running in `http://localhost:8080`
 2. Click on `New > Datasource > PostgreSQL`
 3. Config the connection by `.env.local` file params
 4. Download drivers on the same window if you haven't
+
+
+## Utils
+
+### Fill Database
+
+
