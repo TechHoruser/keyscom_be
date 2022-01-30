@@ -3,8 +3,8 @@
     <entity repository-class="App\Infrastructure\Persistence\Doctrine\Repository\User\PermissionRepository" name="App\Domain\User\Entity\Permission" table="permissions">
         <id name="uuid" type="guid" column="uuid"/>
 
-        <field name="userPermissionType" column="user_permission_type"/>
-        <field name="relatedEntity" column="related_entity" nullable="true"/>
+        <field name="userPermissionType" column="user_permission_type" enum-type="App\Domain\User\Enums\PermissionType"/>
+        <field name="relatedEntity" column="related_entity" enum-type="App\Domain\User\Enums\PermissionRelatedEntity" nullable="true"/>
         <field name="typeOfMachine" column="type_of_machine" nullable="true"/>
         <field name="relatedEntityUuid" type="guid" column="related_entity_uuid" nullable="true"/>
 
@@ -15,7 +15,7 @@
         </many-to-one>
 
         <many-to-one field="createdBy" target-entity="App\Domain\User\Entity\User">
-            <join-column name="create_by_uuid" referenced-column-name="uuid" nullable="false"/>
+            <join-column name="create_by_uuid" referenced-column-name="uuid"/>
         </many-to-one>
 
         <field name="reverted" type="boolean" column="reverted"/>

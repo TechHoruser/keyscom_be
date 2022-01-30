@@ -16,7 +16,7 @@ class Permission
     use TenantEntityTrait;
 
     private string $uuid;
-    private User $createdBy;
+    private ?User $createdBy;
     private User $user;
     private PermissionType $userPermissionType;
     private ?PermissionRelatedEntity $relatedEntity;
@@ -29,7 +29,7 @@ class Permission
 
     public function __construct(
         ?string $uuid,
-        User $createdBy,
+        ?User $createdBy,
         User $user,
         PermissionType $userPermissionType,
         ?PermissionRelatedEntity $relatedEntity,
@@ -56,26 +56,34 @@ class Permission
 
     /**
      * @param string $uuid
+     *
+     * @return $this
      */
-    public function setUuid(string $uuid): void
+    public function setUuid(string $uuid): static
     {
         $this->uuid = $uuid;
+
+        return $this;
     }
 
     /**
-     * @return User
+     * @return User|null
      */
-    public function getCreatedBy(): User
+    public function getCreatedBy(): ?User
     {
         return $this->createdBy;
     }
 
     /**
-     * @param User $createdBy
+     * @param User|null $createdBy
+     *
+     * @return $this
      */
-    public function setCreatedBy(User $createdBy): void
+    public function setCreatedBy(?User $createdBy): static
     {
         $this->createdBy = $createdBy;
+
+        return $this;
     }
 
     /**
@@ -88,30 +96,54 @@ class Permission
 
     /**
      * @param User $user
+     *
+     * @return $this
      */
-    public function setUser(User $user): void
+    public function setUser(User $user): static
     {
         $this->user = $user;
+
+        return $this;
     }
 
+    /**
+     * @return PermissionType
+     */
     public function getUserPermissionType(): PermissionType
     {
         return $this->userPermissionType;
     }
 
-    public function setUserPermissionType(PermissionType $userPermissionType): void
+    /**
+     * @param PermissionType $userPermissionType
+     *
+     * @return $this
+     */
+    public function setUserPermissionType(PermissionType $userPermissionType): static
     {
         $this->userPermissionType = $userPermissionType;
+
+        return $this;
     }
 
+    /**
+     * @return PermissionRelatedEntity|null
+     */
     public function getRelatedEntity(): ?PermissionRelatedEntity
     {
         return $this->relatedEntity;
     }
 
-    public function setRelatedEntity(?PermissionRelatedEntity $relatedEntity): void
+    /**
+     * @param PermissionRelatedEntity|null $relatedEntity
+     *
+     * @return $this
+     */
+    public function setRelatedEntity(?PermissionRelatedEntity $relatedEntity): static
     {
         $this->relatedEntity = $relatedEntity;
+
+        return $this;
     }
 
     /**
@@ -124,10 +156,14 @@ class Permission
 
     /**
      * @param string|null $typeOfMachine
+     *
+     * @return $this
      */
-    public function setTypeOfMachine(?string $typeOfMachine): void
+    public function setTypeOfMachine(?string $typeOfMachine): static
     {
         $this->typeOfMachine = $typeOfMachine;
+
+        return $this;
     }
 
     /**
@@ -140,34 +176,14 @@ class Permission
 
     /**
      * @param string|null $relatedEntityUuid
+     *
+     * @return $this
      */
-    public function setRelatedEntityUuid(?string $relatedEntityUuid): void
+    public function setRelatedEntityUuid(?string $relatedEntityUuid): static
     {
         $this->relatedEntityUuid = $relatedEntityUuid;
-    }
 
-    /**
-     * @param ActionUserOnMachine $action
-     */
-    public function addAction(ActionUserOnMachine $action): void
-    {
-        $this->actions[] = $action;
-    }
-
-    /**
-     * @return ActionUserOnMachine[]
-     */
-    public function getActions(): iterable
-    {
-        return $this->actions;
-    }
-
-    /**
-     * @param ActionUserOnMachine[] $actions
-     */
-    public function setActions(iterable $actions): void
-    {
-        $this->actions = $actions;
+        return $this;
     }
 
     /**
@@ -180,9 +196,33 @@ class Permission
 
     /**
      * @param bool $reverted
+     *
+     * @return $this
      */
-    public function setReverted(bool $reverted): void
+    public function setReverted(bool $reverted): static
     {
         $this->reverted = $reverted;
+
+        return $this;
+    }
+
+    /**
+     * @return ActionUserOnMachine[]
+     */
+    public function getActions(): array
+    {
+        return $this->actions;
+    }
+
+    /**
+     * @param ActionUserOnMachine[] $actions
+     *
+     * @return $this
+     */
+    public function setActions(array $actions): static
+    {
+        $this->actions = $actions;
+
+        return $this;
     }
 }
