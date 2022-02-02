@@ -2,17 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\User\Repository;
+namespace App\Domain\Shared\Interfaces;
 
 use App\Domain\Shared\Entities\PaginationProperties;
-use App\Domain\User\Entity\User;
 
-interface UserRepositoryInterface
+interface ComplexFindInterface
 {
-    public function getByUuid(string $uuid): ?User;
-
     public function complexFind(
-        PaginationProperties $paginationProperties,
+        PaginationProperties $paginationProperties = new PaginationProperties(),
         array $filters = [],
     ): iterable;
 

@@ -5,18 +5,9 @@ declare(strict_types=1);
 namespace App\Domain\Client\Repository;
 
 use App\Domain\Client\Entity\Client;
+use App\Domain\Shared\Interfaces\ComplexFindInterface;
 
-interface ClientRepositoryInterface
+interface ClientRepositoryInterface extends ComplexFindInterface
 {
     public function getByUuid(string $uuid): ?Client;
-
-    public function complexFind(
-        int $page = 0,
-        int $pageSize = 0,
-        ?string $sortBy = null,
-        ?string $sortOrder = null,
-        array $filters = []
-    ): iterable;
-
-    public function countAll($filters = []): int;
 }

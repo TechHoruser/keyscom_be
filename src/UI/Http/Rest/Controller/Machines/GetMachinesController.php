@@ -6,18 +6,16 @@ namespace App\UI\Http\Rest\Controller\Machines;
 
 use App\Application\UseCase\Machine\GetMachines\GetMachinesQuery;
 use App\UI\Http\Rest\Controller\AbstractQueryController;
-use OpenApi\Annotations as OA;
-use Symfony\Component\Routing\Annotation\Route as Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 /**
- * @Route("/machines", methods={"GET"})
+ * @Route("/machine", methods={"GET"})
  *
  * @OA\Get (
- *     path="/machines",
+ *     path="/machine",
  *     summary="Get Machines",
- *     tags={"machines"},
+ *     tags={"Machines"},
  *     @OA\Parameter (
  *         name="page",
  *         in="query",
@@ -34,11 +32,8 @@ class GetMachinesController extends AbstractQueryController
     public function __invoke()
     {
         $results = $this->dispatch(new GetMachinesQuery(
-            intval($this->request->query->get('page', 0)),
-            intval($this->request->query->get('page_size', 0)),
-            $this->request->query->get('sort_by'),
-            $this->request->query->get('sort_order'),
-            $this->request->query->all('filters')
+            $this->generatePaginationPropertiesByQueryParams(),
+            $this->request->query->all('filters'),
         ));
 
         return new JsonResponse($this->normalizer->normalize($results));

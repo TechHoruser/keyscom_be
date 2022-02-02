@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Http\Rest\Controller\Clients;
+namespace App\UI\Http\Rest\Controller\Users;
 
-use App\Application\UseCase\Client\GetClients\GetClientsQuery;
+use App\Application\UseCase\User\GetUsers\GetUsersQuery;
 use App\UI\Http\Rest\Controller\AbstractQueryController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 /**
- * @Symfony\Component\Routing\Annotation\Route("/client", methods={"GET"})
+ * @Route("/user", methods={"GET"})
  *
  * @OA\Get (
- *     path="/client",
- *     summary="Get Clients",
- *     tags={"Clients"},
+ *     path="/user",
+ *     summary="Get Users",
+ *     tags={"Users"},
  *     @OA\Parameter (
  *         name="page",
  *         in="query",
@@ -23,7 +23,7 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface;
  *     )
  * )
  */
-class GetClientsController extends AbstractQueryController
+class GetUsersController extends AbstractQueryController
 {
     /**
      * @return JsonResponse
@@ -31,9 +31,9 @@ class GetClientsController extends AbstractQueryController
      */
     public function __invoke()
     {
-        $results = $this->dispatch(new GetClientsQuery(
+        $results = $this->dispatch(new GetUsersQuery(
             $this->generatePaginationPropertiesByQueryParams(),
-            $this->request->query->all('filters'),
+            $this->request->query->all('filters')
         ));
 
         return new JsonResponse($this->normalizer->normalize($results));

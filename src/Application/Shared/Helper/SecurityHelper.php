@@ -7,16 +7,10 @@ namespace App\Application\Shared\Helper;
 class SecurityHelper implements SecurityHelperInterface
 {
     private const METHOD = 'aes-256-cbc';
-    private string $secret;
 
-    /**
-     * SecurityHelper constructor.
-     * @param string $secret
-     */
-    public function __construct(string $secret)
-    {
-        $this->secret = $secret;
-    }
+    public function __construct(
+        private string $secret,
+    ) {}
 
     public function encryptString(string $data): string
     {

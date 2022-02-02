@@ -11,34 +11,23 @@ use App\Domain\Project\Repository\ProjectRepositoryInterface;
 
 class GetProjectsHandler implements QueryHandlerInterface
 {
-    private ProjectRepositoryInterface $machineRepository;
-    private PaginationMapper $paginationMapper;
-    private ProjectMapper $projectMapper;
-
     public function __construct(
-        ProjectRepositoryInterface $machineRepository,
-        PaginationMapper $paginationMapper,
-        ProjectMapper $projectMapper
-    ) {
-        $this->machineRepository = $machineRepository;
-        $this->paginationMapper = $paginationMapper;
-        $this->projectMapper = $projectMapper;
-    }
+        private ProjectRepositoryInterface $machineRepository,
+        private PaginationMapper $paginationMapper,
+        private ProjectMapper $projectMapper,
+    ) {}
 
     public function __invoke(GetProjectsQuery $getProjectsQuery)
     {
         /** @var array $results */
         $results = $this->machineRepository->complexFind(
-            $getProjectsQuery->getPage(),
-            $getProjectsQuery->getResultsPerPage(),
-            $getProjectsQuery->getSortBy(),
-            $getProjectsQuery->getSortOrder(),
-            $getProjectsQuery->getFilters()
+            $getProjectsQuery->paginationProperties,
+            $getProjectsQuery->filters,
         );
 
         return $this->paginationMapper->map(
             $this->projectMapper->map($results),
-            $this->machineRepository->countAll($getProjectsQuery->getFilters())
+            $this->machineRepository->countAll($getProjectsQuery->filters)
         );
     }
 }

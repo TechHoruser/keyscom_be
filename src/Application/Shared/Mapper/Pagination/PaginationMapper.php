@@ -14,7 +14,7 @@ class PaginationMapper implements MapperInterface
      * @param int|null $totalItems
      * @return PaginationDto
      */
-    public function map($results, $totalItems = null)
+    public function map($results, ?int $totalItems = null): PaginationDto
     {
         return new PaginationDto(
             $results,

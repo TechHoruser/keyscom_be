@@ -26,18 +26,20 @@ class RollbackPermissionHandler implements CommandHandlerInterface
 
     public function __invoke(RollbackPermissionCommand $rollbackPermissionCommand)
     {
-        $permission = $this->permissionRepository->getByUuid($rollbackPermissionCommand->getPermissionUuid());
+        $permission = $this->permissionRepository->getByUuid($rollbackPermissionCommand->permissionUuid);
         if (is_null($permission)) {
             throw new \Exception('Not exist the permission');
         }
 
-        $user = $this->userRepository->getByUuid($rollbackPermissionCommand->getUuidOfUserWhoRevokePermissions());
+        // TODO: Catch session user uuid
+        $uuidOfUserWhoRevokePermissions = '';
+        $user = $this->userRepository->getByUuid($uuidOfUserWhoRevokePermissions);
         if (is_null($user)) {
             throw new \Exception('Not exist the user');
         }
 
         if (is_null($this->permissionRepository->getParentOrSamePermissionOfUser(
-            $rollbackPermissionCommand->getUuidOfUserWhoRevokePermissions(),
+            $uuidOfUserWhoRevokePermissions,
             PermissionType::ADMIN,
             $permission->getRelatedEntity(),
             $permission->getTypeOfMachine(),

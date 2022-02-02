@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Persistence\Doctrine\Repository;
 
+use App\Domain\Shared\Entities\PaginationProperties;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\QueryBuilder;
@@ -28,21 +29,20 @@ abstract class AbstractRepository extends ServiceEntityRepository
     }
 
     public function complexFind(
-        int $page = 0,
-        int $pageSize = 0,
-        ?string $sortBy = null,
-        ?string $sortOrder = null,
-        array $filters = []
-        ): iterable {
-            $queryBuilder = $this->createQueryBuilder($this->getAliasTable());
+        PaginationProperties $paginationProperties = new PaginationProperties(),
+        array $filters = [],
+    ): iterable {
+        $queryBuilder = $this->createQueryBuilder($this->getAliasTable());
 
-        if ($page > 0 && $pageSize > 0) {
-            $queryBuilder->setFirstResult($pageSize * ($page - 1))
-                ->setMaxResults($pageSize);
+        if ($paginationProperties->page > 0 && $paginationProperties->resultsPerPage > 0) {
+            $queryBuilder->setFirstResult(
+                $paginationProperties->resultsPerPage * ($paginationProperties->page - 1)
+            )
+                ->setMaxResults($paginationProperties->resultsPerPage);
         }
 
-        if (!is_null($sortBy) && !is_null($sortOrder)) {
-            $this->addOrder($queryBuilder, $sortBy, $sortOrder);
+        if (!is_null($paginationProperties->sortBy)) {
+            $this->addOrder($queryBuilder, $paginationProperties->sortBy, $paginationProperties->sortOrder);
         }
 
         foreach ($filters as $fieldName => $fieldValue) {

@@ -6,32 +6,19 @@ namespace App\UI\Http\Rest\Controller;
 
 use App\Application\Shared\Query\QueryBusInterface;
 use App\Application\Shared\Query\QueryInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-abstract class AbstractQueryController
+abstract class AbstractQueryController extends AbstractController
 {
-    private QueryBusInterface $queryBus;
-    protected Request $request;
-    protected SerializerInterface $serializer;
-    protected NormalizerInterface $normalizer;
-
     public function __construct(
+        private QueryBusInterface $queryBus,
         RequestStack $requestStack,
         SerializerInterface $serializer,
         NormalizerInterface $normalizer,
-        QueryBusInterface $queryBus
     ) {
-        /** @var Request request */
-        $request = $requestStack->getCurrentRequest();
-        if ($request instanceof Request) {
-            $this->request = $request;
-        }
-        $this->serializer = $serializer;
-        $this->normalizer = $normalizer;
-        $this->queryBus = $queryBus;
+        parent::__construct($requestStack, $serializer, $normalizer);
     }
 
     protected function dispatch(QueryInterface $query)

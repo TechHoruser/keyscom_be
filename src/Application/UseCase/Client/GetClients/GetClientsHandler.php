@@ -12,40 +12,23 @@ use App\Domain\Client\Repository\ClientRepositoryInterface;
 
 class GetClientsHandler implements QueryHandlerInterface
 {
-    private ClientRepositoryInterface $clientRepository;
-    private PaginationMapper $paginationMapper;
-    private ClientMapper $clientMapper;
-
-    /**
-     * GetClientsHandler constructor.
-     * @param ClientRepositoryInterface $clientRepository
-     * @param PaginationMapper $paginationMapper
-     * @param ClientMapper $clientMapper
-     */
     public function __construct(
-        ClientRepositoryInterface $clientRepository,
-        PaginationMapper $paginationMapper,
-        ClientMapper $clientMapper
-    ) {
-        $this->clientRepository = $clientRepository;
-        $this->paginationMapper = $paginationMapper;
-        $this->clientMapper = $clientMapper;
-    }
+        private ClientRepositoryInterface $clientRepository,
+        private PaginationMapper $paginationMapper,
+        private ClientMapper $clientMapper,
+    ) {}
 
     public function __invoke(GetClientsQuery $getClientsQuery)
     {
         /** @var Client[] $results */
         $results = $this->clientRepository->complexFind(
-            $getClientsQuery->getPage(),
-            $getClientsQuery->getResultsPerPage(),
-            $getClientsQuery->getSortBy(),
-            $getClientsQuery->getSortOrder(),
-            $getClientsQuery->getFilters()
+            $getClientsQuery->paginationProperties,
+            $getClientsQuery->filters,
         );
 
         return $this->paginationMapper->map(
             $this->clientMapper->map($results),
-            $this->clientRepository->countAll($getClientsQuery->getFilters())
+            $this->clientRepository->countAll($getClientsQuery->filters)
         );
     }
 }

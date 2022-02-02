@@ -6,28 +6,25 @@ namespace App\UI\Http\Rest\Controller\Users;
 
 use App\Application\UseCase\User\RollbackPermission\RollbackPermissionCommand;
 use App\UI\Http\Rest\Controller\AbstractCommandController;
-use OpenApi\Annotations as OA;
-use Symfony\Component\Routing\Annotation\Route as Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 /**
- * @Route("/rollback-permissions", methods={"POST"})
+ * @Route("/assigment-permission/rollback", methods={"POST"})
  *
  * @OA\Get (
- *     path="/rollback-permissions",
+ *     path="/assigment-permission/rollback",
  *     summary="Rollback Permission to other user",
- *     tags={"users"},
+ *     tags={"Users"},
  *     @OA\RequestBody (
  *      @OA\JsonContent(
  *        type="object",
- *          @OA\Property(property="userUuid", type="string"),
  *          @OA\Property(property="permissionUuid", type="string"),
  *       )
  *     ),
  * )
  */
-class RollbackPermissionController extends AbstractCommandController
+class RollbackAssignmentPermissionController extends AbstractCommandController
 {
     /**
      * @return JsonResponse
@@ -36,7 +33,6 @@ class RollbackPermissionController extends AbstractCommandController
     public function __invoke()
     {
         $results = $this->dispatch(new RollbackPermissionCommand(
-            $this->request->request->get('userUuid'),
             $this->request->request->get('permissionUuid')
         ));
 

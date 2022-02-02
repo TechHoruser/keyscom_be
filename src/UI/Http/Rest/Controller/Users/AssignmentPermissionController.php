@@ -6,25 +6,23 @@ namespace App\UI\Http\Rest\Controller\Users;
 
 use App\Application\UseCase\User\RollbackPermission\RollbackPermissionCommand;
 use App\UI\Http\Rest\Controller\AbstractCommandController;
-use OpenApi\Annotations as OA;
-use Symfony\Component\Routing\Annotation\Route as Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 /**
- * @Route("/assigment-permissions", methods={"POST"})
+ * @Route("/assigment-permission", methods={"POST"})
  *
  * @OA\Get (
- *     path="/assigment-permissions",
+ *     path="/assigment-permission",
  *     summary="Assigment Permission to other user",
- *     tags={"users"},
+ *     tags={"Users"},
  *     @OA\RequestBody (
  *      @OA\JsonContent(
  *        type="object",
  *          @OA\Property(property="userUuid", type="string"),
  *          @OA\Property(property="userType", type="string", nullable=true),
  *          @OA\Property(property="relatedEntity", type="string"),
- *          @OA\Property(property="typeOfMachine", type="number"),
+ *          @OA\Property(property="typeOfMachine", type="number", nullable=true),
  *          @OA\Property(property="relatedEntityUuid", type="string"),
  *       )
  *     ),

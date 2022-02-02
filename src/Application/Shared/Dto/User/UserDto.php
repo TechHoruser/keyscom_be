@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Shared\Dto\Client;
+namespace App\Application\Shared\Dto\User;
 
-class ClientDto
+class UserDto
 {
     public function __construct(
         readonly ?string $uuid,
-        readonly string $name,
+        readonly string $email,
     ) {}
 }
