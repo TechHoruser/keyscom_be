@@ -12,7 +12,7 @@ class Tenants extends AbstractFixture implements FixtureInterface
     public const PREFIX_REFERENCE = "tenant-";
     private const TENANT_PREFIX_NAME = 'tenant';
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $this->removeUsersInDb($manager);
 
@@ -38,7 +38,6 @@ class Tenants extends AbstractFixture implements FixtureInterface
             $this->addReference(self::PREFIX_REFERENCE . $tenantIndex, $tenant);
         }
     }
-
 
     private function createUserInDb(ObjectManager $manager, string $userDb, string $passwordDb): void
     {

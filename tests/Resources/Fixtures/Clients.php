@@ -10,12 +10,12 @@ class Clients extends AbstractFixture implements DependentFixtureInterface
 {
     public const PREFIX_REFERENCE = "client-%s-%s";
 
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [Tenants::class];
     }
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         for ($tenantIndex = 0; $tenantIndex < $this->fixtureValues->getNumberOfTenants(); ++$tenantIndex) {
             for ($clientIndex = 0; $clientIndex < $this->fixtureValues->getNumberOfClients(); ++$clientIndex) {

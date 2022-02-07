@@ -8,6 +8,7 @@ use App\Domain\Machine\Entity\Machine;
 use App\Domain\Machine\Repository\MachineRepositoryInterface;
 use App\Domain\Project\Entity\Project;
 use App\Domain\Project\Repository\ProjectRepositoryInterface;
+use App\Domain\Shared\Entities\PaginationProperties;
 use App\Domain\User\Entity\Permission;
 use App\Domain\User\Entity\User;
 use App\Domain\User\Enums\PermissionRelatedEntity;
@@ -37,7 +38,10 @@ class PermissionRepositoryTest extends WebTestCase
         $databaseTool = static::getContainer()->get(DatabaseToolCollection::class)->get();
 
         $databaseTool->loadAliceFixture([
-            '/var/www/html/tests/Resources/Fixtures/yml/UsersAndPermissions.yml',
+            '/var/www/html/tests/Resources/Fixtures/yml/Users.yml',
+            '/var/www/html/tests/Resources/Fixtures/yml/Clients.yml',
+            '/var/www/html/tests/Resources/Fixtures/yml/Projects.yml',
+            '/var/www/html/tests/Resources/Fixtures/yml/Machines.yml',
         ]);
 
         $this->setTestVariables();
@@ -46,17 +50,13 @@ class PermissionRepositoryTest extends WebTestCase
     private function setTestVariables()
     {
         $userRepository = static::getContainer()->get(UserRepositoryInterface::class);
-        $this->user = $userRepository->complexFind(0,
-            0,
-            null,
-            null,
-            ['email' => 'developer@keyscom.com']
+        $this->user = $userRepository->complexFind(
+            (new PaginationProperties()),
+            ['email' => 'developer@keyscom.com'],
         )[0];
-        $this->adminUser = $userRepository->complexFind(0,
-            0,
-            null,
-            null,
-            ['email' => 'admin@keyscom.com']
+        $this->adminUser = $userRepository->complexFind(
+            (new PaginationProperties()),
+            ['email' => 'admin@keyscom.com'],
         )[0];
 
         $createAssociativeArrayByName = static fn($array) => array_column(

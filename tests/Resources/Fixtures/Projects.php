@@ -10,7 +10,7 @@ class Projects extends AbstractFixture implements DependentFixtureInterface
 {
     public const PREFIX_REFERENCE = "project-%s-%s";
 
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [Clients::class];
     }

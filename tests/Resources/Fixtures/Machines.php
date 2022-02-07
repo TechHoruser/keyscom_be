@@ -10,7 +10,7 @@ class Machines extends AbstractFixture implements DependentFixtureInterface
 {
     public const PREFIX_REFERENCE = "machine-%s-%s";
 
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [Projects::class];
     }
