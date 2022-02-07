@@ -10,17 +10,17 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 /**
- * @Symfony\Component\Routing\Annotation\Route("/client", methods={"GET"})
+ * @Symfony\Component\Routing\Annotation\Route ("/client", methods={"GET"});
  *
- * @OA\Get (
+ * @OpenApi\Annotations\Get (
  *     path="/client",
  *     summary="Get Clients",
  *     tags={"Clients"},
- *     @OA\Parameter (
+ *     @OpenApi\Annotations\Parameter (
  *         name="page",
  *         in="query",
  *         description="The number of page to show"
- *     )
+ *     ),
  * )
  */
 class GetClientsController extends AbstractQueryController

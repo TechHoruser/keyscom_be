@@ -10,16 +10,16 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 /**
- * @Route("/assigment-permission/rollback", methods={"POST"})
+ * @Symfony\Component\Routing\Annotation\Route ("/assigment-permission/rollback", methods={"POST"})
  *
- * @OA\Get (
+ * @OpenApi\Annotations\Get (
  *     path="/assigment-permission/rollback",
  *     summary="Rollback Permission to other user",
  *     tags={"Users"},
- *     @OA\RequestBody (
- *      @OA\JsonContent(
+ *     @OpenApi\Annotations\RequestBody (
+ *      @OpenApi\Annotations\JsonContent(
  *        type="object",
- *          @OA\Property(property="permissionUuid", type="string"),
+ *          @OpenApi\Annotations\Property(property="permissionUuid", type="string"),
  *       )
  *     ),
  * )

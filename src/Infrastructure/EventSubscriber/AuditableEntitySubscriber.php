@@ -10,7 +10,7 @@ use Doctrine\Persistence\Event\LifecycleEventArgs;
 
 class AuditableEntitySubscriber implements EventSubscriber
 {
-    public function getSubscribedEvents()
+    public function getSubscribedEvents(): array
     {
         return [
             Events::prePersist,

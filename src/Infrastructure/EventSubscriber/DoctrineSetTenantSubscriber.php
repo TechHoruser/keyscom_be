@@ -26,7 +26,7 @@ class DoctrineSetTenantSubscriber implements EventSubscriber
         $this->container = $container;
     }
 
-    public function getSubscribedEvents()
+    public function getSubscribedEvents(): array
     {
         return [
             Events::prePersist

@@ -10,20 +10,20 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 /**
- * @Route("/assigment-permission", methods={"POST"})
+ * @Symfony\Component\Routing\Annotation\Route ("/assigment-permission", methods={"POST"})
  *
- * @OA\Get (
+ * @OpenApi\Annotations\Get (
  *     path="/assigment-permission",
  *     summary="Assigment Permission to other user",
  *     tags={"Users"},
- *     @OA\RequestBody (
- *      @OA\JsonContent(
+ *     @OpenApi\Annotations\RequestBody (
+ *      @OpenApi\Annotations\JsonContent(
  *        type="object",
- *          @OA\Property(property="userUuid", type="string"),
- *          @OA\Property(property="userType", type="string", nullable=true),
- *          @OA\Property(property="relatedEntity", type="string"),
- *          @OA\Property(property="typeOfMachine", type="number", nullable=true),
- *          @OA\Property(property="relatedEntityUuid", type="string"),
+ *          @OpenApi\Annotations\Property(property="userUuid", type="string"),
+ *          @OpenApi\Annotations\Property(property="userType", type="string", nullable=true),
+ *          @OpenApi\Annotations\Property(property="relatedEntity", type="string"),
+ *          @OpenApi\Annotations\Property(property="typeOfMachine", type="number", nullable=true),
+ *          @OpenApi\Annotations\Property(property="relatedEntityUuid", type="string"),
  *       )
  *     ),
  * )

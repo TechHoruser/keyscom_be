@@ -4,13 +4,8 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\EventSubscriber;
 
-use App\Application\Shared\Helper\SecurityHelperInterface;
 use App\Application\Shared\Tenant\TenantProviderInterface;
 use App\Application\Shared\Tenant\TenantSwitcherInterface;
-use App\Infrastructure\Persistence\Doctrine\Connection\WrapperConnection;
-use App\Infrastructure\Tenant\Repository\TenantConfigurationRepository;
-use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -28,7 +23,7 @@ class RequestLoadTenantDBConnectionSubscriber implements EventSubscriberInterfac
         $this->tenantSwitcher = $tenantSwitcher;
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             KernelEvents::REQUEST => 'onKernelRequest'

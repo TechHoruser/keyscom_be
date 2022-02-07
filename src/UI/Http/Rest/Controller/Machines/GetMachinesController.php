@@ -10,13 +10,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 /**
- * @Route("/machine", methods={"GET"})
+ * @Symfony\Component\Routing\Annotation\Route ("/machine", methods={"GET"})
  *
- * @OA\Get (
+ * @OpenApi\Annotations\Get (
  *     path="/machine",
  *     summary="Get Machines",
  *     tags={"Machines"},
- *     @OA\Parameter (
+ *     @OpenApi\Annotations\Parameter (
  *         name="page",
  *         in="query",
  *         description="The number of page to show"
