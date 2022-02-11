@@ -7,3 +7,7 @@ App\Domain\Client\Entity\Client:
     __construct: false
     uuid: <uuid3()>
     name: client_2
+  client_2:
+    __construct: false
+    uuid: <uuid3()>
+    name: client_3
