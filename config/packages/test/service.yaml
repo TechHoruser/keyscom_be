@@ -1,9 +1,2 @@
 imports:
-  - { resource: ../fixtures.yaml }
-
-services:
-  App\Application\Shared\Helper\DateTimeHelperInterface:
-    class: App\Application\Shared\Helper\DateTimeHelper
-    public: true
-    arguments:
-      $parametersConfig: '@App\Infrastructure\Framework\Config\Parameters'
+  - { resource: ./fixtures.yaml }

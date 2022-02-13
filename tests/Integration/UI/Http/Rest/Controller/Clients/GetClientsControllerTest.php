@@ -3,7 +3,6 @@
 namespace App\Tests\Integration\UI\Http\Rest\Controller\Clients;
 
 use App\Tests\Integration\UI\Http\Rest\Controller\AbstractControllerIntegrationTest;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 class GetClientsControllerTest extends AbstractControllerIntegrationTest
 {
@@ -12,6 +11,13 @@ class GetClientsControllerTest extends AbstractControllerIntegrationTest
         // GIVEN
         $method = self::GET;
         $path = '/client';
+        $numberOfClients = 4;
+
+        for ($i = 0; $i < $numberOfClients; ++$i) {
+            $this->_em->persist($this->fakerFactory->newClient());
+        }
+        $this->_em->flush();
+
 
         // WHEN
         $this->client->request($method, $path);
@@ -20,7 +26,6 @@ class GetClientsControllerTest extends AbstractControllerIntegrationTest
 
         // THEN
         $this->assertEquals(200, $response->getStatusCode());
-        $numberOfClientsOnFixtures = 2;
-        $this->assertEquals($numberOfClientsOnFixtures, $responseData['totalItems']);
+        $this->assertEquals($numberOfClients, $responseData['totalItems']);
     }
 }

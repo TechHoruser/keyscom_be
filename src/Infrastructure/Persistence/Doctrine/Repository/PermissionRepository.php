@@ -6,6 +6,7 @@ namespace App\Infrastructure\Persistence\Doctrine\Repository;
 
 use App\Domain\Machine\Entity\Machine;
 use App\Domain\Project\Entity\Project;
+use App\Domain\Shared\Entities\PaginationProperties;
 use App\Domain\User\Entity\Permission;
 use App\Domain\User\Enums\PermissionRelatedEntity;
 use App\Domain\User\Enums\PermissionType;
@@ -37,11 +38,8 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
     public function permissionsOfUser(string $userUuid): iterable
     {
         return $this->complexFind(
-            0,
-            0,
-            null,
-            null,
-            ['user.uuid' => $userUuid]
+            new PaginationProperties(),
+            ['user.uuid' => $userUuid],
         );
     }
 
@@ -51,7 +49,7 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
         ?PermissionRelatedEntity $typeRelatedEntity,
         ?string $typeOfMachine,
         ?string $relatedEntityUuid
-    ): iterable
+    ): array
     {
         // Machine has no children
         if ($typeRelatedEntity === PermissionRelatedEntity::MACHINE) {

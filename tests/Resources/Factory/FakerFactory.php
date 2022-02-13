@@ -27,8 +27,8 @@ class FakerFactory implements FakerFactoryInterface
     public function newClient(?Tenant $tenant = null): Client
     {
         $client = new Client(
-            $this->faker->uuid,
-            $this->faker->name
+            $this->faker->uuid3(),
+            $this->faker->name(),
         );
         $client->setTenant($tenant);
         $client->setCreatedAt(new \DateTime());
@@ -42,13 +42,13 @@ class FakerFactory implements FakerFactoryInterface
             $this->clientRepository->getByUuid($client->getUuid())
         ;
 
-        $startDate = $this->faker->dateTime;
+        $startDate = $this->faker->dateTime();
         $contract = new Project(
-            $this->faker->uuid,
-            $this->faker->name,
+            $this->faker->uuid3(),
+            $this->faker->name(),
             $startDate,
-            $this->faker->boolean ? $this->faker->dateTimeBetween($startDate) : null,
-            $client
+            $this->faker->boolean() ? $this->faker->dateTimeBetween($startDate) : null,
+            $client,
         );
         $contract->setTenantName($client->getTenantName());
         $contract->setCreatedAt(new \DateTime());
@@ -62,12 +62,12 @@ class FakerFactory implements FakerFactoryInterface
         }
 
         $machine = new Machine(
-            $this->faker->uuid,
-            $this->faker->ipv4,
-            $this->faker->name,
-            $this->faker->domainName,
+            $this->faker->uuid3(),
+            $this->faker->ipv4(),
+            $this->faker->name(),
+            $this->faker->domainName(),
             null,
-            $project
+            $project,
         );
         $machine->setTenantName($project->getTenantName());
         $machine->setCreatedAt(new \DateTime());

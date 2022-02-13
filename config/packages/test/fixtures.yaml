@@ -1,0 +1,12 @@
+services:
+  App\Tests\Resources\:
+    resource: '../../../tests/Resources/'
+
+  App\Tests\Resources\FixturesPhp\:
+    resource: '../../../tests/Resources/FixturesPhp/*'
+    tags: [ 'doctrine.fixture.orm' ]
+    autowire: true
+
+  App\Tests\Resources\Factory\:
+    resource: '../../../tests/Resources/Factory/*'
+    autowire: true

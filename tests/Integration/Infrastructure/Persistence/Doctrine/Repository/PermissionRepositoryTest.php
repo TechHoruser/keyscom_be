@@ -38,10 +38,10 @@ class PermissionRepositoryTest extends WebTestCase
         $databaseTool = static::getContainer()->get(DatabaseToolCollection::class)->get();
 
         $databaseTool->loadAliceFixture([
-            '/var/www/html/tests/Resources/Fixtures/yml/Users.yml',
-            '/var/www/html/tests/Resources/Fixtures/yml/Clients.yml',
-            '/var/www/html/tests/Resources/Fixtures/yml/Projects.yml',
-            '/var/www/html/tests/Resources/Fixtures/yml/Machines.yml',
+            '/var/www/html/tests/Resources/FixturesYml/Users.yml',
+            '/var/www/html/tests/Resources/FixturesYml/Clients.yml',
+            '/var/www/html/tests/Resources/FixturesYml/Projects.yml',
+            '/var/www/html/tests/Resources/FixturesYml/Machines.yml',
         ]);
 
         $this->setTestVariables();

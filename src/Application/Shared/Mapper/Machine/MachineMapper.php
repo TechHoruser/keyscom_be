@@ -21,8 +21,10 @@ class MachineMapper implements MapperInterface
         foreach ($machines as $machine) {
             $machinesDto[] = new MachineDto(
                 $machine->getUuid(),
+                $machine->getName(),
                 $machine->getIp(),
                 $machine->getDomain(),
+                $machine->getType(),
             );
         }
 
