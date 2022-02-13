@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Resources\Fixtures;
+namespace App\Tests\Resources\FixturesPhp;
 
 use App\Application\Shared\Helper\SecurityHelperInterface;
 use App\Tests\Resources\Config\FixtureValuesInterface;

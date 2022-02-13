@@ -19,15 +19,19 @@ if (!class_exists(Application::class) || !class_exists(Dotenv::class)) {
     throw new LogicException('You need to add "symfony/framework-bundle" and "symfony/dotenv" as Composer dependencies.');
 }
 
+$input = new ArgvInput();
+if (null !== $env = $input->getParameterOption(['--env', '-e'], null, true)) {
+    putenv('APP_ENV='.$_SERVER['APP_ENV'] = $_ENV['APP_ENV'] = $env);
+}
+
 try {
     (new Dotenv(true))->usePutenv()->bootEnv(dirname(__DIR__) . '/.env.local');
 } catch (Exception $exception) {
     (new Dotenv(true))->usePutenv()->bootEnv(dirname(__DIR__) . '/.env');
 }
 
-$input = new ArgvInput();
-if (null !== $env = $input->getParameterOption(['--env', '-e'], null, true)) {
-    putenv('APP_ENV='.$_SERVER['APP_ENV'] = $_ENV['APP_ENV'] = $env);
+if (getenv('APP_ENV') === 'test') {
+    (new Dotenv(true))->usePutenv()->bootEnv(dirname(__DIR__) . '/.env.test');
 }
 
 if ($input->hasParameterOption('--no-debug', true)) {

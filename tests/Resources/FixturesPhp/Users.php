@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Resources\Fixtures;
+namespace App\Tests\Resources\FixturesPhp;
 
 use App\Domain\Tenant\Entity\Tenant;
 use App\Domain\User\Entity\Permission;

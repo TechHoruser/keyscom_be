@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Resources\Fixtures;
+namespace App\Tests\Resources\FixturesPhp;
 
 use App\Domain\Project\Entity\Project;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;

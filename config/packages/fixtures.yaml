@@ -2,8 +2,8 @@ services:
   App\Tests\Resources\:
     resource: '../../tests/Resources/'
 
-  App\Tests\Resources\Fixtures\:
-    resource: '../../tests/Resources/Fixtures/*'
+  App\Tests\Resources\FixturesPhp\:
+    resource: '../../tests/Resources/FixturesPhp/*'
     tags: [ 'doctrine.fixture.orm' ]
     autowire: true
 

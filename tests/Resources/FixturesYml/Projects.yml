@@ -13,4 +13,4 @@ App\Domain\Project\Entity\Project:
     __construct: false
     uuid: <uuid3()>
     name: project_2_1
-    client: "@client_1"
+    client: "@client_2"

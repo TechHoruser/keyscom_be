@@ -5,15 +5,8 @@ namespace App\Tests\Integration\UI\Http\Rest\Controller\Clients;
 use App\Tests\Integration\UI\Http\Rest\Controller\AbstractControllerIntegrationTest;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-class GetClientsControllerTest extends AbstractControllerIntegrationTest implements DependentFixtureInterface
+class GetClientsControllerTest extends AbstractControllerIntegrationTest
 {
-    public function getDependencies(): array
-    {
-        return [
-            '/var/www/html/tests/Resources/Fixtures/yml/Clients.yml',
-        ];
-    }
-
     public function testGetClientsSuccessfully()
     {
         // GIVEN
