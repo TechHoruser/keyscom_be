@@ -14,6 +14,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
 {
     abstract protected function getAliasTable(): string;
     abstract protected function getEntityRepositoryClass(): string;
+    private array $appliedJoins;
 
     public function __construct(ManagerRegistry $registry)
     {
@@ -32,6 +33,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
         PaginationProperties $paginationProperties = new PaginationProperties(),
         array $filters = [],
     ): iterable {
+        $this->appliedJoins = [];
         $queryBuilder = $this->createQueryBuilder($this->getAliasTable());
 
         if ($paginationProperties->page > 0 && $paginationProperties->resultsPerPage > 0) {
@@ -54,6 +56,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
     public function countAll($filters = []): int
     {
+        $this->appliedJoins = [];
         // REVIEW: %s.uuid by %s.* but error in DTO library
         $queryBuilder = $this->createQueryBuilder($this->getAliasTable())
             ->select(sprintf('count(%s.uuid)', $this->getAliasTable()));
@@ -92,7 +95,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
         if (!isset($classMetadata->associationMappings[$parentField])) {
             $callbackMethod(
                 $queryBuilder,
-                $separatedFieldNames[1] ?? $separatedFieldNames[0],
+                $separatedFieldNames[0],
                 $value,
                 $alias,
                 $classMetadata
@@ -101,7 +104,11 @@ abstract class AbstractRepository extends ServiceEntityRepository
             return;
         }
 
-        $queryBuilder->leftJoin($alias . '.' . $parentField, $parentField);
+        $join = $alias . '.' . $parentField;
+        if (!isset($this->appliedJoins[$join])) {
+            $this->appliedJoins[$join] = true;
+            $queryBuilder->leftJoin($join, $parentField);
+        }
 
         $classMetadata = $this->_em->getClassMetadata(
             $classMetadata->associationMappings[$parentField]['targetEntity']
@@ -148,6 +155,8 @@ abstract class AbstractRepository extends ServiceEntityRepository
         string $alias,
         ClassMetadata $classMetadata
     ) {
+        // TODO: Check $value if it's different to ASC or DESC, then throw certain exception
+
         $queryBuilder->orderBy($alias . '.' . $fieldName, $value);
     }
 

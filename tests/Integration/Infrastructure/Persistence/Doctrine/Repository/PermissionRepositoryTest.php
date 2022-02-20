@@ -142,7 +142,7 @@ class PermissionRepositoryTest extends WebTestCase
         $this->assertEquals(0, count($results));
     }
 
-    public function testIfGetChildPermissionsWhitThatOfUserReturnSuccessfullyV1()
+    public function testIfGetChildPermissionsWhitThatOfUserReturnSuccessfullyGivenAClient()
     {
         $this->permissionRepository->save(
             new Permission(
@@ -169,7 +169,7 @@ class PermissionRepositoryTest extends WebTestCase
         $this->assertEquals(1, count($results));
     }
 
-    public function testIfGetChildPermissionsWhitThatOfUserReturnSuccessfullyV2()
+    public function testIfGetChildPermissionsWhitThatOfUserReturnSuccessfullyGivenTwoProjects()
     {
         $this->permissionRepository->save(
             new Permission(
@@ -207,7 +207,7 @@ class PermissionRepositoryTest extends WebTestCase
         $this->assertEquals(2, count($results));
     }
 
-    public function testIfGetChildPermissionsWhitThatOfUserReturnSuccessfullyV3()
+    public function testIfGetChildPermissionsWhitThatOfUserReturnSuccessfullyGivenAProjectAndAClient()
     {
         $this->permissionRepository->save(
             new Permission(
