@@ -15,15 +15,18 @@ abstract class AbstractRepository extends ServiceEntityRepository
     abstract protected function getAliasTable(): string;
     abstract protected function getEntityRepositoryClass(): string;
     private array $appliedJoins;
+    private QueryBuilder $queryBuilder;
 
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, $this->getEntityRepositoryClass());
+        $this->resetParams();
     }
 
     public function getByUuid(string $uuid)
     {
-        return $this->createQueryBuilder($this->getAliasTable())
+        $this->resetParams();
+        return $this->queryBuilder
             ->where($this->getAliasTable().'.uuid = :uuid')
             ->setParameter('uuid', $uuid)
             ->getQuery()->getOneOrNullResult();
@@ -32,57 +35,63 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function complexFind(
         PaginationProperties $paginationProperties = new PaginationProperties(),
         array $filters = [],
+        array $embeds = [],
     ): iterable {
-        $this->appliedJoins = [];
-        $queryBuilder = $this->createQueryBuilder($this->getAliasTable());
-
+        $this->resetParams();
         if ($paginationProperties->page > 0 && $paginationProperties->resultsPerPage > 0) {
-            $queryBuilder->setFirstResult(
+            $this->queryBuilder->setFirstResult(
                 $paginationProperties->resultsPerPage * ($paginationProperties->page - 1)
             )
                 ->setMaxResults($paginationProperties->resultsPerPage);
         }
 
         if (!is_null($paginationProperties->sortBy)) {
-            $this->addOrder($queryBuilder, $paginationProperties->sortBy, $paginationProperties->sortOrder);
+            $this->addOrder($paginationProperties->sortBy, $paginationProperties->sortOrder);
         }
 
         foreach ($filters as $fieldName => $fieldValue) {
-            $this->addWhere($queryBuilder, $fieldName, $fieldValue);
+            $this->addWhere($fieldName, $fieldValue);
         }
 
-        return $queryBuilder->getQuery()->getResult();
+        foreach ($embeds as $embed) {
+            $this->addEmbed($embed);
+        }
+
+        return $this->queryBuilder->getQuery()->getResult();
     }
 
     public function countAll($filters = []): int
     {
-        $this->appliedJoins = [];
+        $this->resetParams();
         // REVIEW: %s.uuid by %s.* but error in DTO library
-        $queryBuilder = $this->createQueryBuilder($this->getAliasTable())
-            ->select(sprintf('count(%s.uuid)', $this->getAliasTable()));
+        $this->queryBuilder->select(sprintf('count(%s.uuid)', $this->getAliasTable()));
 
         foreach ($filters as $fieldName => $fieldValue) {
-            $this->addWhere($queryBuilder, $fieldName, $fieldValue);
+            $this->addWhere($fieldName, $fieldValue);
         }
 
-        return $queryBuilder->getQuery()->getSingleScalarResult();
+        return $this->queryBuilder->getQuery()->getSingleScalarResult();
     }
 
-    protected function addOrder(QueryBuilder $queryBuilder, string $fieldName, $value)
+    protected function addOrder(string $fieldName, mixed $value)
     {
-        $this->addRecursiveJoin([$this, "_callbackOrder"], $queryBuilder, $fieldName, $value);
+        $this->addRecursiveJoin([$this, "_callbackOrder"], $fieldName, $value);
     }
 
-    protected function addWhere(QueryBuilder $queryBuilder, string $fieldName, $value)
+    protected function addWhere(string $fieldName, mixed $value)
     {
-        $this->addRecursiveJoin([$this, "_callbackWhere"], $queryBuilder, $fieldName, $value);
+        $this->addRecursiveJoin([$this, "_callbackWhere"], $fieldName, $value);
+    }
+
+    protected function addEmbed(string $fieldName)
+    {
+        $this->addRecursiveJoin([$this, "_callbackVoid"], $fieldName);
     }
 
     private function addRecursiveJoin(
-        $callbackMethod,
-        QueryBuilder $queryBuilder,
+        callable $callbackMethod,
         string $fieldName,
-        $value,
+        mixed $value = null,
         ?string $alias = null,
         ?ClassMetadata $classMetadata = null
     ): void {
@@ -94,7 +103,6 @@ abstract class AbstractRepository extends ServiceEntityRepository
         $parentField = $separatedFieldNames[0];
         if (!isset($classMetadata->associationMappings[$parentField])) {
             $callbackMethod(
-                $queryBuilder,
                 $separatedFieldNames[0],
                 $value,
                 $alias,
@@ -107,7 +115,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
         $join = $alias . '.' . $parentField;
         if (!isset($this->appliedJoins[$join])) {
             $this->appliedJoins[$join] = true;
-            $queryBuilder->leftJoin($join, $parentField);
+            $this->queryBuilder->leftJoin($join, $parentField);
         }
 
         $classMetadata = $this->_em->getClassMetadata(
@@ -116,7 +124,6 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
         $this->addRecursiveJoin(
             $callbackMethod,
-            $queryBuilder,
             $separatedFieldNames[1],
             $value,
             $parentField,
@@ -125,7 +132,6 @@ abstract class AbstractRepository extends ServiceEntityRepository
     }
 
     private function _callbackWhere(
-        QueryBuilder $queryBuilder,
         string $fieldName,
         $fieldValue,
         string $alias,
@@ -135,21 +141,20 @@ abstract class AbstractRepository extends ServiceEntityRepository
         $fieldName = $alias . '.' . $fieldName;
 
         if ($fieldMapping['type'] === 'datetime' || $fieldMapping['type'] === 'date') {
-            $this->addWhereDateTime($queryBuilder, $fieldName, $fieldValue);
+            $this->addWhereDateTime($fieldName, $fieldValue);
         }
         if ($fieldMapping['type'] === 'string') {
-            $this->addWhereString($queryBuilder, $fieldName, $fieldValue);
+            $this->addWhereString($fieldName, $fieldValue);
         }
         if ($fieldMapping['type'] === 'guid') {
-            $this->addWhereUuid($queryBuilder, $fieldName, $fieldValue);
+            $this->addWhereUuid($fieldName, $fieldValue);
         }
         if ($fieldMapping['type'] == 'integer') {
-            $this->addWhereInteger($queryBuilder, $fieldName, $fieldValue);
+            $this->addWhereInteger($fieldName, $fieldValue);
         }
     }
 
     private function _callbackOrder(
-        QueryBuilder $queryBuilder,
         string $fieldName,
         $value,
         string $alias,
@@ -157,22 +162,28 @@ abstract class AbstractRepository extends ServiceEntityRepository
     ) {
         // TODO: Check $value if it's different to ASC or DESC, then throw certain exception
 
-        $queryBuilder->orderBy($alias . '.' . $fieldName, $value);
+        $this->queryBuilder->orderBy($alias . '.' . $fieldName, $value);
     }
 
+    private function _callbackVoid(
+        string $fieldName,
+        $value,
+        string $alias,
+        ClassMetadata $classMetadata
+    ) {}
+
     /**
-     * @param QueryBuilder $queryBuilder
      * @param string $fieldName
      * @param $fieldValue
      */
-    protected function addWhereDateTime(QueryBuilder $queryBuilder, string $fieldName, $fieldValue): void
+    protected function addWhereDateTime(string $fieldName, $fieldValue): void
     {
         $dateTimes = explode('/', $fieldValue);
 
         $fromDate = $dateTimes[0];
         if ($fromDate) {
             $fromOperator = count($dateTimes) > 1 ? '>=' : '=';
-            $queryBuilder->andWhere(
+            $this->queryBuilder->andWhere(
                 sprintf(
                     "%s %s '%s'",
                     $fieldName,
@@ -183,38 +194,41 @@ abstract class AbstractRepository extends ServiceEntityRepository
         }
         $toDate = count($dateTimes) > 1 ? $dateTimes[1] : null;
         if ($toDate) {
-            $queryBuilder->andWhere(sprintf("%s <= '%s'", $fieldName, $toDate));
+            $this->queryBuilder->andWhere(sprintf("%s <= '%s'", $fieldName, $toDate));
         }
     }
 
     /**
-     * @param QueryBuilder $queryBuilder
      * @param string $fieldName
      * @param $fieldValue
      */
-    protected function addWhereString(QueryBuilder $queryBuilder, string $fieldName, $fieldValue): void
+    protected function addWhereString(string $fieldName, $fieldValue): void
     {
-        $queryBuilder->andWhere(sprintf('LOWER(%s) LIKE \'%%%s%%\'', $fieldName, mb_strtolower($fieldValue)));
+        $this->queryBuilder->andWhere(sprintf('LOWER(%s) LIKE \'%%%s%%\'', $fieldName, mb_strtolower($fieldValue)));
     }
 
     /**
-     * @param QueryBuilder $queryBuilder
      * @param string $fieldName
      * @param $fieldValue
      */
-    protected function addWhereUuid(QueryBuilder $queryBuilder, string $fieldName, $fieldValue): void
+    protected function addWhereUuid(string $fieldName, $fieldValue): void
     {
-        $queryBuilder->andWhere(sprintf('%s = \'%s\'', $fieldName, mb_strtolower($fieldValue)));
+        $this->queryBuilder->andWhere(sprintf('%s = \'%s\'', $fieldName, mb_strtolower($fieldValue)));
     }
 
     /**
-     * @param QueryBuilder $queryBuilder
      * @param string $fieldName
      * @param $fieldValue
      */
-    protected function addWhereInteger(QueryBuilder $queryBuilder, string $fieldName, $fieldValue): void
+    protected function addWhereInteger(string $fieldName, $fieldValue): void
     {
-        $queryBuilder->andWhere(sprintf('%s = %s', $fieldName, intval($fieldValue)));
+        $this->queryBuilder->andWhere(sprintf('%s = %s', $fieldName, intval($fieldValue)));
+    }
+
+    private function resetParams(): void
+    {
+        $this->queryBuilder = $this->createQueryBuilder($this->getAliasTable());
+        $this->appliedJoins = [];
     }
 
 }
