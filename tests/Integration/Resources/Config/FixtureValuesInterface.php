@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Resources\Config;
+namespace App\Tests\Integration\Resources\Config;
 
 interface FixtureValuesInterface
 {

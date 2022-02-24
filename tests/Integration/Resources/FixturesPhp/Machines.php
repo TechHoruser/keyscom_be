@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Tests\Resources\FixturesPhp;
+namespace App\Tests\Integration\Resources\FixturesPhp;
 
 use App\Domain\Project\Entity\Project;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+use function App\Tests\Resources\FixturesPhp\str_starts_with;
 
 class Machines extends AbstractFixture implements DependentFixtureInterface
 {

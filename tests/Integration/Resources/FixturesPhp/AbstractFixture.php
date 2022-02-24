@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Tests\Resources\FixturesPhp;
+namespace App\Tests\Integration\Resources\FixturesPhp;
 
 use App\Application\Shared\Helper\SecurityHelperInterface;
-use App\Tests\Resources\Config\FixtureValuesInterface;
-use App\Tests\Resources\Factory\FakerFactoryInterface;
+use App\Tests\Integration\Resources\Config\FixtureValuesInterface;
+use App\Tests\Integration\Resources\Factory\FakerFactoryInterface;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 
 abstract class AbstractFixture extends Fixture

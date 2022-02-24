@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Resources\Config;
+namespace App\Tests\Integration\Resources\Config;
 
 class FixtureValues implements FixtureValuesInterface
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Resources\Factory;
+namespace App\Tests\Integration\Resources\Factory;
 
 use App\Domain\Client\Entity\Client;
 use App\Domain\Machine\Entity\Machine;
