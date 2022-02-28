@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace App\Domain\User\Entity;
 
 use App\Domain\Shared\Auditable\AuditableEntityTrait;
+use App\Domain\Shared\Entities\AbstractEntity;
 use App\Domain\Tenant\CertainTenant\TenantEntityTrait;
 use App\Domain\User\Enums\PermissionRelatedEntity;
 use App\Domain\User\Enums\PermissionType;
 use Ramsey\Uuid\Uuid;
 
-class Permission
+class Permission extends AbstractEntity
 {
     use AuditableEntityTrait;
     use TenantEntityTrait;

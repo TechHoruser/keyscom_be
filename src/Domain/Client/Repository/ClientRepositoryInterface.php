@@ -10,4 +10,5 @@ use App\Domain\Shared\Interfaces\ComplexFindInterface;
 interface ClientRepositoryInterface extends ComplexFindInterface
 {
     public function getByUuid(string $uuid): ?Client;
+    public function save(Client $client): Client;
 }

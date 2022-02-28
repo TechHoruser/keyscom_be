@@ -6,17 +6,19 @@ namespace App\Domain\Client\Entity;
 
 use App\Domain\Project\Entity\Project;
 use App\Domain\Shared\Auditable\AuditableEntityTrait;
+use App\Domain\Shared\Entities\AbstractEntity;
 use App\Domain\Tenant\CertainTenant\TenantEntityTrait;
 use Ramsey\Uuid\Uuid;
 
-class Client
+class Client extends AbstractEntity
 {
     use AuditableEntityTrait;
     use TenantEntityTrait;
 
     private string $uuid;
 
-    public function __construct(?string $uuid,
+    public function __construct(
+        ?string $uuid,
         private string $name,
         /** @var Project[] $projects */
         private iterable $projects = [],

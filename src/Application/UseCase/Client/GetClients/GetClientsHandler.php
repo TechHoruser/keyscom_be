@@ -27,7 +27,10 @@ class GetClientsHandler implements QueryHandlerInterface
         );
 
         return $this->paginationMapper->map(
-            $this->clientMapper->map($results),
+            array_map(
+                fn($client) => $this->clientMapper->map($client),
+                $results
+            ),
             $this->clientRepository->countAll($getClientsQuery->filters)
         );
     }

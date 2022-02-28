@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\Persistence\Doctrine\Repository;
 
 use App\Domain\Shared\Entities\PaginationProperties;
+use App\Domain\Shared\Entities\AbstractEntity;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\QueryBuilder;
@@ -23,7 +24,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
         $this->resetParams();
     }
 
-    public function getByUuid(string $uuid)
+    public function getByUuid(string $uuid): ?AbstractEntity
     {
         $this->resetParams();
         return $this->queryBuilder
@@ -71,6 +72,13 @@ abstract class AbstractRepository extends ServiceEntityRepository
         }
 
         return $this->queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    public function saveEntityInterface(AbstractEntity $entity): AbstractEntity
+    {
+        $this->_em->persist($entity);
+        $this->_em->flush();
+        return $entity;
     }
 
     protected function addOrder(string $fieldName, mixed $value)

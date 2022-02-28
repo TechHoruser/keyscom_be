@@ -25,16 +25,9 @@ class ActionUserOnMachineRepository extends AbstractRepository implements Action
         return parent::getByUuid($uuid);
     }
 
-    /**
-     * @param ActionUserOnMachine $actionUserOnMachine
-     * @return ActionUserOnMachine
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
     public function save(ActionUserOnMachine $actionUserOnMachine): ActionUserOnMachine
     {
-        $this->_em->persist($actionUserOnMachine);
-        $this->_em->flush();
-        return $actionUserOnMachine;
+//        TODO: Review warning
+        return parent::saveEntityInterface($actionUserOnMachine);
     }
 }

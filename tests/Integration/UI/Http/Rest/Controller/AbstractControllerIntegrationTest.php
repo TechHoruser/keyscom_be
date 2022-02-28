@@ -2,12 +2,14 @@
 
 namespace App\Tests\Integration\UI\Http\Rest\Controller;
 
-use App\Tests\Resources\Factory\FakerFactoryInterface;
+use App\Tests\Integration\Resources\Factory\FakerFactoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Liip\FunctionalTestBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\SerializerInterface;
 
 abstract class AbstractControllerIntegrationTest extends WebTestCase
 {
@@ -20,6 +22,8 @@ abstract class AbstractControllerIntegrationTest extends WebTestCase
     protected $fakerFactory;
     /** @var EntityManagerInterface */
     protected $_em;
+    /** @var SerializerInterface */
+    protected $serializer;
 
     protected function setUp(): void
     {
@@ -29,6 +33,7 @@ abstract class AbstractControllerIntegrationTest extends WebTestCase
 
         $this->fakerFactory = $container->get(FakerFactoryInterface::class);
         $this->_em = $container->get(EntityManagerInterface::class);
+        $this->serializer = $container->get(SerializerInterface::class);
 
         $schemaTool = new SchemaTool($this->_em);
         $metadata = $this->_em->getMetadataFactory()->getAllMetadata();
@@ -40,5 +45,21 @@ abstract class AbstractControllerIntegrationTest extends WebTestCase
     protected function jsonEncodeAsHttpResponse($data): string
     {
         return json_encode($data, JsonResponse::DEFAULT_ENCODING_OPTIONS);
+    }
+
+    protected function sendRequestWithBody(
+        string $method,
+        string $path,
+        mixed $data
+    ): Response {
+        $this->client->request(
+            $method,
+            $path,
+            [],
+            [],
+            ['CONTENT_TYPE' => 'application/json'],
+            $this->serializer->serialize($data, 'json')
+        );
+        return $this->client->getResponse();
     }
 }
