@@ -7,11 +7,10 @@ namespace App\Domain\Project\Entity;
 use App\Domain\Client\Entity\Client;
 use App\Domain\Machine\Entity\Machine;
 use App\Domain\Shared\Auditable\AuditableEntityTrait;
-use App\Domain\Shared\Entities\AbstractEntity;
 use App\Domain\Tenant\CertainTenant\TenantEntityTrait;
 use Ramsey\Uuid\Uuid;
 
-class Project extends AbstractEntity
+class Project
 {
     use AuditableEntityTrait;
     use TenantEntityTrait;

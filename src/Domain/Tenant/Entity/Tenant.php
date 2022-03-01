@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace App\Domain\Tenant\Entity;
 
 use App\Domain\Shared\Auditable\AuditableEntityTrait;
-use App\Domain\Shared\Entities\AbstractEntity;
 
-class Tenant extends AbstractEntity
+class Tenant
 {
     use AuditableEntityTrait;
 

@@ -28,7 +28,6 @@ class ClientRepository extends AbstractRepository implements ClientRepositoryInt
 
     public function save(Client $client): Client
     {
-//        TODO: Review warning
         return parent::saveEntityInterface($client);
     }
 }

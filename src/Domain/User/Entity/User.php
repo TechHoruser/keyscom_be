@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace App\Domain\User\Entity;
 
 use App\Domain\Shared\Auditable\AuditableEntityTrait;
-use App\Domain\Shared\Entities\AbstractEntity;
 use App\Domain\Tenant\CertainTenant\TenantEntityTrait;
 use Ramsey\Uuid\Uuid;
 
-class User extends AbstractEntity
+class User
 {
     use AuditableEntityTrait;
     use TenantEntityTrait;

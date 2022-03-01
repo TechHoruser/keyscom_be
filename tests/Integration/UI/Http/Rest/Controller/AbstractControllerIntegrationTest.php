@@ -9,6 +9,7 @@ use Liip\FunctionalTestBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 abstract class AbstractControllerIntegrationTest extends WebTestCase
@@ -17,11 +18,14 @@ abstract class AbstractControllerIntegrationTest extends WebTestCase
     protected const POST = 'POST';
     protected const PUT = 'PUT';
     protected const DELETE = 'DELETE';
+    protected const REQUEST_FORMAT = 'json';
     protected KernelBrowser $client;
     /** @var FakerFactoryInterface */
     protected $fakerFactory;
     /** @var EntityManagerInterface */
     protected $_em;
+    /** @var NormalizerInterface */
+    protected $normalizer;
     /** @var SerializerInterface */
     protected $serializer;
 
@@ -33,6 +37,7 @@ abstract class AbstractControllerIntegrationTest extends WebTestCase
 
         $this->fakerFactory = $container->get(FakerFactoryInterface::class);
         $this->_em = $container->get(EntityManagerInterface::class);
+        $this->normalizer = $container->get(NormalizerInterface::class);
         $this->serializer = $container->get(SerializerInterface::class);
 
         $schemaTool = new SchemaTool($this->_em);
@@ -58,7 +63,7 @@ abstract class AbstractControllerIntegrationTest extends WebTestCase
             [],
             [],
             ['CONTENT_TYPE' => 'application/json'],
-            $this->serializer->serialize($data, 'json')
+            $this->serializer->serialize($data, self::REQUEST_FORMAT),
         );
         return $this->client->getResponse();
     }

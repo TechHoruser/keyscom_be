@@ -20,7 +20,26 @@ class CreateClientsControllerTest extends AbstractControllerIntegrationTest
 
         // THEN
         $this->assertEquals(Response::HTTP_CREATED, $response->getStatusCode());
+        $this->assertEquals($client->getUuid(), $responseData['uuid']);
+        $this->assertEquals($client->getName(), $responseData['name']);
+    }
+
+    public function testCreateClientSuccessfullyWithEmptyUuid()
+    {
+        // GIVEN
+        $method = self::POST;
+        $path = '/client';
+
+        // WHEN
+        $client = ($this->fakerFactory->newClient());
+        $clientArray = $this->normalizer->normalize($client, self::REQUEST_FORMAT);
+        unset($clientArray['uuid']);
+        $response = $this->sendRequestWithBody($method, $path, $clientArray);
+        $responseData = json_decode($response->getContent(), true);
+
+        // THEN
+        $this->assertEquals(Response::HTTP_CREATED, $response->getStatusCode());
         $this->assertArrayHasKey('uuid', $responseData);
-        $this->assertArrayHasKey('name', $responseData);
+        $this->assertEquals($client->getName(), $responseData['name']);
     }
 }

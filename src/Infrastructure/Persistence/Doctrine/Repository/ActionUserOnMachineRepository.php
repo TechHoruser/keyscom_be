@@ -27,7 +27,6 @@ class ActionUserOnMachineRepository extends AbstractRepository implements Action
 
     public function save(ActionUserOnMachine $actionUserOnMachine): ActionUserOnMachine
     {
-//        TODO: Review warning
         return parent::saveEntityInterface($actionUserOnMachine);
     }
 }
