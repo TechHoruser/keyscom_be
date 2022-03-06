@@ -23,9 +23,14 @@ abstract class AbstractRepository extends ServiceEntityRepository
         $this->resetParams();
     }
 
-    public function getByUuid(string $uuid)
+    public function getByUuid(string $uuid, array $embeds = [])
     {
         $this->resetParams();
+
+        foreach ($embeds as $embed) {
+            $this->addEmbed($embed);
+        }
+
         return $this->queryBuilder
             ->where($this->getAliasTable().'.uuid = :uuid')
             ->setParameter('uuid', $uuid)
@@ -108,7 +113,16 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
         $separatedFieldNames = explode('.', $fieldName, 2);
         $parentField = $separatedFieldNames[0];
-        if (!isset($classMetadata->associationMappings[$parentField])) {
+
+        if (isset($classMetadata->associationMappings[$parentField])) {
+            $join = $alias . '.' . $parentField;
+            if (!isset($this->appliedJoins[$join])) {
+                $this->appliedJoins[$join] = true;
+                $this->queryBuilder->leftJoin($join, $parentField);
+            }
+        }
+
+        if (!isset($classMetadata->associationMappings[$parentField]) || count($separatedFieldNames) === 1) {
             $callbackMethod(
                 $separatedFieldNames[0],
                 $value,
@@ -117,12 +131,6 @@ abstract class AbstractRepository extends ServiceEntityRepository
             );
 
             return;
-        }
-
-        $join = $alias . '.' . $parentField;
-        if (!isset($this->appliedJoins[$join])) {
-            $this->appliedJoins[$join] = true;
-            $this->queryBuilder->leftJoin($join, $parentField);
         }
 
         $classMetadata = $this->_em->getClassMetadata(

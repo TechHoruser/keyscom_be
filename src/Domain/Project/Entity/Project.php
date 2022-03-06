@@ -8,6 +8,8 @@ use App\Domain\Client\Entity\Client;
 use App\Domain\Machine\Entity\Machine;
 use App\Domain\Shared\Auditable\AuditableEntityTrait;
 use App\Domain\Tenant\CertainTenant\TenantEntityTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\Uuid;
 
 class Project
@@ -23,8 +25,7 @@ class Project
         private ?\DateTime $startDate,
         private ?\DateTime $endDate,
         private Client $client,
-        /** @var Machine[] $machines */
-        private iterable $machines = [],
+        private Collection $machines = new ArrayCollection(),
     ) {
         $this->uuid = $uuid ?? Uuid::uuid4()->toString();
     }
@@ -89,14 +90,21 @@ class Project
         return $this;
     }
 
-    public function getMachines(): iterable
+    public function getMachines(): array
     {
-        return $this->machines;
+        return $this->machines->getValues();
     }
 
-    public function setMachines(iterable $machines): static
+    public function setMachines(array $machines): static
     {
-        $this->machines = $machines;
+        $this->machines = new ArrayCollection($machines);
+
+        return $this;
+    }
+
+    public function addMachine(Machine $machine): static
+    {
+        $this->machines->add($machine);
 
         return $this;
     }

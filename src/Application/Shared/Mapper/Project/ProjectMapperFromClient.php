@@ -6,14 +6,12 @@ namespace App\Application\Shared\Mapper\Project;
 
 use App\Application\Shared\Dto\Project\ProjectDto;
 use App\Application\Shared\Mapper\AbstractMapper;
-use App\Application\Shared\Mapper\Client\ClientMapperFromProject;
 use App\Application\Shared\Mapper\Machine\MachineMapperFromProject;
 use App\Domain\Project\Entity\Project;
 
-class ProjectMapper extends AbstractMapper
+class ProjectMapperFromClient extends AbstractMapper
 {
     public function __construct(
-        private ClientMapperFromProject $clientMapper,
         private MachineMapperFromProject $machineMapper,
     ) {}
 
@@ -24,8 +22,7 @@ class ProjectMapper extends AbstractMapper
         return new ProjectDto(
             $project->getUuid(),
             $project->getName(),
-            !isset($embeds['client']) ? null :
-                $this->clientMapper->map($project->getClient(), $embeds['client']),
+            null,
             !isset($embeds['machines']) ? null :
                 $this->machineMapper->mapArray($project->getMachines(), $embeds['machines']),
         );

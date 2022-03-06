@@ -20,9 +20,9 @@ class ActionUserOnMachineRepository extends AbstractRepository implements Action
         return Permission::class;
     }
 
-    public function getByUuid(string $uuid): ?ActionUserOnMachine
+    public function getByUuid(string $uuid, array $embeds = []): ?ActionUserOnMachine
     {
-        return parent::getByUuid($uuid);
+        return parent::getByUuid($uuid, $embeds);
     }
 
     public function save(ActionUserOnMachine $actionUserOnMachine): ActionUserOnMachine

@@ -43,16 +43,16 @@ class FakerFactory implements FakerFactoryInterface
         ;
 
         $startDate = $this->faker->dateTime();
-        $contract = new Project(
+        $project = new Project(
             $this->faker->uuid3(),
             $this->faker->name(),
             $startDate,
             $this->faker->boolean() ? $this->faker->dateTimeBetween($startDate) : null,
             $client,
         );
-        $contract->setTenantName($client->getTenantName());
-        $contract->setCreatedAt(new \DateTime());
-        return $contract;
+        $project->setTenantName($client->getTenantName());
+        $project->setCreatedAt(new \DateTime());
+        return $project;
     }
 
     public function newMachine(?Project $project = null): Machine

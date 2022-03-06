@@ -19,8 +19,8 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
         return User::class;
     }
 
-    public function getByUuid(string $uuid): ?User
+    public function getByUuid(string $uuid, array $embeds = []): ?User
     {
-        return parent::getByUuid($uuid);
+        return parent::getByUuid($uuid, $embeds);
     }
 }

@@ -21,9 +21,9 @@ class ClientRepository extends AbstractRepository implements ClientRepositoryInt
         return Client::class;
     }
 
-    public function getByUuid(string $uuid): ?Client
+    public function getByUuid(string $uuid, array $embeds = []): ?Client
     {
-        return parent::getByUuid($uuid);
+        return parent::getByUuid($uuid, $embeds);
     }
 
     public function save(Client $client): Client

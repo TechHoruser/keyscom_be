@@ -7,6 +7,8 @@ namespace App\Domain\Client\Entity;
 use App\Domain\Project\Entity\Project;
 use App\Domain\Shared\Auditable\AuditableEntityTrait;
 use App\Domain\Tenant\CertainTenant\TenantEntityTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\Uuid;
 
 class Client
@@ -19,8 +21,7 @@ class Client
     public function __construct(
         ?string $uuid,
         private string $name,
-        /** @var Project[] $projects */
-        private iterable $projects = [],
+        private Collection $projects = new ArrayCollection(),
     ) {
         $this->uuid = $uuid ?? Uuid::uuid4()->toString();
     }
@@ -49,14 +50,21 @@ class Client
         return $this;
     }
 
-    public function getProjects(): iterable
+    public function getProjects(): array
     {
-        return $this->projects;
+        return $this->projects->getValues();
     }
 
-    public function setProjects(iterable $projects): static
+    public function setProjects(array $projects): static
     {
-        $this->projects = $projects;
+        $this->projects = new ArrayCollection($projects);
+
+        return $this;
+    }
+
+    public function addProject(Project $project): static
+    {
+        $this->projects->add($project);
 
         return $this;
     }

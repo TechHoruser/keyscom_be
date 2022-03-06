@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace App\Application\Shared\Mapper\User;
 
 use App\Application\Shared\Dto\User\UserDto;
-use App\Application\Shared\Mapper\MapperInterface;
 use App\Domain\User\Entity\User;
 
-class UserMapper implements MapperInterface
+class UserMapper
 {
     /**
      * @param User[] $users

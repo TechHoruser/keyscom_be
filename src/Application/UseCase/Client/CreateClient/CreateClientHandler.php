@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Application\UseCase\Client\CreateClient;
 
 use App\Application\Shared\Command\CommandHandlerInterface;
-use App\Application\Shared\Dto\Client\Output\ClientDto;
+use App\Application\Shared\Dto\Client\ClientDto;
 use App\Application\Shared\Mapper\Client\ClientMapper;
 use App\Domain\Client\Entity\Client;
 use App\Domain\Client\Repository\ClientRepositoryInterface;

@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace App\Application\Shared\Mapper\Pagination;
 
 use App\Application\Shared\Dto\Pagination\PaginationDto;
-use App\Application\Shared\Mapper\MapperInterface;
 
-class PaginationMapper implements MapperInterface
+class PaginationMapper
 {
     /**
      * @param array $results

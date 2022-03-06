@@ -8,6 +8,8 @@ use App\Domain\Shared\Auditable\AuditableEntityTrait;
 use App\Domain\Tenant\CertainTenant\TenantEntityTrait;
 use App\Domain\User\Enums\PermissionRelatedEntity;
 use App\Domain\User\Enums\PermissionType;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\Uuid;
 
 class Permission
@@ -27,7 +29,7 @@ class Permission
         private ?string $relatedEntityUuid,
         private bool $reverted = false,
         /** @var ActionUserOnMachine[] $actions */
-        private iterable $actions = [],
+        private Collection $actions = new ArrayCollection(),
     ) {
         $this->uuid = $uuid ?? Uuid::uuid4()->toString();
     }
@@ -128,14 +130,14 @@ class Permission
         return $this;
     }
 
-    public function getActions(): iterable
+    public function getActions(): array
     {
-        return $this->actions;
+        return $this->actions->getValues();
     }
 
-    public function setActions(iterable $actions): static
+    public function setActions(array $actions): static
     {
-        $this->actions = $actions;
+        $this->actions = new ArrayCollection($actions);
 
         return $this;
     }
