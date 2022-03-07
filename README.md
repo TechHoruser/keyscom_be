@@ -24,7 +24,10 @@ Run `docker-compose up -d` to run app.
 
 Run `docker-compose exec php composer install` to install the vendors.
 
-The application is running in `http://localhost:8080`
+Run `docker-compose exec php php bin/console lexik:jwt:generate-keypair` for generate pair of keys for JWT library.
+
+The application is running in [http://localhost:8080](http://localhost:8080). You can see OpenAPI documentation on [http://localhost:8080/doc](http://localhost:8080/doc).
+
 
 ## Configurations
 
