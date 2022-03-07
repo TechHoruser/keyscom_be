@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Persistence\Doctrine\Repository;
 
-use App\Domain\User\Entity\User;
-use App\Domain\User\Repository\UserRepositoryInterface;
+use App\Infrastructure\Security\User;
 
-class UserRepository extends AbstractRepository implements UserRepositoryInterface
+class SecurityUserRepository extends AbstractRepository
 {
     protected function getAliasTable(): string
     {

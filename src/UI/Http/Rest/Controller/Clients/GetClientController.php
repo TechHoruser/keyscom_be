@@ -18,7 +18,7 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface;
  *
  * @OpenApi\Annotations\Get (
  *     path="/client/{clientUuid}",
- *     summary="Get Client",
+ *     summary="Get a Client",
  *     tags={"Clients"},
  *     @OpenApi\Annotations\Parameter (
  *         name="embeds",

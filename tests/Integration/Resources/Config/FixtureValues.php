@@ -10,6 +10,7 @@ class FixtureValues implements FixtureValuesInterface
     private int $maxProjectsPerClient;
     private int $maxMachinesPerProject;
     private int $numberOfTenants;
+    private string $commonUserPassword;
 
     public function __construct()
     {
@@ -24,6 +25,7 @@ class FixtureValues implements FixtureValuesInterface
         $this->maxProjectsPerClient = intval($ini['MAX_NUMBER_OF_PROJECTS_PER_CLIENT']);
         $this->maxMachinesPerProject = intval($ini['MAX_NUMBER_OF_MACHINES_PER_PROJECT']);
         $this->numberOfTenants = intval($ini['NUMBER_OF_TENANTS']);
+        $this->commonUserPassword = strval($ini['COMMON_USER_PASSWORD']);
     }
 
     /**
@@ -56,5 +58,10 @@ class FixtureValues implements FixtureValuesInterface
     public function getNumberOfTenants(): int
     {
         return $this->numberOfTenants;
+    }
+
+    public function getCommonUserPassword(): string
+    {
+        return $this->commonUserPassword;
     }
 }

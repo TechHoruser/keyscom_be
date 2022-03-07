@@ -13,18 +13,15 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface;
 /**
  * @Symfony\Component\Routing\Annotation\Route ("/client", methods={"POST"})
  *
- * @OpenApi\Annotations\Get (
- *     path="/assigment-permission",
- *     summary="Assigment Permission to other user",
- *     tags={"Users"},
+ * @OpenApi\Annotations\Post (
+ *     path="/client",
+ *     summary="Create a Client",
+ *     tags={"Clients"},
  *     @OpenApi\Annotations\RequestBody (
  *      @OpenApi\Annotations\JsonContent(
  *        type="object",
- *          @OpenApi\Annotations\Property(property="userUuid", type="string"),
- *          @OpenApi\Annotations\Property(property="userType", type="string", nullable=true),
- *          @OpenApi\Annotations\Property(property="relatedEntity", type="string"),
- *          @OpenApi\Annotations\Property(property="typeOfMachine", type="number", nullable=true),
- *          @OpenApi\Annotations\Property(property="relatedEntityUuid", type="string"),
+ *          @OpenApi\Annotations\Property(property="userUuid", type="string", nullable=true),
+ *          @OpenApi\Annotations\Property(property="name", type="string", nullable=true),
  *       )
  *     ),
  * )

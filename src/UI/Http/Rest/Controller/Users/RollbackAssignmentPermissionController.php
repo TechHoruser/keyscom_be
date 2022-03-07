@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface;
 /**
  * @Symfony\Component\Routing\Annotation\Route ("/assigment-permission/rollback", methods={"POST"})
  *
- * @OpenApi\Annotations\Get (
+ * @OpenApi\Annotations\Post (
  *     path="/assigment-permission/rollback",
  *     summary="Rollback Permission to other user",
  *     tags={"Users"},

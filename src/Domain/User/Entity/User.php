@@ -13,12 +13,14 @@ class User
     use AuditableEntityTrait;
     use TenantEntityTrait;
 
-    private string $uuid;
+    protected string $uuid;
 
     public function __construct(
         ?string $uuid,
-        private string $email,
-        private ?string $pubKey,
+        protected string $email,
+        protected ?string $password,
+        protected ?string $pubKey,
+        protected string $name,
     )
     {
         $this->uuid = $uuid ?? Uuid::uuid4()->toString();
@@ -48,6 +50,18 @@ class User
         return $this;
     }
 
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): static
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
     public function getPubKey(): ?string
     {
         return $this->pubKey;
@@ -56,6 +70,18 @@ class User
     public function setPubKey(?string $pubKey): static
     {
         $this->pubKey = $pubKey;
+
+        return $this;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): static
+    {
+        $this->name = $name;
 
         return $this;
     }

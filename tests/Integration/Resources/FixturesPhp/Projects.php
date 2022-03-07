@@ -5,7 +5,6 @@ namespace App\Tests\Integration\Resources\FixturesPhp;
 use App\Domain\Client\Entity\Client;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
-use function App\Tests\Resources\FixturesPhp\str_starts_with;
 
 class Projects extends AbstractFixture implements DependentFixtureInterface
 {

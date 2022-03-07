@@ -17,9 +17,9 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Infrastructure/Persistence/Doctrine/Mapping/Domain'
                 prefix: 'App\Domain'
                 alias: App
-            Tennant:
+            Infrastructure:
                 is_bundle: false
                 type: xml
                 dir: '%kernel.project_dir%/src/Infrastructure/Persistence/Doctrine/Mapping/Infrastructure'
-                prefix: 'App\Infrastructure\Tenant'
-                alias: Tenant
+                prefix: 'App\Infrastructure'
+                alias: Infrastructure

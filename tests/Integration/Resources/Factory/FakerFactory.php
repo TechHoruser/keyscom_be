@@ -9,19 +9,45 @@ use App\Domain\Client\Repository\ClientRepositoryInterface;
 use App\Domain\Machine\Entity\Machine;
 use App\Domain\Project\Entity\Project;
 use App\Domain\Tenant\Entity\Tenant;
+use App\Infrastructure\Security\User;
+use App\Tests\Integration\Resources\Config\FixtureValuesInterface;
 use Faker\Factory;
 use Faker\Generator;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class FakerFactory implements FakerFactoryInterface
 {
     private Generator $faker;
-    private ClientRepositoryInterface $clientRepository;
 
     public function __construct(
-        ClientRepositoryInterface $clientRepository
+        private ClientRepositoryInterface $clientRepository,
+        private FixtureValuesInterface $fixtureValues,
+        private UserPasswordHasherInterface $passwordHasher,
     ) {
         $this->faker = Factory::create();
-        $this->clientRepository = $clientRepository;
+    }
+
+    public function getUserPassword(): string
+    {
+        return $this->fixtureValues->getCommonUserPassword();
+    }
+
+    public function newUser(?Tenant $tenant = null): User
+    {
+        $user = new User(
+            $this->faker->uuid3(),
+            $this->faker->email(),
+            null,
+            null,
+            $this->faker->name(),
+        );
+        $user->setPassword($this->passwordHasher->hashPassword(
+            $user,
+            $this->fixtureValues->getCommonUserPassword(),
+        ));
+        $user->setTenant($tenant);
+        $user->setCreatedAt(new \DateTime());
+        return $user;
     }
 
     public function newClient(?Tenant $tenant = null): Client

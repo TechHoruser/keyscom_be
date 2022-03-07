@@ -9,15 +9,16 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Serializer\SerializerInterface;
 
 abstract class AbstractRepository extends ServiceEntityRepository
 {
     abstract protected function getAliasTable(): string;
     abstract protected function getEntityRepositoryClass(): string;
     private array $appliedJoins;
-    private QueryBuilder $queryBuilder;
+    protected QueryBuilder $queryBuilder;
 
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, SerializerInterface $serializer)
     {
         parent::__construct($registry, $this->getEntityRepositoryClass());
         $this->resetParams();

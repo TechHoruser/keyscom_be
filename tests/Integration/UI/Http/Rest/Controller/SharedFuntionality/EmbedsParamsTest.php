@@ -44,6 +44,8 @@ class EmbedsParamsTest extends AbstractControllerIntegrationTest
             $method,
             str_replace(':clientUuid', $client->getUuid(), $path),
             ['embeds' => ['projects.machines']],
+            [],
+            ['CONTENT_TYPE' => 'application/json'],
         );
         $response = $this->client->getResponse();
         $responseData = json_decode($response->getContent(), true);

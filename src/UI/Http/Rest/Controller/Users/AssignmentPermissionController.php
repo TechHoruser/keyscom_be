@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface;
 /**
  * @Symfony\Component\Routing\Annotation\Route ("/assigment-permission", methods={"POST"})
  *
- * @OpenApi\Annotations\Get (
+ * @OpenApi\Annotations\Post (
  *     path="/assigment-permission",
  *     summary="Assigment Permission to other user",
  *     tags={"Users"},

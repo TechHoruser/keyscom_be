@@ -9,6 +9,8 @@ use App\Domain\User\Entity\User;
 
 interface UserRepositoryInterface
 {
+    public function getByEmail(string $email): ?User;
+
     public function getByUuid(string $uuid): ?User;
 
     public function complexFind(

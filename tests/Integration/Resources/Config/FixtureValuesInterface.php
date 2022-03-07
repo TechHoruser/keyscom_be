@@ -8,4 +8,5 @@ interface FixtureValuesInterface
     public function getMaxProjectsPerClient(): int;
     public function getMaxMachinesPerProject(): int;
     public function getNumberOfTenants(): int;
+    public function getCommonUserPassword(): string;
 }
