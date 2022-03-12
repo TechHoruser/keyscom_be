@@ -9,7 +9,7 @@ use App\Domain\Client\Repository\ClientRepositoryInterface;
 use App\Domain\Machine\Entity\Machine;
 use App\Domain\Project\Entity\Project;
 use App\Domain\Tenant\Entity\Tenant;
-use App\Infrastructure\Security\User;
+use App\Domain\User\Entity\User;
 use App\Tests\Integration\Resources\Config\FixtureValuesInterface;
 use Faker\Factory;
 use Faker\Generator;
@@ -42,7 +42,7 @@ class FakerFactory implements FakerFactoryInterface
             $this->faker->name(),
         );
         $user->setPassword($this->passwordHasher->hashPassword(
-            $user,
+            \App\Infrastructure\Security\User::createFromUser($user),
             $this->fixtureValues->getCommonUserPassword(),
         ));
         $user->setTenant($tenant);

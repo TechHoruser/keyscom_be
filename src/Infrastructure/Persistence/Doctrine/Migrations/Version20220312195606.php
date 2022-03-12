@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20220312182338 extends AbstractMigration
+final class Version20220312195606 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -46,13 +46,13 @@ final class Version20220312182338 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_5C93B3A443625D9F ON projects (updated_at)');
         $this->addSql('CREATE TABLE tenant_infrastructure_configuration (host VARCHAR(100) NOT NULL, user_db VARCHAR(100) NOT NULL, password_db VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(host))');
         $this->addSql('CREATE TABLE tenants (host VARCHAR(100) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(host))');
-        $this->addSql('CREATE TABLE users (uuid UUID NOT NULL, email VARCHAR(255) NOT NULL, pub_key VARCHAR(255) DEFAULT NULL, password VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, tenant_name VARCHAR(100) DEFAULT NULL, PRIMARY KEY(uuid))');
+        $this->addSql('CREATE TABLE users (uuid UUID NOT NULL, email VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, pub_key VARCHAR(255) DEFAULT NULL, password VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, tenant_name VARCHAR(100) DEFAULT NULL, PRIMARY KEY(uuid))');
         $this->addSql('CREATE INDEX IDX_1483A5E98B8E8428 ON users (created_at)');
         $this->addSql('CREATE INDEX IDX_1483A5E943625D9F ON users (updated_at)');
-        $this->addSql('ALTER TABLE action_user_on_machine ADD CONSTRAINT FK_97DD1CB680B1CB06 FOREIGN KEY (permission_uuid) REFERENCES permissions (uuid) NOT DEFERRABLE INITIALLY IMMEDIATE');
-        $this->addSql('ALTER TABLE action_user_on_machine ADD CONSTRAINT FK_97DD1CB68775BBDF FOREIGN KEY (machine_uuid) REFERENCES machines (uuid) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE action_user_on_machine ADD CONSTRAINT FK_97DD1CB680B1CB06 FOREIGN KEY (permission_uuid) REFERENCES permissions (uuid) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE action_user_on_machine ADD CONSTRAINT FK_97DD1CB68775BBDF FOREIGN KEY (machine_uuid) REFERENCES machines (uuid) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE machines ADD CONSTRAINT FK_F1CE8DEDE8EE98BE FOREIGN KEY (project_uuid) REFERENCES projects (uuid) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
-        $this->addSql('ALTER TABLE permissions ADD CONSTRAINT FK_2DEDCC6FABFE1C6F FOREIGN KEY (user_uuid) REFERENCES users (uuid) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE permissions ADD CONSTRAINT FK_2DEDCC6FABFE1C6F FOREIGN KEY (user_uuid) REFERENCES users (uuid) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE permissions ADD CONSTRAINT FK_2DEDCC6FC5289E1C FOREIGN KEY (create_by_uuid) REFERENCES users (uuid) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE projects ADD CONSTRAINT FK_5C93B3A4E393C4 FOREIGN KEY (client_uuid) REFERENCES clients (uuid) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
     }

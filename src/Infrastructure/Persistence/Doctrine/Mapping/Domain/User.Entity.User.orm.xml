@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <mapped-superclass repository-class="App\Infrastructure\Persistence\Doctrine\Repository\User\UserRepository" name="App\Domain\User\Entity\User" table="users">
+    <entity repository-class="App\Infrastructure\Persistence\Doctrine\Repository\User\UserRepository" name="App\Domain\User\Entity\User" table="users">
         <id name="uuid" type="guid" column="uuid"/>
 
         <field name="email" column="email"/>
+        <field name="name" column="name"/>
         <field name="pubKey" column="pub_key" nullable="true"/>
 
         <field name="password" column="password"/>
@@ -13,9 +14,11 @@
 
         <field name="tenantName" column="tenant_name" length="100" nullable="true"/>
 
+        <one-to-many field="permissions" target-entity="App\Domain\User\Entity\Permission" mapped-by="user"/>
+
         <indexes>
             <index columns="created_at"/>
             <index columns="updated_at"/>
         </indexes>
-    </mapped-superclass>
+    </entity>
 </doctrine-mapping>

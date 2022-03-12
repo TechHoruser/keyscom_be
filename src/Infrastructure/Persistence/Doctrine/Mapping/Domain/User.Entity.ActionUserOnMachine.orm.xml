@@ -8,11 +8,11 @@
         <field name="canceled" column="canceled" type="boolean"/>
 
         <many-to-one field="permission" target-entity="App\Domain\User\Entity\Permission">
-            <join-column name="permission_uuid" referenced-column-name="uuid"/>
+            <join-column name="permission_uuid" referenced-column-name="uuid" on-delete="CASCADE"/>
         </many-to-one>
 
         <many-to-one field="machine" target-entity="App\Domain\Machine\Entity\Machine">
-            <join-column name="machine_uuid" referenced-column-name="uuid"/>
+            <join-column name="machine_uuid" referenced-column-name="uuid" on-delete="CASCADE"/>
         </many-to-one>
 
         <field name="createdAt" type="datetime" column="created_at"/>

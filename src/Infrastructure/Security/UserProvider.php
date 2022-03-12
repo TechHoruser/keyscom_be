@@ -2,7 +2,7 @@
 
 namespace App\Infrastructure\Security;
 
-use App\Infrastructure\Persistence\Doctrine\Repository\SecurityUserRepository;
+use App\Infrastructure\Persistence\Doctrine\Repository\UserRepository;
 use Lexik\Bundle\JWTAuthenticationBundle\Security\User\PayloadAwareUserProviderInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -12,7 +12,7 @@ class UserProvider implements PayloadAwareUserProviderInterface
     private array $cache = [];
 
     public function __construct(
-        private SecurityUserRepository $userRepository,
+        private UserRepository $userRepository,
         private RequestStack $requestStack,
     ) {}
 
@@ -33,7 +33,7 @@ class UserProvider implements PayloadAwareUserProviderInterface
             throw new \Exception();
         }
 
-        return $this->cache[$username] = $user;
+        return $this->cache[$username] = User::createFromUser($user);
     }
 
     public function refreshUser(UserInterface $user)
@@ -58,6 +58,6 @@ class UserProvider implements PayloadAwareUserProviderInterface
             throw new \Exception();
         }
 
-        return $this->cache[$identifier] = $user;
+        return $this->cache[$identifier] = User::createFromUser($user);
     }
 }

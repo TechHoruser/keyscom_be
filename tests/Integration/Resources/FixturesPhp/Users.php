@@ -5,8 +5,8 @@ namespace App\Tests\Integration\Resources\FixturesPhp;
 use App\Application\Shared\Helper\SecurityHelperInterface;
 use App\Domain\Tenant\Entity\Tenant;
 use App\Domain\User\Entity\Permission;
+use App\Domain\User\Entity\User;
 use App\Domain\User\Enums\PermissionType;
-use App\Infrastructure\Security\User;
 use App\Tests\Integration\Resources\Config\FixtureValuesInterface;
 use App\Tests\Integration\Resources\Factory\FakerFactoryInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -45,7 +45,7 @@ class Users extends AbstractFixture implements DependentFixtureInterface
                 'Admin User',
             );
             $adminUser->setPassword($this->passwordHasher->hashPassword(
-                $adminUser,
+                \App\Infrastructure\Security\User::createFromUser($adminUser),
                 $this->fixtureValues->getCommonUserPassword(),
             ));
             $adminUser->setTenantName($tenant->getHost());
@@ -73,7 +73,7 @@ class Users extends AbstractFixture implements DependentFixtureInterface
                 'Ssh User',
             );
             $sshUser->setPassword($this->passwordHasher->hashPassword(
-                $sshUser,
+                \App\Infrastructure\Security\User::createFromUser($sshUser),
                 $this->fixtureValues->getCommonUserPassword(),
             ));
             $sshUser->setTenantName($tenant->getHost());

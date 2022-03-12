@@ -7,9 +7,27 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 class User extends \App\Domain\User\Entity\User implements JWTUserInterface, PasswordAuthenticatedUserInterface
 {
+    public static function createFromUser(\App\Domain\User\Entity\User $user): static
+    {
+        return new static(
+            $user->getUuid(),
+            $user->getEmail(),
+            $user->getPassword(),
+            $user->getPubKey(),
+            $user->getName(),
+            $user->getPermissions(),
+        );
+    }
+
     public static function createFromPayload($username, array $payload): static
     {
-        return new static($payload['uuid'], $payload['email'], null, null, $payload['name']);
+        return new static(
+            $payload['uuid'],
+            $payload['email'],
+            null,
+            null,
+            $payload['name']
+        );
     }
 
     public function getRoles(): array
@@ -17,23 +35,16 @@ class User extends \App\Domain\User\Entity\User implements JWTUserInterface, Pas
         return [];
     }
 
-    public function eraseCredentials()
-    {
-    }
+    public function eraseCredentials() {}
 
     public function getUserIdentifier(): string
     {
-        return $this->uuid;
-    }
-
-    public function getPassword(): string
-    {
-        return $this->password;
+        return $this->getUuid();
     }
 
     public function getUsername(): string
     {
-        return $this->email;
+        return $this->getEmail();
     }
 
 }

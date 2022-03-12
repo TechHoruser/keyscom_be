@@ -6,6 +6,8 @@ namespace App\Domain\User\Entity;
 
 use App\Domain\Shared\Auditable\AuditableEntityTrait;
 use App\Domain\Tenant\CertainTenant\TenantEntityTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\Uuid;
 
 class User
@@ -21,6 +23,8 @@ class User
         protected ?string $password,
         protected ?string $pubKey,
         protected string $name,
+        /** @var Permission[] $permissions */
+        protected Collection $permissions = new ArrayCollection(),
     )
     {
         $this->uuid = $uuid ?? Uuid::uuid4()->toString();
@@ -82,6 +86,18 @@ class User
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getPermissions(): ArrayCollection|Collection
+    {
+        return $this->permissions;
+    }
+
+    public function setPermissions(ArrayCollection|Collection $permissions): static
+    {
+        $this->permissions = $permissions;
 
         return $this;
     }
