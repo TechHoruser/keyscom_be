@@ -8,7 +8,6 @@ use App\Application\UseCase\Client\CreateClient\CreateClientCommand;
 use App\UI\Http\Rest\Controller\AbstractCommandController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 /**
  * @Symfony\Component\Routing\Annotation\Route ("/client", methods={"POST"})
@@ -28,11 +27,7 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface;
  */
 class CreateClientController extends AbstractCommandController
 {
-    /**
-     * @return JsonResponse
-     * @throws ExceptionInterface
-     */
-    public function __invoke()
+    public function __invoke(): JsonResponse
     {
         $result = $this->dispatch(new CreateClientCommand(
             $this->request->request->get('uuid'),

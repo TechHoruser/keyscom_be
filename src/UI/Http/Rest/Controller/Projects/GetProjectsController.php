@@ -7,7 +7,6 @@ namespace App\UI\Http\Rest\Controller\Projects;
 use App\Application\UseCase\Project\GetProjects\GetProjectsQuery;
 use App\UI\Http\Rest\Controller\AbstractQueryController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 /**
  * @Symfony\Component\Routing\Annotation\Route ("/project", methods={"GET"})
@@ -25,11 +24,7 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface;
  */
 class GetProjectsController extends AbstractQueryController
 {
-    /**
-     * @return JsonResponse
-     * @throws ExceptionInterface
-     */
-    public function __invoke()
+    public function __invoke(): JsonResponse
     {
         $results = $this->dispatch(new GetProjectsQuery(
             $this->generatePaginationPropertiesByQueryParams(),

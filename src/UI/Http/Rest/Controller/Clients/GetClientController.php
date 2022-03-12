@@ -7,7 +7,6 @@ namespace App\UI\Http\Rest\Controller\Clients;
 use App\Application\UseCase\Client\GetClient\GetClientQuery;
 use App\UI\Http\Rest\Controller\AbstractQueryController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 /**
  * @Symfony\Component\Routing\Annotation\Route (
@@ -29,11 +28,7 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface;
  */
 class GetClientController extends AbstractQueryController
 {
-    /**
-     * @return JsonResponse
-     * @throws ExceptionInterface
-     */
-    public function __invoke(string $clientUuid)
+    public function __invoke(string $clientUuid): JsonResponse
     {
         $results = $this->dispatch(new GetClientQuery(
             $clientUuid,

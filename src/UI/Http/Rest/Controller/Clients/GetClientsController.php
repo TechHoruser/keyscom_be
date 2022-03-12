@@ -7,7 +7,6 @@ namespace App\UI\Http\Rest\Controller\Clients;
 use App\Application\UseCase\Client\GetClients\GetClientsQuery;
 use App\UI\Http\Rest\Controller\AbstractQueryController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 /**
  * @Symfony\Component\Routing\Annotation\Route ("/client", methods={"GET"});
@@ -25,11 +24,7 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface;
  */
 class GetClientsController extends AbstractQueryController
 {
-    /**
-     * @return JsonResponse
-     * @throws ExceptionInterface
-     */
-    public function __invoke()
+    public function __invoke(): JsonResponse
     {
         $results = $this->dispatch(new GetClientsQuery(
             $this->generatePaginationPropertiesByQueryParams(),
