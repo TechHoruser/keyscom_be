@@ -38,6 +38,12 @@ abstract class AbstractRepository extends ServiceEntityRepository
             ->getQuery()->getOneOrNullResult();
     }
 
+    public function deleteByUuid(string $uuid): void
+    {
+        $entity = $this->_em->getPartialReference($this->getClassName(), array('uuid' => $uuid));
+        $this->_em->remove($entity);
+    }
+
     public function complexFind(
         PaginationProperties $paginationProperties = new PaginationProperties(),
         array $filters = [],

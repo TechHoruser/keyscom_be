@@ -12,7 +12,7 @@
         <field name="type" column="type" nullable="true"/>
 
         <many-to-one field="project" target-entity="App\Domain\Project\Entity\Project">
-            <join-column name="project_uuid" referenced-column-name="uuid"/>
+            <join-column name="project_uuid" referenced-column-name="uuid" on-delete="CASCADE"/>
         </many-to-one>
 
         <field name="createdAt" type="datetime" column="created_at"/>
