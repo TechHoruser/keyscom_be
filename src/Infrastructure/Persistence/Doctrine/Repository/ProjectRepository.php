@@ -18,4 +18,14 @@ class ProjectRepository extends AbstractRepository implements ProjectRepositoryI
     {
         return Project::class;
     }
+
+    public function getByUuid(string $uuid, array $embeds = []): ?Project
+    {
+        return parent::getByUuid($uuid, $embeds);
+    }
+
+    public function save(Project $project): Project
+    {
+        return parent::saveEntityInterface($project);
+    }
 }

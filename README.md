@@ -36,7 +36,7 @@ The application is running in [http://localhost:8080](http://localhost:8080). Yo
 #### PHP Interpreter
 
 1. Access to PHP Settings (`File > Settings > PHP`)
-2. Select PHP language level (`PHP 7.4`)
+2. Select PHP language level (`PHP 8.1`)
 3. Add new interpreter (`From Docker`)
    1. New server (`Docker`) - Unix socket defaut
    2. Configuration File `./docker-compose.yml`

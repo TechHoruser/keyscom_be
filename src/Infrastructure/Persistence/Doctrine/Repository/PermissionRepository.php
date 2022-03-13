@@ -25,11 +25,6 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
         return Permission::class;
     }
 
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry);
-    }
-
     public function getByUuid(string $uuid, array $embeds = []): ?Permission
     {
         return parent::getByUuid($uuid, $embeds);

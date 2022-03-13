@@ -18,4 +18,14 @@ class MachineRepository extends AbstractRepository implements MachineRepositoryI
     {
         return Machine::class;
     }
+
+    public function getByUuid(string $uuid, array $embeds = []): ?Machine
+    {
+        return parent::getByUuid($uuid, $embeds);
+    }
+
+    public function save(Machine $machine): Machine
+    {
+        return parent::saveEntityInterface($machine);
+    }
 }
