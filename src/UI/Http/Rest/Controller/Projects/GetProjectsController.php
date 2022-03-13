@@ -29,6 +29,7 @@ class GetProjectsController extends AbstractQueryController
         $results = $this->dispatch(new GetProjectsQuery(
             $this->generatePaginationPropertiesByQueryParams(),
             $this->request->query->all('filters'),
+            $this->request->query->all('embeds'),
         ));
 
         return new JsonResponse($this->normalizer->normalize($results));

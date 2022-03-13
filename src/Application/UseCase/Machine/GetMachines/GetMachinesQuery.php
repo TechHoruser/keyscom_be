@@ -12,5 +12,6 @@ class GetMachinesQuery implements QueryInterface
     public function __construct(
         readonly PaginationProperties $paginationProperties,
         readonly array $filters,
+        readonly array $embeds,
     ) {}
 }

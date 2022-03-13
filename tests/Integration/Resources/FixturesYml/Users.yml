@@ -3,7 +3,11 @@ App\Domain\User\Entity\User:
     __construct: false
     uuid: <uuid3()>
     email: admin@keyscom.com
-  user_developer:
+    name: Admin
+    password: \$2y\$13\$u/OhqXcm2FD65hMNod/TieL6Y5HeeLjgDQTSYSym03OBl1yQgxk9O
+  user_ssh:
     __construct: false
     uuid: <uuid3()>
-    email: developer@keyscom.com
+    email: ssh@keyscom.com
+    name: Ssh
+    password: \$2y\$13\$sHR33w0UK9jzEgLX2.QQieCdMxvgD3UporPUpuNiySjxIgmZoWfm2

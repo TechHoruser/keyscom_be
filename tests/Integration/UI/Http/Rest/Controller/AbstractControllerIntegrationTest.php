@@ -2,6 +2,7 @@
 
 namespace App\Tests\Integration\UI\Http\Rest\Controller;
 
+use App\Domain\User\Entity\User;
 use App\Tests\Integration\Resources\Factory\FakerFactoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
@@ -19,6 +20,7 @@ abstract class AbstractControllerIntegrationTest extends WebTestCase
     protected const PUT = 'PUT';
     protected const DELETE = 'DELETE';
     protected const REQUEST_FORMAT = 'json';
+    protected const LOGIN_CHECK_PATH = '/login_check';
     protected KernelBrowser $client;
     /** @var FakerFactoryInterface */
     protected $fakerFactory;
@@ -28,6 +30,7 @@ abstract class AbstractControllerIntegrationTest extends WebTestCase
     protected $normalizer;
     /** @var SerializerInterface */
     protected $serializer;
+    protected string $token;
 
     protected function setUp(): void
     {
@@ -47,23 +50,56 @@ abstract class AbstractControllerIntegrationTest extends WebTestCase
         $schemaTool->createSchema($metadata);
     }
 
+    private function getAuthorizationToken(): string
+    {
+        $this->token ?? $this->setAuthorizationToken();
+        return $this->token;
+    }
+
+    private function setAuthorizationToken(): void
+    {
+        $user = $this->fakerFactory->newUser();
+        $user->setEmail('fullAccess@user.com');
+        $this->_em->persist($user);
+        $this->_em->flush();
+
+        $this->client->request(
+            self::POST,
+            self::LOGIN_CHECK_PATH,
+            [],
+            [],
+            ['CONTENT_TYPE' => 'application/json'],
+            $this->serializer->serialize([
+                'username' => $user->getEmail(),
+                'password' => $this->fakerFactory->getUserPassword(),
+            ], self::REQUEST_FORMAT),
+        );
+
+        $this->token = json_decode($this->client->getResponse()->getContent(), true)['token'];
+    }
+
     protected function jsonEncodeAsHttpResponse($data): string
     {
         return json_encode($data, JsonResponse::DEFAULT_ENCODING_OPTIONS);
     }
 
-    protected function sendRequestWithBody(
+    protected function sendRequest(
         string $method,
         string $path,
-        mixed $data
-    ): Response {
+        mixed $queryParams = [],
+        mixed $body = [],
+    ): Response
+    {
         $this->client->request(
             $method,
             $path,
+            $queryParams,
             [],
-            [],
-            ['CONTENT_TYPE' => 'application/json'],
-            $this->serializer->serialize($data, self::REQUEST_FORMAT),
+            [
+                'CONTENT_TYPE' => 'application/json',
+                'HTTP_AUTHORIZATION' => 'Bearer ' . $this->getAuthorizationToken(),
+            ],
+            $this->serializer->serialize($body, self::REQUEST_FORMAT),
         );
         return $this->client->getResponse();
     }

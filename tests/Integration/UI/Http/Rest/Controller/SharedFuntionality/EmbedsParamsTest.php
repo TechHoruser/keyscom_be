@@ -17,7 +17,7 @@ class EmbedsParamsTest extends AbstractControllerIntegrationTest
         $client = $clients[1];
 
         // WHEN
-        $this->client->request(
+        $this->sendRequest(
             $method,
             str_replace(':clientUuid', $client->getUuid(), $path),
             ['embeds' => ['projects']],
@@ -40,7 +40,7 @@ class EmbedsParamsTest extends AbstractControllerIntegrationTest
         $client = $clients[1];
 
         // WHEN
-        $this->client->request(
+        $this->sendRequest(
             $method,
             str_replace(':clientUuid', $client->getUuid(), $path),
             ['embeds' => ['projects.machines']],

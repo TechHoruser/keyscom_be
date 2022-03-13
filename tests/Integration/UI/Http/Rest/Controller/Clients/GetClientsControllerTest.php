@@ -20,7 +20,7 @@ class GetClientsControllerTest extends AbstractControllerIntegrationTest
 
 
         // WHEN
-        $this->client->request($method, $path);
+        $this->sendRequest($method, $path);
         $response = $this->client->getResponse();
         $responseData = json_decode($response->getContent(), true);
 

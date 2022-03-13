@@ -15,7 +15,7 @@ class CreateClientsControllerTest extends AbstractControllerIntegrationTest
 
         // WHEN
         $client = $this->fakerFactory->newClient();
-        $response = $this->sendRequestWithBody($method, $path, $client);
+        $response = $this->sendRequest($method, $path, [], $client);
         $responseData = json_decode($response->getContent(), true);
 
         // THEN
@@ -34,7 +34,7 @@ class CreateClientsControllerTest extends AbstractControllerIntegrationTest
         $client = ($this->fakerFactory->newClient());
         $clientArray = $this->normalizer->normalize($client, self::REQUEST_FORMAT);
         unset($clientArray['uuid']);
-        $response = $this->sendRequestWithBody($method, $path, $clientArray);
+        $response = $this->sendRequest($method, $path, [], $clientArray);
         $responseData = json_decode($response->getContent(), true);
 
         // THEN

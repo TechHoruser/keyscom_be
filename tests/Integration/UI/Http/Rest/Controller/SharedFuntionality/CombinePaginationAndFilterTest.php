@@ -16,12 +16,13 @@ class CombinePaginationAndFilterTest extends AbstractControllerIntegrationTest
         $this->saveMachinesLinkedToProjectsLinkedToClients();
 
         // WHEN
-        $this->client->request($method, $path, [
+        $this->sendRequest($method, $path, [
             'filters' => ['project.client.name' => 'b'],
             'sort_by' => 'project.client.name',
             'sort_order' => 'DESC',
             'page' => 1,
             'page_size' => 1,
+            'embeds' => ['project.client'],
         ]);
         $response = $this->client->getResponse();
         $responseData = json_decode($response->getContent(), true);
@@ -31,8 +32,7 @@ class CombinePaginationAndFilterTest extends AbstractControllerIntegrationTest
         $this->assertEquals(3, $responseData['totalItems']);
         $this->assertCount(1, $responseData['results']);
         $this->assertEquals('2', $responseData['results'][0]['name']);
-//        TODO: add embeds
-//        $this->assertEquals('bcde', $responseData['results'][0]['project']['client']['name']);
+        $this->assertEquals('bcde', $responseData['results'][0]['project']['client']['name']);
     }
 
     private function saveMachinesLinkedToProjectsLinkedToClients(): void

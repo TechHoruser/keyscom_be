@@ -16,9 +16,10 @@ class AuthenticationTest extends AbstractControllerIntegrationTest
         $user = $this->saveAndReturnUser();
 
         // WHEN
-        $this->sendRequestWithBody(
+        $this->sendRequest(
             $method,
             $path,
+            [],
             [
                 'username' => $user->getEmail(),
                 'password' => $this->fakerFactory->getUserPassword(),

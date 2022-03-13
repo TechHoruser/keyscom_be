@@ -16,7 +16,7 @@ class FilterParamsTest extends AbstractControllerIntegrationTest
         $numberOfExpectedClients = 2;
 
         // WHEN
-        $this->client->request($method, $path, ['filters' => ['name' => 'b']]);
+        $this->sendRequest($method, $path, ['filters' => ['name' => 'b']]);
         $response = $this->client->getResponse();
         $responseData = json_decode($response->getContent(), true);
 
@@ -35,7 +35,7 @@ class FilterParamsTest extends AbstractControllerIntegrationTest
         $numberOfExpectedClients = 3;
 
         // WHEN
-        $this->client->request($method, $path, ['filters' => ['project.client.name' => 'b']]);
+        $this->sendRequest($method, $path, ['filters' => ['project.client.name' => 'b']]);
         $response = $this->client->getResponse();
         $responseData = json_decode($response->getContent(), true);
 

@@ -52,7 +52,7 @@ class PermissionRepositoryTest extends WebTestCase
         $userRepository = static::getContainer()->get(UserRepositoryInterface::class);
         $this->user = $userRepository->complexFind(
             (new PaginationProperties()),
-            ['email' => 'developer@keyscom.com'],
+            ['email' => 'ssh@keyscom.com'],
         )[0];
         $this->adminUser = $userRepository->complexFind(
             (new PaginationProperties()),

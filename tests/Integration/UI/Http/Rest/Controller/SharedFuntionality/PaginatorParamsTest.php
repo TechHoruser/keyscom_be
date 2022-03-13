@@ -15,7 +15,7 @@ class PaginatorParamsTest extends AbstractControllerIntegrationTest
         $clients = $this->saveAndReturnClients();
 
         // WHEN
-        $this->client->request($method, $path);
+        $this->sendRequest($method, $path);
         $response = $this->client->getResponse();
         $responseData = json_decode($response->getContent(), true);
 
@@ -35,7 +35,7 @@ class PaginatorParamsTest extends AbstractControllerIntegrationTest
         $orderedNames = ['a', 'b', 'c'];
 
         // WHEN
-        $this->client->request($method, $path, ['sort_by' => 'name']);
+        $this->sendRequest($method, $path, ['sort_by' => 'name']);
         $response = $this->client->getResponse();
         $responseData = json_decode($response->getContent(), true);
 
@@ -54,7 +54,7 @@ class PaginatorParamsTest extends AbstractControllerIntegrationTest
         $orderedNames = ['c', 'b', 'a'];
 
         // WHEN
-        $this->client->request($method, $path, ['sort_by' => 'name', 'sort_order' => 'DESC']);
+        $this->sendRequest($method, $path, ['sort_by' => 'name', 'sort_order' => 'DESC']);
         $response = $this->client->getResponse();
         $responseData = json_decode($response->getContent(), true);
 
@@ -75,7 +75,7 @@ class PaginatorParamsTest extends AbstractControllerIntegrationTest
         $page = 2;
 
         // WHEN
-        $this->client->request($method, $path, ['page' => $page, 'page_size' => $pageSize, 'sort_by' => 'name']);
+        $this->sendRequest($method, $path, ['page' => $page, 'page_size' => $pageSize, 'sort_by' => 'name']);
         $response = $this->client->getResponse();
         $responseData = json_decode($response->getContent(), true);
 
@@ -96,7 +96,7 @@ class PaginatorParamsTest extends AbstractControllerIntegrationTest
         $orderedNames = ['3', '2', '2', '1'];
 
         // WHEN
-        $this->client->request($method, $path, ['sort_by' => 'project.client.name']);
+        $this->sendRequest($method, $path, ['sort_by' => 'project.client.name']);
         $response = $this->client->getResponse();
         $responseData = json_decode($response->getContent(), true);
 

@@ -23,10 +23,11 @@ class GetProjectsHandler implements QueryHandlerInterface
         $results = $this->machineRepository->complexFind(
             $getProjectsQuery->paginationProperties,
             $getProjectsQuery->filters,
+            $getProjectsQuery->embeds,
         );
 
         return $this->paginationMapper->map(
-            $this->projectMapper->map($results),
+            $this->projectMapper->mapArray($results, $getProjectsQuery->embeds),
             $this->machineRepository->countAll($getProjectsQuery->filters)
         );
     }

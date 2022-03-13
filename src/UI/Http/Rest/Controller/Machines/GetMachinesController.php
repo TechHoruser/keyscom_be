@@ -29,6 +29,7 @@ class GetMachinesController extends AbstractQueryController
         $results = $this->dispatch(new GetMachinesQuery(
             $this->generatePaginationPropertiesByQueryParams(),
             $this->request->query->all('filters'),
+            $this->request->query->all('embeds'),
         ));
 
         return new JsonResponse($this->normalizer->normalize($results));

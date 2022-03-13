@@ -127,9 +127,13 @@ abstract class AbstractRepository extends ServiceEntityRepository
                 $this->appliedJoins[$join] = true;
                 $this->queryBuilder->leftJoin($join, $parentField);
             }
+
+            if (count($separatedFieldNames) === 1) {
+                return;
+            }
         }
 
-        if (!isset($classMetadata->associationMappings[$parentField]) || count($separatedFieldNames) === 1) {
+        if (!isset($classMetadata->associationMappings[$parentField])) {
             $callbackMethod(
                 $separatedFieldNames[0],
                 $value,

@@ -23,10 +23,11 @@ class GetMachinesHandler implements QueryHandlerInterface
         $results = $this->machineRepository->complexFind(
             $getMachinesQuery->paginationProperties,
             $getMachinesQuery->filters,
+            $getMachinesQuery->embeds,
         );
 
         return $this->paginationMapper->map(
-            $this->machineMapper->map($results),
+            $this->machineMapper->mapArray($results, $getMachinesQuery->embeds),
             $this->machineRepository->countAll($getMachinesQuery->filters)
         );
     }
