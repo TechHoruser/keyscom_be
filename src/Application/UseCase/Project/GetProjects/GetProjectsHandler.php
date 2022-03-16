@@ -22,8 +22,8 @@ class GetProjectsHandler implements QueryHandlerInterface
     {
         $results = $this->projectRepository->complexFind(
             $getProjectsQuery->paginationProperties,
-            $getProjectsQuery->filters,
             $getProjectsQuery->embeds,
+            $getProjectsQuery->filters,
         );
 
         return $this->paginationMapper->map(

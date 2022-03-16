@@ -17,6 +17,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     abstract protected function getEntityRepositoryClass(): string;
     private array $appliedJoins;
     protected QueryBuilder $queryBuilder;
+    protected array $savedConditions;
 
     public function __construct(ManagerRegistry $registry, SerializerInterface $serializer)
     {
@@ -28,9 +29,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     {
         $this->resetParams();
 
-        foreach ($embeds as $embed) {
-            $this->addEmbed($embed);
-        }
+        $this->addEmbeds($embeds);
 
         return $this->queryBuilder
             ->where($this->getAliasTable().'.uuid = :uuid')
@@ -46,9 +45,9 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
     public function complexFind(
         PaginationProperties $paginationProperties = new PaginationProperties(),
-        array $filtersByPermission = [],
-        array $filters = [],
         array $embeds = [],
+        array $filtersWithAnds = [],
+        array $filtersWithOrs = [],
     ): iterable {
         $this->resetParams();
         if ($paginationProperties->page > 0 && $paginationProperties->resultsPerPage > 0) {
@@ -62,17 +61,11 @@ abstract class AbstractRepository extends ServiceEntityRepository
             $this->addOrder($paginationProperties->sortBy, $paginationProperties->sortOrder);
         }
 
-        foreach ($filtersByPermission as $fieldName => $fieldValue) {
-            $this->addWhere($fieldName, $fieldValue);
-        }
+        $this->addWhereWithOrs($filtersWithOrs);
 
-        foreach ($filters as $fieldName => $fieldValue) {
-            $this->addWhere($fieldName, $fieldValue);
-        }
+        $this->addWhereWithAnds($filtersWithAnds);
 
-        foreach ($embeds as $embed) {
-            $this->addEmbed($embed);
-        }
+        $this->addEmbeds($embeds);
 
         return $this->queryBuilder->getQuery()->getResult();
     }
@@ -83,9 +76,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
         // REVIEW: %s.uuid by %s.* but error in DTO library
         $this->queryBuilder->select(sprintf('count(%s.uuid)', $this->getAliasTable()));
 
-        foreach ($filters as $fieldName => $fieldValue) {
-            $this->addWhere($fieldName, $fieldValue);
-        }
+        $this->addWhereWithAnds($filters);
 
         return $this->queryBuilder->getQuery()->getSingleScalarResult();
     }
@@ -102,14 +93,28 @@ abstract class AbstractRepository extends ServiceEntityRepository
         $this->addRecursiveJoin([$this, "_callbackOrder"], $fieldName, $value);
     }
 
-    protected function addWhere(string $fieldName, mixed $value)
+    protected function addWhereWithAnds(array $filtersWithAnds)
     {
-        $this->addRecursiveJoin([$this, "_callbackWhere"], $fieldName, $value);
+        foreach ($filtersWithAnds as $fieldName => $fieldValue) {
+            $this->addRecursiveJoin([$this, "_callbackWhereAnds"], $fieldName, $fieldValue);
+        }
     }
 
-    protected function addEmbed(string $fieldName)
+    protected function addWhereWithOrs(array $filtersWithOrs)
     {
-        $this->addRecursiveJoin([$this, "_callbackVoid"], $fieldName);
+        foreach ($filtersWithOrs as $fieldName => $fieldValue) {
+            $this->addRecursiveJoin([$this, "_callbackWhereOrs"], $fieldName, $fieldValue);
+        }
+        if (!empty($this->savedConditions)) {
+            $this->queryBuilder->andWhere('(' . implode(' OR ', $this->savedConditions) . ')');
+        }
+    }
+
+    protected function addEmbeds(array $embeds)
+    {
+        foreach ($embeds as $embed) {
+            $this->addRecursiveJoin([$this, "_callbackVoid"], $embed);
+        }
     }
 
     private function addRecursiveJoin(
@@ -162,27 +167,30 @@ abstract class AbstractRepository extends ServiceEntityRepository
         );
     }
 
-    private function _callbackWhere(
+    private function _callbackWhereAnds(
         string $fieldName,
         $fieldValue,
         string $alias,
-        ClassMetadata $classMetadata
-    ) {
-        $fieldMapping = $classMetadata->fieldMappings[$fieldName];
-        $fieldName = $alias . '.' . $fieldName;
+        ClassMetadata $classMetadata,
+    ): void
+    {
+        $conditions = $this->getConditions($classMetadata, $fieldName, $alias, $fieldValue);
+        foreach ($conditions as $condition) {
+            $this->queryBuilder->andWhere($condition);
+        }
+    }
 
-        if ($fieldMapping['type'] === 'datetime' || $fieldMapping['type'] === 'date') {
-            $this->addWhereDateTime($fieldName, $fieldValue);
-        }
-        if ($fieldMapping['type'] === 'string') {
-            $this->addWhereString($fieldName, $fieldValue);
-        }
-        if ($fieldMapping['type'] === 'guid') {
-            $this->addWhereUuid($fieldName, $fieldValue);
-        }
-        if ($fieldMapping['type'] == 'integer') {
-            $this->addWhereInteger($fieldName, $fieldValue);
-        }
+    private function _callbackWhereOrs(
+        string $fieldName,
+        $fieldValue,
+        string $alias,
+        ClassMetadata $classMetadata,
+    ): void
+    {
+        array_push(
+            $this->savedConditions,
+            ...$this->getConditions($classMetadata, $fieldName, $alias, $fieldValue)
+        );
     }
 
     private function _callbackOrder(
@@ -206,60 +214,74 @@ abstract class AbstractRepository extends ServiceEntityRepository
     /**
      * @param string $fieldName
      * @param $fieldValue
+     *
+     * @return string[]
      */
-    protected function addWhereDateTime(string $fieldName, $fieldValue): void
+    protected function getWhereDateTimeConditions(string $fieldName, $fieldValue): array
     {
+        $conditions = [];
         $dateTimes = explode('/', $fieldValue);
 
         $fromDate = $dateTimes[0];
         if ($fromDate) {
             $fromOperator = count($dateTimes) > 1 ? '>=' : '=';
-            $this->queryBuilder->andWhere(
-                sprintf(
-                    "%s %s '%s'",
-                    $fieldName,
-                    $fromOperator,
-                    $fromDate
-                )
+            $conditions[] = sprintf(
+                "%s %s '%s'",
+                $fieldName,
+                $fromOperator,
+                $fromDate,
             );
         }
         $toDate = count($dateTimes) > 1 ? $dateTimes[1] : null;
         if ($toDate) {
-            $this->queryBuilder->andWhere(sprintf("%s <= '%s'", $fieldName, $toDate));
+            $conditions[] = sprintf("%s <= '%s'", $fieldName, $toDate);
         }
+
+        return $conditions;
     }
 
-    /**
-     * @param string $fieldName
-     * @param $fieldValue
-     */
-    protected function addWhereString(string $fieldName, $fieldValue): void
+    protected function getWhereStringCondition(string $fieldName, $fieldValue): string
     {
-        $this->queryBuilder->andWhere(sprintf('LOWER(%s) LIKE \'%%%s%%\'', $fieldName, mb_strtolower($fieldValue)));
+        return sprintf('LOWER(%s) LIKE \'%%%s%%\'', $fieldName, mb_strtolower($fieldValue));
     }
 
-    /**
-     * @param string $fieldName
-     * @param $fieldValue
-     */
-    protected function addWhereUuid(string $fieldName, $fieldValue): void
+    protected function getWhereUuidCondition(string $fieldName, $fieldValue): string
     {
-        $this->queryBuilder->andWhere(sprintf('%s = \'%s\'', $fieldName, mb_strtolower($fieldValue)));
+        return sprintf('%s = \'%s\'', $fieldName, mb_strtolower($fieldValue));
     }
 
-    /**
-     * @param string $fieldName
-     * @param $fieldValue
-     */
-    protected function addWhereInteger(string $fieldName, $fieldValue): void
+    protected function getWhereIntegerCondition(string $fieldName, $fieldValue): string
     {
-        $this->queryBuilder->andWhere(sprintf('%s = %s', $fieldName, intval($fieldValue)));
+        return sprintf('%s = %s', $fieldName, intval($fieldValue));
     }
 
     private function resetParams(): void
     {
         $this->queryBuilder = $this->createQueryBuilder($this->getAliasTable());
         $this->appliedJoins = [];
+        $this->savedConditions = [];
+    }
+
+    private function getConditions(ClassMetadata $classMetadata, string $fieldName, string $alias, $fieldValue): array
+    {
+        $fieldMapping = $classMetadata->fieldMappings[$fieldName];
+        $fieldName = $alias . '.' . $fieldName;
+
+        $conditions = [];
+        if ($fieldMapping['type'] === 'datetime' || $fieldMapping['type'] === 'date') {
+            array_push($conditions, ...$this->getWhereDateTimeConditions($fieldName, $fieldValue));
+        }
+        if ($fieldMapping['type'] === 'string') {
+            $conditions[] = $this->getWhereStringCondition($fieldName, $fieldValue);
+        }
+        if ($fieldMapping['type'] === 'guid') {
+            $conditions[] = $this->getWhereUuidCondition($fieldName, $fieldValue);
+        }
+        if ($fieldMapping['type'] == 'integer') {
+            $conditions[] = $this->getWhereIntegerCondition($fieldName, $fieldValue);
+        }
+
+        return $conditions;
     }
 
 }

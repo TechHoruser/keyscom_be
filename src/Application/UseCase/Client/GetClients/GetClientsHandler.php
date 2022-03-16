@@ -40,9 +40,9 @@ class GetClientsHandler implements QueryHandlerInterface
 
         $results = $this->clientRepository->complexFind(
             $getClientsQuery->paginationProperties,
-            $filtersByPermissions,
-            $getClientsQuery->filters,
             $getClientsQuery->embeds,
+            $getClientsQuery->filters,
+            $filtersByPermissions,
         );
 
         return $this->paginationMapper->map(

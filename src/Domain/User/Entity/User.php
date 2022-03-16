@@ -138,10 +138,10 @@ class User
 
     public function getPermissionsByRelatedEntity(?PermissionType $permissionType = null): array
     {
-        $permissions = array_map(
-            static fn($case) => [$case->name => []],
-            PermissionRelatedEntity::cases(),
-        );
+        $permissions = [];
+        foreach (PermissionRelatedEntity::cases() as $case) {
+            $permissions[$case->name] = [];
+        }
 
         foreach ($this->getPermissions() as $permission) {
             if (

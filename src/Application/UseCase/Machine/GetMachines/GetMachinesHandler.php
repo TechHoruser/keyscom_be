@@ -22,8 +22,8 @@ class GetMachinesHandler implements QueryHandlerInterface
     {
         $results = $this->machineRepository->complexFind(
             $getMachinesQuery->paginationProperties,
-            $getMachinesQuery->filters,
             $getMachinesQuery->embeds,
+            $getMachinesQuery->filters,
         );
 
         return $this->paginationMapper->map(

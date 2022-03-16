@@ -112,6 +112,6 @@ class AssignmentPermissionHandler implements CommandHandlerInterface
             throw new \Exception('Unrecognized related entity type.');
         }
 
-        return $this->machineRepository->complexFind(null, $filters);
+        return $this->machineRepository->complexFind(null, null, $filters);
     }
 }

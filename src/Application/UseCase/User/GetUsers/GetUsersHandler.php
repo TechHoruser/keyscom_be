@@ -24,6 +24,7 @@ class GetUsersHandler implements QueryHandlerInterface
         /** @var User[] $results */
         $results = $this->userRepository->complexFind(
             $getUsersQuery->paginationProperties,
+            null,
             $getUsersQuery->filters,
         );
 
