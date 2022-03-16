@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\UseCase\Project\GetProjects;
 
+use App\Application\Shared\Dto\Pagination\PaginationDto;
 use App\Application\Shared\Mapper\Pagination\PaginationMapper;
 use App\Application\Shared\Mapper\Project\ProjectMapper;
 use App\Application\Shared\Query\QueryHandlerInterface;
@@ -12,15 +13,14 @@ use App\Domain\Project\Repository\ProjectRepositoryInterface;
 class GetProjectsHandler implements QueryHandlerInterface
 {
     public function __construct(
-        private ProjectRepositoryInterface $machineRepository,
+        private ProjectRepositoryInterface $projectRepository,
         private PaginationMapper $paginationMapper,
         private ProjectMapper $projectMapper,
     ) {}
 
-    public function __invoke(GetProjectsQuery $getProjectsQuery)
+    public function __invoke(GetProjectsQuery $getProjectsQuery): PaginationDto
     {
-        /** @var array $results */
-        $results = $this->machineRepository->complexFind(
+        $results = $this->projectRepository->complexFind(
             $getProjectsQuery->paginationProperties,
             $getProjectsQuery->filters,
             $getProjectsQuery->embeds,
@@ -28,7 +28,7 @@ class GetProjectsHandler implements QueryHandlerInterface
 
         return $this->paginationMapper->map(
             $this->projectMapper->mapArray($results, $getProjectsQuery->embeds),
-            $this->machineRepository->countAll($getProjectsQuery->filters)
+            $this->projectRepository->countAll($getProjectsQuery->filters)
         );
     }
 }

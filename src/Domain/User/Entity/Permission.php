@@ -141,4 +141,9 @@ class Permission
 
         return $this;
     }
+
+    public function isSuper(): bool
+    {
+        return is_null($this->relatedEntityUuid);
+    }
 }

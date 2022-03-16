@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\UseCase\Machine\GetMachine;
 
+use App\Application\Shared\Dto\Machine\MachineDto;
 use App\Application\Shared\Mapper\Machine\MachineMapper;
 use App\Application\Shared\Query\QueryHandlerInterface;
 use App\Domain\Machine\Repository\MachineRepositoryInterface;
@@ -15,7 +16,7 @@ class GetMachineHandler implements QueryHandlerInterface
         private MachineMapper $machineMapper,
     ) {}
 
-    public function __invoke(GetMachineQuery $getMachineQuery)
+    public function __invoke(GetMachineQuery $getMachineQuery): MachineDto
     {
         $machine = $this->machineRepository->getByUuid(
             $getMachineQuery->uuid,

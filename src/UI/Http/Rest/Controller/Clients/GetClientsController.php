@@ -27,8 +27,10 @@ class GetClientsController extends AbstractQueryController
     public function __invoke(): JsonResponse
     {
         $results = $this->dispatch(new GetClientsQuery(
+            $this->getLoggedUser(),
             $this->generatePaginationPropertiesByQueryParams(),
             $this->request->query->all('filters'),
+            $this->request->query->all('embeds'),
         ));
 
         return new JsonResponse($this->normalizer->normalize($results));

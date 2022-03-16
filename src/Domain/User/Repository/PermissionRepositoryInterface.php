@@ -16,11 +16,12 @@ interface PermissionRepositoryInterface
 
     /**
      * @param string $userUuid
-     * @param string('admin','ssh') $userPermissionType
-     * @param null|string('machine', 'project', 'client') $typeRelatedEntity
+     * @param PermissionType $userPermissionType
+     * @param PermissionRelatedEntity|null $typeRelatedEntity
      * @param string|null $typeOfMachine
      * @param string|null $relatedEntityUuid
-     * @return iterable
+     *
+     * @return Permission[]
      */
     public function getChildPermissionsOfUser(
         string $userUuid,

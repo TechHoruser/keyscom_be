@@ -46,6 +46,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
     public function complexFind(
         PaginationProperties $paginationProperties = new PaginationProperties(),
+        array $filtersByPermission = [],
         array $filters = [],
         array $embeds = [],
     ): iterable {
@@ -59,6 +60,10 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
         if (!is_null($paginationProperties->sortBy)) {
             $this->addOrder($paginationProperties->sortBy, $paginationProperties->sortOrder);
+        }
+
+        foreach ($filtersByPermission as $fieldName => $fieldValue) {
+            $this->addWhere($fieldName, $fieldValue);
         }
 
         foreach ($filters as $fieldName => $fieldValue) {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\UseCase\Machine\GetMachines;
 
+use App\Application\Shared\Dto\Pagination\PaginationDto;
 use App\Application\Shared\Mapper\Machine\MachineMapper;
 use App\Application\Shared\Mapper\Pagination\PaginationMapper;
 use App\Application\Shared\Query\QueryHandlerInterface;
@@ -17,9 +18,8 @@ class GetMachinesHandler implements QueryHandlerInterface
         private MachineMapper $machineMapper,
     ) {}
 
-    public function __invoke(GetMachinesQuery $getMachinesQuery)
+    public function __invoke(GetMachinesQuery $getMachinesQuery): PaginationDto
     {
-        /** @var array $results */
         $results = $this->machineRepository->complexFind(
             $getMachinesQuery->paginationProperties,
             $getMachinesQuery->filters,

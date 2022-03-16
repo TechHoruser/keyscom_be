@@ -4,8 +4,10 @@ namespace App\Infrastructure\Security;
 
 use Lexik\Bundle\JWTAuthenticationBundle\Security\User\JWTUserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
-class User extends \App\Domain\User\Entity\User implements JWTUserInterface, PasswordAuthenticatedUserInterface
+class User extends \App\Domain\User\Entity\User
+    implements UserInterface, JWTUserInterface, PasswordAuthenticatedUserInterface
 {
     public static function createFromUser(\App\Domain\User\Entity\User $user): static
     {
@@ -45,6 +47,18 @@ class User extends \App\Domain\User\Entity\User implements JWTUserInterface, Pas
     public function getUsername(): string
     {
         return $this->getEmail();
+    }
+
+    public function getDomainUser(): \App\Domain\User\Entity\User
+    {
+        return new parent(
+            $this->getUuid(),
+            $this->getEmail(),
+            $this->getPassword(),
+            $this->getPubKey(),
+            $this->getName(),
+            $this->getPermissions(),
+        );
     }
 
 }

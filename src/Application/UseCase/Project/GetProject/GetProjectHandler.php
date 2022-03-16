@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\UseCase\Project\GetProject;
 
+use App\Application\Shared\Dto\Project\ProjectDto;
 use App\Application\Shared\Mapper\Project\ProjectMapper;
 use App\Application\Shared\Query\QueryHandlerInterface;
 use App\Domain\Project\Repository\ProjectRepositoryInterface;
@@ -15,7 +16,7 @@ class GetProjectHandler implements QueryHandlerInterface
         private ProjectMapper $projectMapper,
     ) {}
 
-    public function __invoke(GetProjectQuery $getProjectQuery)
+    public function __invoke(GetProjectQuery $getProjectQuery): ProjectDto
     {
         $project = $this->projectRepository->getByUuid(
             $getProjectQuery->uuid,
