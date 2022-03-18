@@ -2,7 +2,9 @@
 
 namespace App\Tests\Integration\UI\Http\Rest\Controller;
 
+use App\Domain\User\Entity\Permission;
 use App\Domain\User\Entity\User;
+use App\Domain\User\Enums\PermissionType;
 use App\Tests\Integration\Resources\Factory\FakerFactoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
@@ -61,6 +63,18 @@ abstract class AbstractControllerIntegrationTest extends WebTestCase
         $user = $this->fakerFactory->newUser();
         $user->setEmail('fullAccess@user.com');
         $this->_em->persist($user);
+        $this->_em->flush();
+
+        $permission = new Permission(
+            null,
+            $user,
+            $user,
+            PermissionType::ADMIN,
+            null,
+            null,
+            null,
+        );
+        $this->_em->persist($permission);
         $this->_em->flush();
 
         $this->client->request(

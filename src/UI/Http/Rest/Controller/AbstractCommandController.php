@@ -38,8 +38,8 @@ abstract class AbstractCommandController extends AbstractController
         }
     }
 
-    protected function dispatch(CommandInterface $command)
+    protected function getBus()
     {
-        return $this->commandBus->dispatch($command);
+        return $this->commandBus;
     }
 }

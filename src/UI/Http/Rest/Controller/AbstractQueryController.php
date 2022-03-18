@@ -23,8 +23,8 @@ abstract class AbstractQueryController extends AbstractController
         parent::__construct($requestStack, $serializer, $normalizer, $security);
     }
 
-    protected function dispatch(QueryInterface $query)
+    protected function getBus()
     {
-        return $this->queryBus->dispatch($query);
+        return $this->queryBus;
     }
 }

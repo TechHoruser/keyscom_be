@@ -124,7 +124,7 @@ class User
         foreach ($this->getPermissions() as $permission) {
             if (
                 (
-                    is_null($permission->getUserPermissionType()) ||
+                    is_null($permissionType) ||
                     $permission->getUserPermissionType() === $permissionType
                 ) && (
                     $permission->isSuper()
@@ -147,7 +147,7 @@ class User
             if (
                 !$permission->isSuper() &&
                 (
-                    is_null($permission->getUserPermissionType()) ||
+                    is_null($permissionType) ||
                     $permission->getUserPermissionType() === $permissionType
                 )
             ) {
@@ -163,7 +163,7 @@ class User
         foreach ($this->getPermissions() as $permission) {
             if (
                 (
-                    is_null($permission->getUserPermissionType()) ||
+                    is_null($permissionType) ||
                     $permission->getUserPermissionType() === $permissionType
                 ) && (
                     $permission->isSuper() ||
@@ -184,7 +184,7 @@ class User
         foreach ($this->getPermissions() as $permission) {
             if (
                 (
-                    is_null($permission->getUserPermissionType()) ||
+                    is_null($permissionType) ||
                     $permission->getUserPermissionType() === $permissionType
                 ) && (
                     $permission->isSuper()||
@@ -209,7 +209,7 @@ class User
         foreach ($this->getPermissions() as $permission) {
             if (
                 (
-                    is_null($permission->getUserPermissionType()) ||
+                    is_null($permissionType) ||
                     $permission->getUserPermissionType() === $permissionType
                 ) && (
                     $permission->isSuper() ||

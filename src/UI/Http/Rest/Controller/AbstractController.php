@@ -44,4 +44,11 @@ abstract class AbstractController
 
         return $securityUser->getDomainUser();
     }
+
+    protected abstract function getBus();
+
+    protected function dispatch($message)
+    {
+        return $this->getBus()->dispatch($message);
+    }
 }
