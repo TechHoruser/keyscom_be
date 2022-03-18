@@ -58,24 +58,35 @@ abstract class AbstractControllerIntegrationTest extends WebTestCase
         return $this->token;
     }
 
-    private function setAuthorizationToken(): void
+    /**
+     * @param User|null $user
+     * @param Permission[]|null $permissions
+     */
+    protected function setAuthorizationToken(?User $user = null, ?array $permissions = null): void
     {
-        $user = $this->fakerFactory->newUser();
-        $user->setEmail('fullAccess@user.com');
+        if (is_null($user)) {
+            $user = $this->fakerFactory->newUser();
+            $user->setEmail('fullAccess@user.com');
+        }
         $this->_em->persist($user);
         $this->_em->flush();
 
-        $permission = new Permission(
-            null,
-            $user,
-            $user,
-            PermissionType::ADMIN,
-            null,
-            null,
-            null,
-        );
-        $this->_em->persist($permission);
-        $this->_em->flush();
+        if (is_null($permissions)) {
+            $permissions = [new Permission(
+                null,
+                null,
+                $user,
+                PermissionType::ADMIN,
+                null,
+                null,
+                null,
+            )];
+        }
+
+        foreach ($permissions as $permission) {
+            $this->_em->persist($permission);
+            $this->_em->flush();
+        }
 
         $this->client->request(
             self::POST,

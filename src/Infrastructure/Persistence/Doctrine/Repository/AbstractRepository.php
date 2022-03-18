@@ -70,13 +70,18 @@ abstract class AbstractRepository extends ServiceEntityRepository
         return $this->queryBuilder->getQuery()->getResult();
     }
 
-    public function countAll($filters = []): int
+    public function countAll(
+        array $filtersWithAnds = [],
+        array $filtersWithOrs = [],
+    ): int
     {
         $this->resetParams();
         // REVIEW: %s.uuid by %s.* but error in DTO library
         $this->queryBuilder->select(sprintf('count(%s.uuid)', $this->getAliasTable()));
 
-        $this->addWhereWithAnds($filters);
+        $this->addWhereWithOrs($filtersWithOrs);
+
+        $this->addWhereWithAnds($filtersWithAnds);
 
         return $this->queryBuilder->getQuery()->getSingleScalarResult();
     }
@@ -245,6 +250,18 @@ abstract class AbstractRepository extends ServiceEntityRepository
         return sprintf('LOWER(%s) LIKE \'%%%s%%\'', $fieldName, mb_strtolower($fieldValue));
     }
 
+    protected function getWhereUuidArrayCondition(string $fieldName, $fieldValues): string
+    {
+        return sprintf(
+            '%s IN (%s)',
+            $fieldName,
+            implode(',', array_map(
+                static fn($fieldValue) => sprintf('\'%s\'', mb_strtolower($fieldValue)),
+                $fieldValues,
+            )),
+        );
+    }
+
     protected function getWhereUuidCondition(string $fieldName, $fieldValue): string
     {
         return sprintf('%s = \'%s\'', $fieldName, mb_strtolower($fieldValue));
@@ -275,7 +292,10 @@ abstract class AbstractRepository extends ServiceEntityRepository
             $conditions[] = $this->getWhereStringCondition($fieldName, $fieldValue);
         }
         if ($fieldMapping['type'] === 'guid') {
-            $conditions[] = $this->getWhereUuidCondition($fieldName, $fieldValue);
+            $conditions[] = is_array($fieldValue) ?
+                $this->getWhereUuidArrayCondition($fieldName, $fieldValue) :
+                $this->getWhereUuidCondition($fieldName, $fieldValue)
+            ;
         }
         if ($fieldMapping['type'] == 'integer') {
             $conditions[] = $this->getWhereIntegerCondition($fieldName, $fieldValue);

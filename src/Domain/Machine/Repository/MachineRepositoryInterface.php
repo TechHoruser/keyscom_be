@@ -12,15 +12,17 @@ interface MachineRepositoryInterface extends ComplexFindInterface
 {
     /**
      * @param PaginationProperties $paginationProperties
-     * @param string[] $filters
      * @param string[] $embeds
+     * @param string[] $filtersWithAnds
+     * @param string[] $filtersWithOrs
      *
      * @return Machine[]
      */
     public function complexFind(
         PaginationProperties $paginationProperties = new PaginationProperties(),
-        array $filters = [],
         array $embeds = [],
+        array $filtersWithAnds = [],
+        array $filtersWithOrs = [],
     ): iterable;
 
     public function getByUuid(string $uuid): ?Machine;

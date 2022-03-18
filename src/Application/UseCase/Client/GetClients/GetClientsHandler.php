@@ -34,7 +34,10 @@ class GetClientsHandler implements QueryHandlerInterface
             $permissionsByRelatedEntity = $getClientsQuery->loggedUser->getPermissionsByRelatedEntity();
             foreach ($permissionsByRelatedEntity as $relatedEntity => $uuids) {
                 foreach ($uuids as $uuid) {
-                    $filtersByPermissions[] = [$filterFieldByRelatedEntityType[$relatedEntity] => $uuid];
+                    if (!isset($filtersByPermissions[$filterFieldByRelatedEntityType[$relatedEntity]])) {
+                        $filtersByPermissions[$filterFieldByRelatedEntityType[$relatedEntity]] = [];
+                    }
+                    $filtersByPermissions[$filterFieldByRelatedEntityType[$relatedEntity]][] = $uuid;
                 }
             }
 
@@ -52,7 +55,7 @@ class GetClientsHandler implements QueryHandlerInterface
 
         return $this->paginationMapper->map(
             $this->clientMapper->mapArray($results, $getClientsQuery->embeds),
-            $this->clientRepository->countAll($getClientsQuery->filters)
+            $this->clientRepository->countAll($getClientsQuery->filters, $filtersByPermissions)
         );
     }
 }
