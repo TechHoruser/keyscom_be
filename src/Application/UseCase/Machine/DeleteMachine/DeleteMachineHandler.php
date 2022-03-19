@@ -6,6 +6,7 @@ namespace App\Application\UseCase\Machine\DeleteMachine;
 
 use App\Application\Shared\Command\CommandHandlerInterface;
 use App\Domain\Machine\Repository\MachineRepositoryInterface;
+use App\Domain\User\Enums\PermissionType;
 
 class DeleteMachineHandler implements CommandHandlerInterface
 {
@@ -13,8 +14,13 @@ class DeleteMachineHandler implements CommandHandlerInterface
         private MachineRepositoryInterface $machineRepository,
     ) {}
 
-    public function __invoke(DeleteMachineCommand $createMachineCommand): void
+    public function __invoke(DeleteMachineCommand $deleteMachineCommand): void
     {
-        $this->machineRepository->deleteByUuid($createMachineCommand->uuid);
+        $machine = $this->machineRepository->getByUuid($deleteMachineCommand->uuid) ??
+            throw new \Exception('Bad Machine Uuid');
+
+        $deleteMachineCommand->loggedUser->checkPermissionForMachine($machine, PermissionType::ADMIN);
+
+        $this->machineRepository->deleteByUuid($deleteMachineCommand->uuid);
     }
 }

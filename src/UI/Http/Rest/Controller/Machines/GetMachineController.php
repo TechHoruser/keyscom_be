@@ -31,6 +31,7 @@ class GetMachineController extends AbstractQueryController
     public function __invoke(string $machineUuid): JsonResponse
     {
         $results = $this->dispatch(new GetMachineQuery(
+            $this->getLoggedUser(),
             $machineUuid,
             $this->request->query->all('embeds'),
         ));

@@ -30,6 +30,7 @@ class CreateProjectController extends AbstractCommandController
     public function __invoke(): JsonResponse
     {
         $result = $this->dispatch(new CreateProjectCommand(
+            $this->getLoggedUser(),
             $this->request->request->get('uuid'),
             $this->request->request->get('name'),
             is_null($startDate = $this->request->request->get('startDate')) ?

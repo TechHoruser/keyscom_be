@@ -10,7 +10,6 @@ use App\Domain\User\Enums\ActionOfUserOnMachine;
 use App\Domain\User\Enums\PermissionType;
 use App\Domain\User\Repository\ActionUserOnMachineRepositoryInterface;
 use App\Domain\User\Repository\PermissionRepositoryInterface;
-use App\Domain\User\Repository\UserRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Lock\LockFactory;
 
@@ -18,7 +17,6 @@ class RollbackPermissionHandler implements CommandHandlerInterface
 {
     public function __construct(
         private PermissionRepositoryInterface $permissionRepository,
-        private UserRepositoryInterface $userRepository,
         private ActionUserOnMachineRepositoryInterface $actionUserOnMachineRepository,
         private EntityManagerInterface $entityManager,
         private LockFactory $lockFactory,
@@ -26,20 +24,11 @@ class RollbackPermissionHandler implements CommandHandlerInterface
 
     public function __invoke(RollbackPermissionCommand $rollbackPermissionCommand)
     {
-        $permission = $this->permissionRepository->getByUuid($rollbackPermissionCommand->permissionUuid);
-        if (is_null($permission)) {
+        $permission = $this->permissionRepository->getByUuid($rollbackPermissionCommand->permissionUuid) ??
             throw new \Exception('Not exist the permission');
-        }
-
-        // TODO: Catch session user uuid
-        $uuidOfUserWhoRevokePermissions = '';
-        $user = $this->userRepository->getByUuid($uuidOfUserWhoRevokePermissions);
-        if (is_null($user)) {
-            throw new \Exception('Not exist the user');
-        }
 
         if (is_null($this->permissionRepository->getParentOrSamePermissionOfUser(
-            $uuidOfUserWhoRevokePermissions,
+            $rollbackPermissionCommand->loggedUser,
             PermissionType::ADMIN,
             $permission->getRelatedEntity(),
             $permission->getTypeOfMachine(),

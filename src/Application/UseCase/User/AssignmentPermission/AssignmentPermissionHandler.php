@@ -30,8 +30,11 @@ class AssignmentPermissionHandler implements CommandHandlerInterface
 
     public function __invoke(AssignmentPermissionCommand $assignmentPermissionCommand)
     {
+        $user = $this->userRepository->getByUuid($assignmentPermissionCommand->userUuid) ??
+            throw new \Exception('Not exist the user');
+
         if (is_null($this->permissionRepository->getParentOrSamePermissionOfUser(
-            $assignmentPermissionCommand->userUuid,
+            $user,
             $assignmentPermissionCommand->userPermissionType,
             $assignmentPermissionCommand->typeRelatedEntity,
             $assignmentPermissionCommand->typeOfMachine,
@@ -40,20 +43,13 @@ class AssignmentPermissionHandler implements CommandHandlerInterface
             throw new \Exception('You has not permissions for assign this');
         }
 
-        $user = $this->userRepository->getByUuid($assignmentPermissionCommand->userUuid);
-        if (is_null($user)) {
-            throw new \Exception('Not exist the user');
-        }
-
         try {
             $this->entityManager->getConnection()->beginTransaction();
 
-            // TODO: Set the correct session user
-            $sessionUser = $user;
             $permission = $this->permissionRepository->save(
                 new Permission(
                     null,
-                    $sessionUser,
+                    $assignmentPermissionCommand->loggedUser,
                     $user,
                     $assignmentPermissionCommand->userPermissionType,
                     $assignmentPermissionCommand->typeRelatedEntity,
@@ -108,7 +104,6 @@ class AssignmentPermissionHandler implements CommandHandlerInterface
         } elseif ($typeRelatedEntity === PermissionRelatedEntity::CLIENT) {
             $filters['project.client.uuid'] = $relatedEntityUuid;
         } else {
-            // TODO: Remove generic exception
             throw new \Exception('Unrecognized related entity type.');
         }
 

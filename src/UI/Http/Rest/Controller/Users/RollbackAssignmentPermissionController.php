@@ -9,26 +9,24 @@ use App\UI\Http\Rest\Controller\AbstractCommandController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * @Symfony\Component\Routing\Annotation\Route ("/assigment-permission/rollback", methods={"POST"})
+ * @Symfony\Component\Routing\Annotation\Route ("/assigment-permission/rollback/{permissionUuid}",
+ *     requirements={"projectUuid"="[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"},
+ *     methods={"POST"},
+ * );
  *
  * @OpenApi\Annotations\Post (
- *     path="/assigment-permission/rollback",
+ *     path="/assigment-permission/rollback/{permissionUuid}",
  *     summary="Rollback Permission to other user",
  *     tags={"Users"},
- *     @OpenApi\Annotations\RequestBody (
- *      @OpenApi\Annotations\JsonContent(
- *        type="object",
- *          @OpenApi\Annotations\Property(property="permissionUuid", type="string"),
- *       )
- *     ),
  * )
  */
 class RollbackAssignmentPermissionController extends AbstractCommandController
 {
-    public function __invoke(): JsonResponse
+    public function __invoke(string $permissionUuid): JsonResponse
     {
         $results = $this->dispatch(new RollbackPermissionCommand(
-            $this->request->request->get('permissionUuid')
+            $this->getLoggedUser(),
+            $permissionUuid,
         ));
 
         return new JsonResponse($this->normalizer->normalize($results));

@@ -30,6 +30,7 @@ class CreateMachineController extends AbstractCommandController
     public function __invoke(): JsonResponse
     {
         $result = $this->dispatch(new CreateMachineCommand(
+            $this->getLoggedUser(),
             $this->request->request->get('uuid'),
             $this->request->request->get('ip'),
             $this->request->request->get('name'),

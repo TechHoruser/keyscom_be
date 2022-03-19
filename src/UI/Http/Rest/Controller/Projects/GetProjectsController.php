@@ -27,6 +27,7 @@ class GetProjectsController extends AbstractQueryController
     public function __invoke(): JsonResponse
     {
         $results = $this->dispatch(new GetProjectsQuery(
+            $this->getLoggedUser(),
             $this->generatePaginationPropertiesByQueryParams(),
             $this->request->query->all('filters'),
             $this->request->query->all('embeds'),

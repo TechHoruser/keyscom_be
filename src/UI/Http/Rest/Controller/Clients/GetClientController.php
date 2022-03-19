@@ -31,6 +31,7 @@ class GetClientController extends AbstractQueryController
     public function __invoke(string $clientUuid): JsonResponse
     {
         $results = $this->dispatch(new GetClientQuery(
+            $this->getLoggedUser(),
             $clientUuid,
             $this->request->query->all('embeds'),
         ));

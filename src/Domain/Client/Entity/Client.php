@@ -50,11 +50,20 @@ class Client
         return $this;
     }
 
+    /**
+     *
+     * @return Project[]
+     */
     public function getProjects(): array
     {
         return $this->projects->getValues();
     }
 
+    /**
+     * @param Project[] $projects
+     *
+     * @return $this
+     */
     public function setProjects(array $projects): static
     {
         $this->projects = new ArrayCollection($projects);

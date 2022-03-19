@@ -8,10 +8,10 @@ use App\Domain\Machine\Entity\Machine;
 use App\Domain\Project\Entity\Project;
 use App\Domain\Shared\Entities\PaginationProperties;
 use App\Domain\User\Entity\Permission;
+use App\Domain\User\Entity\User;
 use App\Domain\User\Enums\PermissionRelatedEntity;
 use App\Domain\User\Enums\PermissionType;
 use App\Domain\User\Repository\PermissionRepositoryInterface;
-use Doctrine\Persistence\ManagerRegistry;
 
 class PermissionRepository extends AbstractRepository implements PermissionRepositoryInterface
 {
@@ -39,7 +39,7 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
     }
 
     public function getChildPermissionsOfUser(
-        string $userUuid,
+        User $user,
         PermissionType $userPermissionType,
         ?PermissionRelatedEntity $typeRelatedEntity,
         ?string $typeOfMachine,
@@ -52,7 +52,7 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
         }
 
         $queryBuilder = $this->createQueryBuilder($this->getAliasTable())
-            ->andWhere(sprintf($this->getAliasTable() . '.user = \'%s\'', $userUuid))
+            ->andWhere(sprintf($this->getAliasTable() . '.user = \'%s\'', $user->getUuid()))
             ->andWhere(sprintf($this->getAliasTable() . '.userPermissionType = \'%s\'', $userPermissionType->value));
 
         if (!is_null($typeOfMachine)) {
@@ -119,14 +119,14 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
     }
 
     public function getParentOrSamePermissionOfUser(
-        string $userUuid,
+        User $user,
         PermissionType $userPermissionType,
         ?PermissionRelatedEntity $typeRelatedEntity,
         ?string $typeOfMachine,
         ?string $relatedEntityUuid
     ): ?Permission {
         $queryBuilder = $this->createQueryBuilder($this->getAliasTable())
-            ->andWhere(sprintf($this->getAliasTable() . '.user = \'%s\'', $userUuid))
+            ->andWhere(sprintf($this->getAliasTable() . '.user = \'%s\'', $user->getUuid()))
             ->andWhere(sprintf($this->getAliasTable() . '.userPermissionType = \'%s\'', $userPermissionType->value));
 
         if (!is_null($typeOfMachine)) {
@@ -190,7 +190,7 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
     public function save(Permission $permission): Permission
     {
         if (!is_null($this->getParentOrSamePermissionOfUser(
-            $permission->getUser()->getUuid(),
+            $permission->getUser(),
             $permission->getUserPermissionType(),
             $permission->getRelatedEntity(),
             $permission->getTypeOfMachine(),
@@ -200,7 +200,7 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
         }
 
         $childrenPermissions = $this->getChildPermissionsOfUser(
-            $permission->getUser()->getUuid(),
+            $permission->getUser(),
             $permission->getUserPermissionType(),
             $permission->getRelatedEntity(),
             $permission->getTypeOfMachine(),

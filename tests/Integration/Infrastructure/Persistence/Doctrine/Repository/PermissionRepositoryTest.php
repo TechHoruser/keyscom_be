@@ -86,7 +86,7 @@ class PermissionRepositoryTest extends WebTestCase
     {
         // WHEN
         $results = $this->permissionRepository->getChildPermissionsOfUser(
-            $this->user->getUuid(),
+            $this->user,
             PermissionType::SSH,
             null,
             null,
@@ -101,7 +101,7 @@ class PermissionRepositoryTest extends WebTestCase
     {
         // WHEN
         $results = $this->permissionRepository->getChildPermissionsOfUser(
-            $this->user->getUuid(),
+            $this->user,
             PermissionType::SSH,
             PermissionRelatedEntity::CLIENT,
             null,
@@ -116,7 +116,7 @@ class PermissionRepositoryTest extends WebTestCase
     {
         // WHEN
         $results = $this->permissionRepository->getChildPermissionsOfUser(
-            $this->user->getUuid(),
+            $this->user,
             PermissionType::SSH,
             PermissionRelatedEntity::PROJECT,
             null,
@@ -131,7 +131,7 @@ class PermissionRepositoryTest extends WebTestCase
     {
         // WHEN
         $results = $this->permissionRepository->getChildPermissionsOfUser(
-            $this->user->getUuid(),
+            $this->user,
             PermissionType::SSH,
             PermissionRelatedEntity::MACHINE,
             null,
@@ -158,7 +158,7 @@ class PermissionRepositoryTest extends WebTestCase
 
         // WHEN
         $results = $this->permissionRepository->getChildPermissionsOfUser(
-            $this->user->getUuid(),
+            $this->user,
             PermissionType::SSH,
             null,
             null,
@@ -196,7 +196,7 @@ class PermissionRepositoryTest extends WebTestCase
 
         // WHEN
         $results = $this->permissionRepository->getChildPermissionsOfUser(
-            $this->user->getUuid(),
+            $this->user,
             PermissionType::SSH,
             null,
             null,
@@ -223,7 +223,7 @@ class PermissionRepositoryTest extends WebTestCase
 
         // WHEN
         $results = $this->permissionRepository->getChildPermissionsOfUser(
-            $this->user->getUuid(),
+            $this->user,
             PermissionType::SSH,
             PermissionRelatedEntity::CLIENT,
             null,
@@ -261,7 +261,7 @@ class PermissionRepositoryTest extends WebTestCase
 
         // WHEN
         $results = $this->permissionRepository->getChildPermissionsOfUser(
-            $this->user->getUuid(),
+            $this->user,
             PermissionType::SSH,
             PermissionRelatedEntity::CLIENT,
             null,
@@ -276,7 +276,7 @@ class PermissionRepositoryTest extends WebTestCase
     {
         // WHEN
         $results = $this->permissionRepository->getChildPermissionsOfUser(
-            $this->user->getUuid(),
+            $this->user,
             PermissionType::SSH,
             PermissionRelatedEntity::MACHINE,
             null,
@@ -316,7 +316,7 @@ class PermissionRepositoryTest extends WebTestCase
 
         // WHEN
         $results = $this->permissionRepository->getChildPermissionsOfUser(
-            $this->user->getUuid(),
+            $this->user,
             PermissionType::SSH,
             PermissionRelatedEntity::CLIENT,
             null,
@@ -331,7 +331,7 @@ class PermissionRepositoryTest extends WebTestCase
     {
         // WHEN
         $result = $this->permissionRepository->getParentOrSamePermissionOfUser(
-            $this->user->getUuid(),
+            $this->user,
             PermissionType::SSH,
             PermissionRelatedEntity::CLIENT,
             null,
@@ -346,7 +346,7 @@ class PermissionRepositoryTest extends WebTestCase
     {
         // WHEN
         $result = $this->permissionRepository->getParentOrSamePermissionOfUser(
-            $this->user->getUuid(),
+            $this->user,
             PermissionType::SSH,
             PermissionRelatedEntity::PROJECT,
             null,
@@ -361,7 +361,7 @@ class PermissionRepositoryTest extends WebTestCase
     {
         // WHEN
         $result = $this->permissionRepository->getParentOrSamePermissionOfUser(
-            $this->user->getUuid(),
+            $this->user,
             PermissionType::SSH,
             PermissionRelatedEntity::MACHINE,
             null,
@@ -376,7 +376,7 @@ class PermissionRepositoryTest extends WebTestCase
     {
         // WHEN
         $result = $this->permissionRepository->getParentOrSamePermissionOfUser(
-            $this->user->getUuid(),
+            $this->user,
             PermissionType::SSH,
             null,
             null,

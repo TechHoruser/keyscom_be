@@ -9,6 +9,7 @@ use App\Application\Shared\Mapper\Machine\MachineMapper;
 use App\Application\Shared\Mapper\Pagination\PaginationMapper;
 use App\Application\Shared\Query\QueryHandlerInterface;
 use App\Domain\Machine\Repository\MachineRepositoryInterface;
+use App\Domain\User\Enums\PermissionRelatedEntity;
 
 class GetMachinesHandler implements QueryHandlerInterface
 {
@@ -20,15 +21,19 @@ class GetMachinesHandler implements QueryHandlerInterface
 
     public function __invoke(GetMachinesQuery $getMachinesQuery): PaginationDto
     {
+        $filtersByPermissions =
+            $getMachinesQuery->loggedUser->getPermissionsConditions(PermissionRelatedEntity::MACHINE);
+
         $results = $this->machineRepository->complexFind(
             $getMachinesQuery->paginationProperties,
             $getMachinesQuery->embeds,
             $getMachinesQuery->filters,
+            $filtersByPermissions,
         );
 
         return $this->paginationMapper->map(
             $this->machineMapper->mapArray($results, $getMachinesQuery->embeds),
-            $this->machineRepository->countAll($getMachinesQuery->filters)
+            $this->machineRepository->countAll($getMachinesQuery->filters, $filtersByPermissions)
         );
     }
 }

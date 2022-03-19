@@ -21,7 +21,9 @@ class GetMachineHandler implements QueryHandlerInterface
         $machine = $this->machineRepository->getByUuid(
             $getMachineQuery->uuid,
             $getMachineQuery->embeds,
-        );
+        ) ?? throw new \Exception('Bad Machine Uuid');
+
+        $getMachineQuery->loggedUser->checkPermissionForMachine($machine);
 
         return $this->machineMapper->map($machine, $getMachineQuery->embeds);
     }

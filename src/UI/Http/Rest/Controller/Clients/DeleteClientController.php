@@ -25,7 +25,10 @@ class DeleteClientController extends AbstractCommandController
 {
     public function __invoke(string $clientUuid): JsonResponse
     {
-        $this->dispatch(new DeleteClientCommand($clientUuid));
+        $this->dispatch(new DeleteClientCommand(
+            $this->getLoggedUser(),
+            $clientUuid,
+        ));
 
         return new JsonResponse();
     }

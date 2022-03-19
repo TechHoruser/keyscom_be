@@ -21,7 +21,9 @@ class GetProjectHandler implements QueryHandlerInterface
         $project = $this->projectRepository->getByUuid(
             $getProjectQuery->uuid,
             $getProjectQuery->embeds,
-        );
+        ) ?? throw new \Exception('Bad Project Uuid');
+
+        $getProjectQuery->loggedUser->checkPermissionForProject($project);
 
         return $this->projectMapper->map($project, $getProjectQuery->embeds);
     }

@@ -90,11 +90,20 @@ class Project
         return $this;
     }
 
+    /**
+     *
+     * @return Machine[]
+     */
     public function getMachines(): array
     {
         return $this->machines->getValues();
     }
 
+    /**
+     * @param Machine[] $machines
+     *
+     * @return $this
+     */
     public function setMachines(array $machines): static
     {
         $this->machines = new ArrayCollection($machines);

@@ -10,6 +10,8 @@ use App\Application\Shared\Mapper\Machine\MachineMapper;
 use App\Domain\Machine\Entity\Machine;
 use App\Domain\Machine\Repository\MachineRepositoryInterface;
 use App\Domain\Project\Repository\ProjectRepositoryInterface;
+use App\Domain\Shared\Exception\DomainError;
+use App\Domain\User\Enums\PermissionType;
 
 class CreateMachineHandler implements CommandHandlerInterface
 {
@@ -21,11 +23,10 @@ class CreateMachineHandler implements CommandHandlerInterface
 
     public function __invoke(CreateMachineCommand $createMachineCommand): MachineDto
     {
-        $project = $this->projectRepository->getByUuid($createMachineCommand->projectUuid);
+        $project = $this->projectRepository->getByUuid($createMachineCommand->projectUuid) ??
+            throw new DomainError('Bad Project Uuid');
 
-        if (!$project) {
-            throw new \Exception('Bad Project Uuid');
-        }
+        $createMachineCommand->loggedUser->checkPermissionForProject($project, PermissionType::ADMIN);
 
         $machine = $this->machineRepository->save(new Machine(
             $createMachineCommand->uuid,

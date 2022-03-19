@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\UI\Http\Rest\Controller\Users;
 
-use App\Application\UseCase\User\RollbackPermission\RollbackPermissionCommand;
+use App\Application\UseCase\User\AssignmentPermission\AssignmentPermissionCommand;
+use App\Domain\User\Enums\PermissionRelatedEntity;
+use App\Domain\User\Enums\PermissionType;
 use App\UI\Http\Rest\Controller\AbstractCommandController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -31,9 +33,16 @@ class AssignmentPermissionController extends AbstractCommandController
 {
     public function __invoke(): JsonResponse
     {
-        $results = $this->dispatch(new RollbackPermissionCommand(
-            '5c1f1b27-ff41-43a9-95b3-6db79de86903',
-            '5c1f1b27-ff41-43a9-95b3-6db79de86903'
+        $results = $this->dispatch(new AssignmentPermissionCommand(
+            $this->getLoggedUser(),
+            $this->request->request->get('userUuid'),
+            PermissionType::from($this->request->request->get('userPermissionType')),
+            is_null($typeRelatedEntity = $this->request->request->get('typeRelatedEntity')) ?
+                null :
+                PermissionRelatedEntity::from($typeRelatedEntity)
+            ,
+            $this->request->request->get('typeOfMachine'),
+            $this->request->request->get('relatedEntityUuid'),
         ));
 
         return new JsonResponse($this->normalizer->normalize($results));

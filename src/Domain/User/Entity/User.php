@@ -9,6 +9,7 @@ use App\Domain\Client\Entity\Client;
 use App\Domain\Machine\Entity\Machine;
 use App\Domain\Project\Entity\Project;
 use App\Domain\Shared\Auditable\AuditableEntityTrait;
+use App\Domain\Shared\Exception\ForbiddenException;
 use App\Domain\Tenant\CertainTenant\TenantEntityTrait;
 use App\Domain\User\Enums\PermissionRelatedEntity;
 use App\Domain\User\Enums\PermissionType;
@@ -119,6 +120,13 @@ class User
         return $this;
     }
 
+    public function checkSuperPermission(?PermissionType $permissionType = null): void
+    {
+        if (!$this->isSuper($permissionType)) {
+            throw new ForbiddenException();
+        }
+    }
+
     public function isSuper(?PermissionType $permissionType = null): bool
     {
         foreach ($this->getPermissions() as $permission) {
@@ -158,6 +166,13 @@ class User
         return $permissions;
     }
 
+    public function checkPermissionForClient(Client $client, ?PermissionType $permissionType = null): void
+    {
+        if (!$this->hasPermissionForClient($client, $permissionType)) {
+            throw new ForbiddenException();
+        }
+    }
+
     public function hasPermissionForClient(Client $client, ?PermissionType $permissionType = null): bool
     {
         foreach ($this->getPermissions() as $permission) {
@@ -177,6 +192,13 @@ class User
             }
         }
         return false;
+    }
+
+    public function checkPermissionForProject(Project $project, ?PermissionType $permissionType = null): void
+    {
+        if (!$this->hasPermissionForProject($project, $permissionType)) {
+            throw new ForbiddenException();
+        }
     }
 
     public function hasPermissionForProject(Project $project, ?PermissionType $permissionType = null): bool
@@ -202,6 +224,13 @@ class User
             }
         }
         return false;
+    }
+
+    public function checkPermissionForMachine(Machine $machine, ?PermissionType $permissionType = null): void
+    {
+        if (!$this->hasPermissionForMachine($machine, $permissionType)) {
+            throw new ForbiddenException();
+        }
     }
 
     public function hasPermissionForMachine(Machine $machine, ?PermissionType $permissionType = null): bool
@@ -231,5 +260,46 @@ class User
             }
         }
         return false;
+    }
+
+    public function getPermissionsConditions(PermissionRelatedEntity $permissionRelatedEntity): array
+    {
+        $filterFieldByRelatedEntityType = match ($permissionRelatedEntity) {
+            PermissionRelatedEntity::CLIENT => [
+                PermissionRelatedEntity::CLIENT->name  => 'uuid',
+                PermissionRelatedEntity::PROJECT->name => 'projects.uuid',
+                PermissionRelatedEntity::MACHINE->name => 'projects.machines.uuid',
+            ],
+            PermissionRelatedEntity::PROJECT => [
+                PermissionRelatedEntity::CLIENT->name  => 'client.uuid',
+                PermissionRelatedEntity::PROJECT->name => 'uuid',
+                PermissionRelatedEntity::MACHINE->name => 'machines.uuid',
+            ],
+            PermissionRelatedEntity::MACHINE => [
+                PermissionRelatedEntity::CLIENT->name  => 'project.client.uuid',
+                PermissionRelatedEntity::PROJECT->name => 'project.uuid',
+                PermissionRelatedEntity::MACHINE->name => 'uuid',
+            ],
+        };
+
+        $filtersByPermissions = [];
+
+        if(!$this->isSuper()) {
+            $permissionsByRelatedEntity = $this->getPermissionsByRelatedEntity();
+            foreach ($permissionsByRelatedEntity as $relatedEntity => $uuids) {
+                foreach ($uuids as $uuid) {
+                    if (!isset($filtersByPermissions[$filterFieldByRelatedEntityType[$relatedEntity]])) {
+                        $filtersByPermissions[$filterFieldByRelatedEntityType[$relatedEntity]] = [];
+                    }
+                    $filtersByPermissions[$filterFieldByRelatedEntityType[$relatedEntity]][] = $uuid;
+                }
+            }
+
+            if (empty($filtersByPermissions)) {
+                throw new ForbiddenException();
+            }
+        }
+
+        return $filtersByPermissions;
     }
 }

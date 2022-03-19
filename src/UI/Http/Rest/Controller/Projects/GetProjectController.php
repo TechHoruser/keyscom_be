@@ -31,6 +31,7 @@ class GetProjectController extends AbstractQueryController
     public function __invoke(string $projectUuid): JsonResponse
     {
         $results = $this->dispatch(new GetProjectQuery(
+            $this->getLoggedUser(),
             $projectUuid,
             $this->request->query->all('embeds'),
         ));

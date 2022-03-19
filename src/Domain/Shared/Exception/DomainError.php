@@ -2,7 +2,7 @@
 
 namespace App\Domain\Shared\Exception;
 
-class ApiError extends \Exception
+class DomainError extends \Exception
 {
 
 }

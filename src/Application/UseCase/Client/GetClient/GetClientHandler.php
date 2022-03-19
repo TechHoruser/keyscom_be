@@ -21,7 +21,9 @@ class GetClientHandler implements QueryHandlerInterface
         $client = $this->clientRepository->getByUuid(
             $getClientQuery->uuid,
             $getClientQuery->embeds,
-        );
+        ) ?? throw new \Exception('Bad Client Uuid');
+
+        $getClientQuery->loggedUser->checkPermissionForClient($client);
 
         return $this->clientMapper->map($client, $getClientQuery->embeds);
     }

@@ -25,7 +25,10 @@ class DeleteProjectController extends AbstractCommandController
 {
     public function __invoke(string $projectUuid): JsonResponse
     {
-        $this->dispatch(new DeleteProjectCommand($projectUuid));
+        $this->dispatch(new DeleteProjectCommand(
+            $this->getLoggedUser(),
+            $projectUuid,
+        ));
 
         return new JsonResponse();
     }

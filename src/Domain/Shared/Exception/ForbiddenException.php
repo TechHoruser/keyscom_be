@@ -2,7 +2,7 @@
 
 namespace App\Domain\Shared\Exception;
 
-class ForbiddenException extends ApiError
+class ForbiddenException extends DomainError
 {
 
 }

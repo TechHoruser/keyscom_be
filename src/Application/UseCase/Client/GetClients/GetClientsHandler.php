@@ -22,29 +22,8 @@ class GetClientsHandler implements QueryHandlerInterface
 
     public function __invoke(GetClientsQuery $getClientsQuery): PaginationDto
     {
-        $filterFieldByRelatedEntityType = [
-            PermissionRelatedEntity::CLIENT->name => 'uuid',
-            PermissionRelatedEntity::PROJECT->name => 'projects.uuid',
-            PermissionRelatedEntity::MACHINE->name => 'projects.machines.uuid',
-        ];
-
-        $filtersByPermissions = [];
-
-        if(!$getClientsQuery->loggedUser->isSuper()) {
-            $permissionsByRelatedEntity = $getClientsQuery->loggedUser->getPermissionsByRelatedEntity();
-            foreach ($permissionsByRelatedEntity as $relatedEntity => $uuids) {
-                foreach ($uuids as $uuid) {
-                    if (!isset($filtersByPermissions[$filterFieldByRelatedEntityType[$relatedEntity]])) {
-                        $filtersByPermissions[$filterFieldByRelatedEntityType[$relatedEntity]] = [];
-                    }
-                    $filtersByPermissions[$filterFieldByRelatedEntityType[$relatedEntity]][] = $uuid;
-                }
-            }
-
-            if (empty($filtersByPermissions)) {
-                throw new ForbiddenException();
-            }
-        }
+        $filtersByPermissions =
+            $getClientsQuery->loggedUser->getPermissionsConditions(PermissionRelatedEntity::CLIENT);
 
         $results = $this->clientRepository->complexFind(
             $getClientsQuery->paginationProperties,

@@ -30,6 +30,7 @@ class CreateClientController extends AbstractCommandController
     public function __invoke(): JsonResponse
     {
         $result = $this->dispatch(new CreateClientCommand(
+            $this->getLoggedUser(),
             $this->request->request->get('uuid'),
             $this->request->request->get('name'),
         ));

@@ -6,15 +6,21 @@ namespace App\Application\UseCase\Project\DeleteProject;
 
 use App\Application\Shared\Command\CommandHandlerInterface;
 use App\Domain\Project\Repository\ProjectRepositoryInterface;
+use App\Domain\User\Enums\PermissionType;
 
 class DeleteProjectHandler implements CommandHandlerInterface
 {
     public function __construct(
-        private ProjectRepositoryInterface $machineRepository,
+        private ProjectRepositoryInterface $projectRepository,
     ) {}
 
-    public function __invoke(DeleteProjectCommand $createProjectCommand): void
+    public function __invoke(DeleteProjectCommand $deleteProjectCommand): void
     {
-        $this->machineRepository->deleteByUuid($createProjectCommand->uuid);
+        $project = $this->projectRepository->getByUuid($deleteProjectCommand->uuid) ??
+            throw new \Exception('Bad Project Uuid');
+
+        $deleteProjectCommand->loggedUser->checkPermissionForProject($project, PermissionType::ADMIN);
+
+        $this->projectRepository->deleteByUuid($deleteProjectCommand->uuid);
     }
 }

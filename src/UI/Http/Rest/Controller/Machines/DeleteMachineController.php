@@ -25,7 +25,10 @@ class DeleteMachineController extends AbstractCommandController
 {
     public function __invoke(string $machineUuid): JsonResponse
     {
-        $this->dispatch(new DeleteMachineCommand($machineUuid));
+        $this->dispatch(new DeleteMachineCommand(
+            $this->getLoggedUser(),
+            $machineUuid,
+        ));
 
         return new JsonResponse();
     }
