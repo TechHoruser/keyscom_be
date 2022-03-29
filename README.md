@@ -45,9 +45,9 @@ The application is running in [http://localhost:8080](http://localhost:8080). Yo
 
 #### Debugger
 
-1. On PhpStorm Settings, access to `PHP>Debug`
+1. _PhpStorm_ - Open Settings and access to `PHP > Debug`
    1. Only available the port 9003.
-2. On PhpStorm Settings, access to `PHP>Servers`
+2. _PhpStorm_ - Open Settings, access to `PHP > Servers`
    1. Create a new server, **IMPORTANT** with the name `localhost`. *This is important cause of `docker-compose.yml` config:*
    ```
    environment:
@@ -58,13 +58,19 @@ The application is running in [http://localhost:8080](http://localhost:8080). Yo
 
 #### Tests
 
-1. Add new Test Frameworks (`File > Settings > PHP > Test Framework`)
-2. Add new
+Create configuration file `cp ./phpunit.xml.dist ./phpunit.xml`
+
+1. _PHPStorm_ - Add new Test Frameworks (`File > Settings > PHP > Test Framework`)
+2. _PHPStorm_ - Add new
    1. Not modify path mapping
    2. Still mark `Use Composer Autoload`
    3. Fill path with `/var/www/html/vendor/autoload.php`
    4. Mark `Default configuration file` and fill in with `/var/www/html/phpunit.xml`
-3. Create configuration file `cp ./phpunit.xml.dist ./phpunit.xml`
+
+Execute them with `docker-compose exec php ./vendor/bin/phpunit tests`
+
+Or generating html-coverage folder with
+`docker-compose exec -e XDEBUG_MODE=coverage php ./vendor/bin/phpunit tests`
 
 #### Database
 

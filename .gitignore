@@ -13,15 +13,12 @@
 .idea/
 
 /tests/Integration/Resources/Config/IniFiles/values.ini
-###> symfony/phpunit-bridge ###
+
+###< phpunit/phpunit ###
 .phpunit
 .phpunit.result.cache
 /phpunit.xml
-###< symfony/phpunit-bridge ###
-
-###> phpunit/phpunit ###
-/phpunit.xml
-.phpunit.result.cache
+html-coverage
 ###< phpunit/phpunit ###
 
 ###> lexik/jwt-authentication-bundle ###
@@ -38,4 +35,3 @@
 /.phpcs-cache
 /phpcs.xml
 ###< squizlabs/php_codesniffer ###
-tests/Resources/Config/IniFiles/values.ini
