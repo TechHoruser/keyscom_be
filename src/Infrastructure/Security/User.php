@@ -16,7 +16,8 @@ class User extends \App\Domain\User\Entity\User
             $user->getEmail(),
             $user->getPassword(),
             $user->getPubKey(),
-            $user->getName(),
+            $user->getFirstName(),
+            $user->getLastName(),
             $user->getPermissions(),
         );
     }
@@ -28,7 +29,8 @@ class User extends \App\Domain\User\Entity\User
             $payload['email'],
             null,
             null,
-            $payload['name']
+            $payload['firstName'],
+            $payload['lastName'],
         );
     }
 
@@ -56,7 +58,8 @@ class User extends \App\Domain\User\Entity\User
             $this->getEmail(),
             $this->getPassword(),
             $this->getPubKey(),
-            $this->getName(),
+            $this->getFirstName(),
+            $this->getLastName(),
             $this->getPermissions(),
         );
     }

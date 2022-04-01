@@ -20,7 +20,9 @@ class UserMapper
         foreach ($users as $user) {
             $usersDto[] = new UserDto(
                 $user->getUuid(),
-                $user->getEmail()
+                $user->getEmail(),
+                $user->getFirstName(),
+                $user->getLastName(),
             );
         }
 

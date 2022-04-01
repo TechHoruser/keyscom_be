@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Domain\User\Entity;
 
-use App\Application\Shared\Dto\Client\ClientDto;
 use App\Domain\Client\Entity\Client;
 use App\Domain\Machine\Entity\Machine;
 use App\Domain\Project\Entity\Project;
@@ -30,7 +29,8 @@ class User
         protected string $email,
         protected ?string $password,
         protected ?string $pubKey,
-        protected string $name,
+        protected string $firstName,
+        protected string $lastName,
         /** @var Permission[] $permissions */
         array $permissions = [],
     )
@@ -87,14 +87,26 @@ class User
         return $this;
     }
 
-    public function getName(): string
+    public function getFirstName(): string
     {
-        return $this->name;
+        return $this->firstName;
     }
 
-    public function setName(string $name): static
+    public function setFirstName(string $firstName): static
     {
-        $this->name = $name;
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getLastName(): string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): static
+    {
+        $this->lastName = $lastName;
 
         return $this;
     }

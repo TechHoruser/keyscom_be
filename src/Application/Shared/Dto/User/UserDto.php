@@ -9,5 +9,7 @@ class UserDto
     public function __construct(
         readonly ?string $uuid,
         readonly string $email,
+        readonly string $firstName,
+        readonly string $lastName,
     ) {}
 }

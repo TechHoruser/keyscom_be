@@ -42,7 +42,8 @@ class Users extends AbstractFixture implements DependentFixtureInterface
                 'admin@keyscom.com',
                 null,
                 null,
-                'Admin User',
+                'Admin',
+                'User',
             );
             $adminUser->setPassword($this->passwordHasher->hashPassword(
                 \App\Infrastructure\Security\User::createFromUser($adminUser),
@@ -70,7 +71,8 @@ class Users extends AbstractFixture implements DependentFixtureInterface
                 'ssh@keyscom.com',
                 null,
                 null,
-                'Ssh User',
+                'Ssh',
+                'User',
             );
             $sshUser->setPassword($this->passwordHasher->hashPassword(
                 \App\Infrastructure\Security\User::createFromUser($sshUser),

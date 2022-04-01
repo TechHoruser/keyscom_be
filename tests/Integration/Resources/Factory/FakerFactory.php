@@ -39,7 +39,8 @@ class FakerFactory implements FakerFactoryInterface
             $this->faker->email(),
             null,
             null,
-            $this->faker->name(),
+            $this->faker->firstName(),
+            $this->faker->lastName(),
         );
         $user->setPassword($this->passwordHasher->hashPassword(
             \App\Infrastructure\Security\User::createFromUser($user),
