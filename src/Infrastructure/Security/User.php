@@ -9,7 +9,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class User extends \App\Domain\User\Entity\User
     implements UserInterface, JWTUserInterface, PasswordAuthenticatedUserInterface
 {
-    public static function createFromUser(\App\Domain\User\Entity\User $user): static
+    public static function createFromDomainUser(\App\Domain\User\Entity\User $user): static
     {
         return new static(
             $user->getUuid(),

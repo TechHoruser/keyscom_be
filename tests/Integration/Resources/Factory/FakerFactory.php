@@ -43,7 +43,7 @@ class FakerFactory implements FakerFactoryInterface
             $this->faker->lastName(),
         );
         $user->setPassword($this->passwordHasher->hashPassword(
-            \App\Infrastructure\Security\User::createFromUser($user),
+            \App\Infrastructure\Security\User::createFromDomainUser($user),
             $this->fixtureValues->getCommonUserPassword(),
         ));
         $user->setTenant($tenant);

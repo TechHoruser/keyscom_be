@@ -46,7 +46,7 @@ class Users extends AbstractFixture implements DependentFixtureInterface
                 'User',
             );
             $adminUser->setPassword($this->passwordHasher->hashPassword(
-                \App\Infrastructure\Security\User::createFromUser($adminUser),
+                \App\Infrastructure\Security\User::createFromDomainUser($adminUser),
                 $this->fixtureValues->getCommonUserPassword(),
             ));
             $adminUser->setTenantName($tenant->getHost());
@@ -75,7 +75,7 @@ class Users extends AbstractFixture implements DependentFixtureInterface
                 'User',
             );
             $sshUser->setPassword($this->passwordHasher->hashPassword(
-                \App\Infrastructure\Security\User::createFromUser($sshUser),
+                \App\Infrastructure\Security\User::createFromDomainUser($sshUser),
                 $this->fixtureValues->getCommonUserPassword(),
             ));
             $sshUser->setTenantName($tenant->getHost());

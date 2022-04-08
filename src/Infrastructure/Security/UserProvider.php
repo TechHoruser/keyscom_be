@@ -33,7 +33,7 @@ class UserProvider implements PayloadAwareUserProviderInterface
             throw new \Exception();
         }
 
-        return $this->cache[$username] = User::createFromUser($user);
+        return $this->cache[$username] = User::createFromDomainUser($user);
     }
 
     public function refreshUser(UserInterface $user)
@@ -58,6 +58,6 @@ class UserProvider implements PayloadAwareUserProviderInterface
             throw new \Exception();
         }
 
-        return $this->cache[$identifier] = User::createFromUser($user);
+        return $this->cache[$identifier] = User::createFromDomainUser($user);
     }
 }
