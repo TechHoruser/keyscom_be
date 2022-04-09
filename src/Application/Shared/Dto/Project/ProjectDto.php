@@ -11,6 +11,8 @@ class ProjectDto
     public function __construct(
         readonly ?string $uuid,
         readonly string $name,
+        readonly ?\DateTime $startDate,
+        readonly ?\DateTime $endDate,
         readonly ?ClientDto $client,
         readonly ?array $machines,
     ) {}
