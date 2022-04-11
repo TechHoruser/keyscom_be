@@ -9,7 +9,6 @@ use App\Application\Shared\Mapper\Client\ClientMapper;
 use App\Application\Shared\Mapper\Pagination\PaginationMapper;
 use App\Application\Shared\Query\QueryHandlerInterface;
 use App\Domain\Client\Repository\ClientRepositoryInterface;
-use App\Domain\Shared\Exception\ForbiddenException;
 use App\Domain\User\Enums\PermissionRelatedEntity;
 
 class GetClientsHandler implements QueryHandlerInterface

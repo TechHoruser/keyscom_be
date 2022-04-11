@@ -28,6 +28,7 @@ Run `docker-compose exec php php bin/console lexik:jwt:generate-keypair` for gen
 
 The application is running in [http://localhost:8080](http://localhost:8080). You can see OpenAPI documentation on [http://localhost:8080/doc](http://localhost:8080/doc).
 
+Generate database 
 
 ## Configurations
 
