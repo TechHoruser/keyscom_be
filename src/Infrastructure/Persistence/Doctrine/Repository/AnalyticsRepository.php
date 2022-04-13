@@ -22,7 +22,6 @@ class AnalyticsRepository implements AnalyticsRepositoryInterface
                 DATE_TRUNC('day', created_at) AS \"day\", 
                 COUNT(created_at) AS \"count\"
             FROM $table
-            WHERE date_part('year', created_at) = date_part('year', CURRENT_DATE)
             GROUP BY DATE_TRUNC('day', created_at);
             ")
             ->executeQuery()
