@@ -22,7 +22,10 @@ class AuditableEntitySubscriber implements EventSubscriber
     {
         $object = $args->getObject();
 
-        if (method_exists($object, 'setCreatedAt')) {
+        if (
+            method_exists($object, 'getCreatedAt') && is_null($object->getCreatedAt()) &&
+            method_exists($object, 'setCreatedAt')
+        ) {
             $object->setCreatedAt(new \DateTime());
         }
 

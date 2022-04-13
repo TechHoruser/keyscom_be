@@ -47,7 +47,7 @@ class FakerFactory implements FakerFactoryInterface
             $this->fixtureValues->getCommonUserPassword(),
         ));
         $user->setTenant($tenant);
-        $user->setCreatedAt(new \DateTime());
+        $user->setCreatedAt($this->faker->dateTimeBetween((new \DateTime('2021-11-01'))));
         return $user;
     }
 
@@ -58,7 +58,7 @@ class FakerFactory implements FakerFactoryInterface
             $this->faker->name(),
         );
         $client->setTenant($tenant);
-        $client->setCreatedAt(new \DateTime());
+        $client->setCreatedAt($this->faker->dateTimeBetween((new \DateTime('2021-11-01'))));
         return $client;
     }
 
@@ -78,7 +78,7 @@ class FakerFactory implements FakerFactoryInterface
             $client,
         );
         $project->setTenantName($client->getTenantName());
-        $project->setCreatedAt(new \DateTime());
+        $project->setCreatedAt($this->faker->dateTimeBetween((new \DateTime('2021-11-01'))));
         return $project;
     }
 
@@ -97,7 +97,7 @@ class FakerFactory implements FakerFactoryInterface
             $project,
         );
         $machine->setTenantName($project->getTenantName());
-        $machine->setCreatedAt(new \DateTime());
+        $machine->setCreatedAt($this->faker->dateTimeBetween((new \DateTime('2021-11-01'))));
         return $machine;
     }
 }
