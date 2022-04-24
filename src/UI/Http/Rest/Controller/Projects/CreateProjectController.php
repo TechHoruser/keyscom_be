@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
  *     @OpenApi\Annotations\RequestBody (
  *      @OpenApi\Annotations\JsonContent(
  *        type="object",
- *          @OpenApi\Annotations\Property(property="userUuid", type="string", nullable=true),
+ *          @OpenApi\Annotations\Property(property="clientUuid", type="string", nullable=true),
  *          @OpenApi\Annotations\Property(property="name", type="string", nullable=true),
  *       )
  *     ),

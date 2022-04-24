@@ -6,7 +6,7 @@ services:
       - .:/var/www/html:ro
       - ./.docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
     ports:
-      - 8080:80
+      - "8080:80"
     depends_on:
       - php
     networks:
@@ -31,8 +31,16 @@ services:
     volumes:
       - ./.docker/db/data:/var/lib/postgresql/data
     ports:
-      - 5432:5432
+      - "5432:5432"
     env_file: .env.local
+    networks:
+      - keyscom
+  mailhog:
+    image: mailhog/mailhog
+    logging:
+      driver: 'none'  # disable saving logs
+    ports:
+      - "8081:8025" # web ui
     networks:
       - keyscom
 

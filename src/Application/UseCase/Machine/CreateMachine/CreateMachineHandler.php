@@ -10,7 +10,7 @@ use App\Application\Shared\Mapper\Machine\MachineMapper;
 use App\Domain\Machine\Entity\Machine;
 use App\Domain\Machine\Repository\MachineRepositoryInterface;
 use App\Domain\Project\Repository\ProjectRepositoryInterface;
-use App\Domain\Shared\Exception\DomainError;
+use App\Domain\Shared\Errors\DomainError;
 use App\Domain\User\Enums\PermissionType;
 
 class CreateMachineHandler implements CommandHandlerInterface

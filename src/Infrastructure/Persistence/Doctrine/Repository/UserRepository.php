@@ -31,4 +31,9 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
     {
         return parent::getByUuid($uuid, $embeds);
     }
+
+    public function save(User $user): User
+    {
+        return parent::saveEntityInterface($user);
+    }
 }

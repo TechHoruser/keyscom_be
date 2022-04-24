@@ -16,3 +16,7 @@ framework:
     #fragments: true
     php_errors:
         log: true
+
+    # Mailer
+    mailer:
+        dsn: '%env(MAILER_DSN)%'

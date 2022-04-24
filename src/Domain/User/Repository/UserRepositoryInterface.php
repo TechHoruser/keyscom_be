@@ -28,4 +28,6 @@ interface UserRepositoryInterface extends ComplexFindInterface
         array $filtersWithAnds = [],
         array $filtersWithOrs = [],
     ): iterable;
+
+    public function save(User $user): User;
 }

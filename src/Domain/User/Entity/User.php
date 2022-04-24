@@ -8,7 +8,7 @@ use App\Domain\Client\Entity\Client;
 use App\Domain\Machine\Entity\Machine;
 use App\Domain\Project\Entity\Project;
 use App\Domain\Shared\Auditable\AuditableEntityTrait;
-use App\Domain\Shared\Exception\ForbiddenException;
+use App\Domain\Shared\Errors\ForbiddenError;
 use App\Domain\Tenant\CertainTenant\TenantEntityTrait;
 use App\Domain\User\Enums\PermissionRelatedEntity;
 use App\Domain\User\Enums\PermissionType;
@@ -135,7 +135,7 @@ class User
     public function checkSuperPermission(?PermissionType $permissionType = null): void
     {
         if (!$this->isSuper($permissionType)) {
-            throw new ForbiddenException();
+            throw new ForbiddenError();
         }
     }
 
@@ -181,7 +181,7 @@ class User
     public function checkPermissionForClient(Client $client, ?PermissionType $permissionType = null): void
     {
         if (!$this->hasPermissionForClient($client, $permissionType)) {
-            throw new ForbiddenException();
+            throw new ForbiddenError();
         }
     }
 
@@ -209,7 +209,7 @@ class User
     public function checkPermissionForProject(Project $project, ?PermissionType $permissionType = null): void
     {
         if (!$this->hasPermissionForProject($project, $permissionType)) {
-            throw new ForbiddenException();
+            throw new ForbiddenError();
         }
     }
 
@@ -241,7 +241,7 @@ class User
     public function checkPermissionForMachine(Machine $machine, ?PermissionType $permissionType = null): void
     {
         if (!$this->hasPermissionForMachine($machine, $permissionType)) {
-            throw new ForbiddenException();
+            throw new ForbiddenError();
         }
     }
 
@@ -308,7 +308,7 @@ class User
             }
 
             if (empty($filtersByPermissions)) {
-                throw new ForbiddenException();
+                throw new ForbiddenError();
             }
         }
 

@@ -22,6 +22,8 @@ class ProjectMapperFromMachine extends AbstractMapper
         return new ProjectDto(
             $project->getUuid(),
             $project->getName(),
+            $project->getStartDate(),
+            $project->getEndDate(),
             !isset($embeds['client']) ? null :
                 $this->clientMapper->map($project->getClient(), $embeds['client']),
             null,

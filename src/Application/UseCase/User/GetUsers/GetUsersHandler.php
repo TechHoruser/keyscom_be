@@ -29,7 +29,7 @@ class GetUsersHandler implements QueryHandlerInterface
         );
 
         return $this->paginationMapper->map(
-            $this->userMapper->map($results),
+            $this->userMapper->mapArray($results),
             $this->userRepository->countAll($getUsersQuery->filters)
         );
     }

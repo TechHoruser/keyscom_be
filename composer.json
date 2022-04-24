@@ -21,6 +21,7 @@
         "symfony/flex": "*",
         "symfony/framework-bundle": "*",
         "symfony/lock": "*",
+        "symfony/mailer": "^6.0",
         "symfony/messenger": "*",
         "symfony/monolog-bundle": "*",
         "symfony/security-bundle": "*",
