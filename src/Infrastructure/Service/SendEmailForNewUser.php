@@ -27,6 +27,7 @@ class SendEmailForNewUser implements SendEmailForNewUserInterface
                 Now you can access to http://localhost:4200 with the following credentials:
                  - username: %s
                  - password: %s
+                Please change the password as soon as possible.
                 ",
                 $user->getFirstName(),
                 $user->getLastName(),

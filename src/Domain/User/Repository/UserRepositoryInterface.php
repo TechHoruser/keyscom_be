@@ -30,4 +30,6 @@ interface UserRepositoryInterface extends ComplexFindInterface
     ): iterable;
 
     public function save(User $user): User;
+
+    public function deleteByUuid(string $uuid): void;
 }
