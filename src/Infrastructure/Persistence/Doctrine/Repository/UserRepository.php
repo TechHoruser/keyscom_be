@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace App\Infrastructure\Persistence\Doctrine\Repository;
 
 use App\Domain\User\Entity\User;
+use App\Domain\User\Error\EmailAlreadyInUseError;
 use App\Domain\User\Repository\UserRepositoryInterface;
+use Doctrine\DBAL\Exception\DriverException;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 class UserRepository extends AbstractRepository implements UserRepositoryInterface
 {
@@ -34,6 +37,10 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
 
     public function save(User $user): User
     {
-        return parent::saveEntityInterface($user);
+        try {
+            return parent::saveEntityInterface($user);
+        } catch (UniqueConstraintViolationException) {
+            throw new EmailAlreadyInUseError();
+        }
     }
 }

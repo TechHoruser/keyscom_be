@@ -3,7 +3,7 @@
     <entity repository-class="App\Infrastructure\Persistence\Doctrine\Repository\User\UserRepository" name="App\Domain\User\Entity\User" table="users">
         <id name="uuid" type="guid" column="uuid"/>
 
-        <field name="email" column="email"/>
+        <field name="email" column="email" unique="true"/>
         <field name="firstName" column="firstName"/>
         <field name="lastName" column="lastName"/>
         <field name="pubKey" column="pub_key" nullable="true"/>
