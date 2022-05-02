@@ -8,6 +8,7 @@ use App\Domain\Shared\Errors\DomainError;
 use App\UI\Http\Rest\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -43,15 +44,27 @@ class RequestExceptionSubscriber implements EventSubscriberInterface
     {
         $error = $event->getThrowable()->getPrevious() ? $event->getThrowable()->getPrevious() : $event->getThrowable();
 
-        if (!($error instanceof DomainError) || !$this->isControllerRequest) {
+        if (!$this->isControllerRequest) {
             throw $error;
         }
 
-        $payload = [
-            'code'    => $error->getCode(),
-            'message' => $error->getMessage(),
-        ];
+        $payload = $this->getPayload($error);
+        $event->setResponse(new JsonResponse($payload, $payload['code']));
+    }
 
-        $event->setResponse(new JsonResponse($payload, $error->getCode()));
+    private function getPayload(\Throwable $error): array {
+        if ($error instanceof DomainError) {
+            return [
+                'code'    => $error->getCode(),
+                'message' => $error->getMessage(),
+            ];
+        }
+
+        // TODO: Log error
+
+        return [
+            'code'    => Response::HTTP_INTERNAL_SERVER_ERROR,
+            'message' => 'Internal Server Error',
+        ];
     }
 }
