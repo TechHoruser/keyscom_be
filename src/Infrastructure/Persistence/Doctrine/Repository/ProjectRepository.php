@@ -26,6 +26,6 @@ class ProjectRepository extends AbstractRepository implements ProjectRepositoryI
 
     public function save(Project $project): Project
     {
-        return parent::saveEntityInterface($project);
+        return parent::saveEntity($project);
     }
 }

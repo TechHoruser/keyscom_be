@@ -26,6 +26,6 @@ class ClientRepository extends AbstractRepository implements ClientRepositoryInt
 
     public function save(Client $client): Client
     {
-        return parent::saveEntityInterface($client);
+        return parent::saveEntity($client);
     }
 }

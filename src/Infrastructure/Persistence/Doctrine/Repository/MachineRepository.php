@@ -26,6 +26,6 @@ class MachineRepository extends AbstractRepository implements MachineRepositoryI
 
     public function save(Machine $machine): Machine
     {
-        return parent::saveEntityInterface($machine);
+        return parent::saveEntity($machine);
     }
 }

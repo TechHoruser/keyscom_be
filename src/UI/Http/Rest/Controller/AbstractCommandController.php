@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\UI\Http\Rest\Controller;
 
 use App\Application\Shared\Command\CommandBusInterface;
-use App\Application\Shared\Command\CommandInterface;
 use App\Application\Shared\Helper\DateTimeHelperInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;

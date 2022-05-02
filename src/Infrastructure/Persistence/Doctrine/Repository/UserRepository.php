@@ -38,7 +38,7 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
     public function save(User $user): User
     {
         try {
-            return parent::saveEntityInterface($user);
+            return parent::saveEntity($user);
         } catch (UniqueConstraintViolationException) {
             throw new EmailAlreadyInUseError();
         }

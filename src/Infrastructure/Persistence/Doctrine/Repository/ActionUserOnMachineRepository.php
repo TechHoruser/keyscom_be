@@ -27,6 +27,6 @@ class ActionUserOnMachineRepository extends AbstractRepository implements Action
 
     public function save(ActionUserOnMachine $actionUserOnMachine): ActionUserOnMachine
     {
-        return parent::saveEntityInterface($actionUserOnMachine);
+        return parent::saveEntity($actionUserOnMachine);
     }
 }

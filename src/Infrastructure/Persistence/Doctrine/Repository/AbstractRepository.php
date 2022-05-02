@@ -86,7 +86,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
         return $this->queryBuilder->getQuery()->getSingleScalarResult();
     }
 
-    public function saveEntityInterface($entity)
+    public function saveEntity($entity)
     {
         $this->_em->persist($entity);
         $this->_em->flush();
