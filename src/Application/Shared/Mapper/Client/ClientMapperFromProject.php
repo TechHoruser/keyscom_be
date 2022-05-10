@@ -20,13 +20,13 @@ class ClientMapperFromProject extends AbstractMapper
     }
 
     /**
-     * @param Client[] $clients
+     * @param Client[] $entities
      * @param string[] $embeds
      *
      * @return ClientDto[]
      */
-    public function mapArray(array $clients, array $embeds = []): array
+    public function mapArray(array $entities, array $embeds = []): array
     {
-        return parent::mapArray($clients, $embeds);
+        return parent::mapArray($entities, $embeds);
     }
 }

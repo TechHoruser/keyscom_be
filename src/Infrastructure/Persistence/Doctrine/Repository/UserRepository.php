@@ -7,7 +7,6 @@ namespace App\Infrastructure\Persistence\Doctrine\Repository;
 use App\Domain\User\Entity\User;
 use App\Domain\User\Error\EmailAlreadyInUseError;
 use App\Domain\User\Repository\UserRepositoryInterface;
-use Doctrine\DBAL\Exception\DriverException;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 class UserRepository extends AbstractRepository implements UserRepositoryInterface

@@ -23,13 +23,13 @@ class MachineMapperFromProject extends AbstractMapper
     }
 
     /**
-     * @param Machine[] $machines
+     * @param Machine[] $entities
      * @param string[] $embeds
      *
      * @return MachineDto[]
      */
-    public function mapArray(array $machines, array $embeds = []): array
+    public function mapArray(array $entities, array $embeds = []): array
     {
-        return parent::mapArray($machines, $embeds);
+        return parent::mapArray($entities, $embeds);
     }
 }

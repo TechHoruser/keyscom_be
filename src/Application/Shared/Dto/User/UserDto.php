@@ -11,5 +11,6 @@ class UserDto
         readonly string $email,
         readonly string $firstName,
         readonly string $lastName,
+        readonly ?string $pubKey,
     ) {}
 }

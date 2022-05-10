@@ -14,9 +14,9 @@ use App\Domain\User\Enums\PermissionRelatedEntity;
 class GetClientsHandler implements QueryHandlerInterface
 {
     public function __construct(
-        private ClientRepositoryInterface $clientRepository,
-        private PaginationMapper $paginationMapper,
-        private ClientMapper $clientMapper,
+        private readonly ClientRepositoryInterface $clientRepository,
+        private readonly PaginationMapper $paginationMapper,
+        private readonly ClientMapper $clientMapper,
     ) {}
 
     public function __invoke(GetClientsQuery $getClientsQuery): PaginationDto

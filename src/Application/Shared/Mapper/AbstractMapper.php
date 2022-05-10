@@ -4,11 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\Shared\Mapper;
 
-use App\Application\Shared\Dto\Client\ClientDto;
-use App\Application\Shared\Mapper\Project\ProjectMapper;
-use App\Domain\Client\Entity\Client;
-
-class AbstractMapper
+abstract class AbstractMapper
 {
     protected function getOrganizedEmbeds(array $embeds): array
     {
@@ -28,8 +24,6 @@ class AbstractMapper
 
         return $organizedEmbeds;
     }
-
-
 
     /**
      * @param array $entities

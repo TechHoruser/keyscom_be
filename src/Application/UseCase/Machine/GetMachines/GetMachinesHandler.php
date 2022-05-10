@@ -14,9 +14,9 @@ use App\Domain\User\Enums\PermissionRelatedEntity;
 class GetMachinesHandler implements QueryHandlerInterface
 {
     public function __construct(
-        private MachineRepositoryInterface $machineRepository,
-        private PaginationMapper $paginationMapper,
-        private MachineMapper $machineMapper,
+        private readonly MachineRepositoryInterface $machineRepository,
+        private readonly PaginationMapper $paginationMapper,
+        private readonly MachineMapper $machineMapper,
     ) {}
 
     public function __invoke(GetMachinesQuery $getMachinesQuery): PaginationDto

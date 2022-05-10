@@ -21,17 +21,18 @@ class UserMapper extends AbstractMapper
             $user->getEmail(),
             $user->getFirstName(),
             $user->getLastName(),
+            $user->getPubKey(),
         );
     }
 
     /**
-     * @param User[] $users
+     * @param User[] $entities
      * @param string[] $embeds
      *
      * @return UserDto[]
      */
-    public function mapArray(array $users, array $embeds = []): array
+    public function mapArray(array $entities, array $embeds = []): array
     {
-        return parent::mapArray($users, $embeds);
+        return parent::mapArray($entities, $embeds);
     }
 }

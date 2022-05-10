@@ -14,9 +14,9 @@ use App\Domain\User\Enums\PermissionRelatedEntity;
 class GetProjectsHandler implements QueryHandlerInterface
 {
     public function __construct(
-        private ProjectRepositoryInterface $projectRepository,
-        private PaginationMapper $paginationMapper,
-        private ProjectMapper $projectMapper,
+        private readonly ProjectRepositoryInterface $projectRepository,
+        private readonly PaginationMapper $paginationMapper,
+        private readonly ProjectMapper $projectMapper,
     ) {}
 
     public function __invoke(GetProjectsQuery $getProjectsQuery): PaginationDto

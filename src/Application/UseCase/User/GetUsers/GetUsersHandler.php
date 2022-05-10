@@ -14,9 +14,9 @@ use App\Domain\User\Repository\UserRepositoryInterface;
 class GetUsersHandler implements QueryHandlerInterface
 {
     public function __construct(
-        private UserRepositoryInterface $userRepository,
-        private PaginationMapper $paginationMapper,
-        private UserMapper $userMapper,
+        private readonly UserRepositoryInterface $userRepository,
+        private readonly PaginationMapper $paginationMapper,
+        private readonly UserMapper $userMapper,
     ) {}
 
     public function __invoke(GetUsersQuery $getUsersQuery): PaginationDto

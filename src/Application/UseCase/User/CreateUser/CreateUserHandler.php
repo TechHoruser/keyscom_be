@@ -16,10 +16,10 @@ use App\Domain\User\Enums\PermissionType;
 class CreateUserHandler implements CommandHandlerInterface
 {
     public function __construct(
-        private UserRepositoryInterface $userRepository,
-        private UserMapper $userMapper,
-        private GenerateRandomPasswordInterface $generateRandomPassword,
-        private SendEmailForNewUserInterface $sendEmailForNewUser,
+        private readonly UserRepositoryInterface $userRepository,
+        private readonly UserMapper $userMapper,
+        private readonly GenerateRandomPasswordInterface $generateRandomPassword,
+        private readonly SendEmailForNewUserInterface $sendEmailForNewUser,
     ) {}
 
     public function __invoke(CreateUserCommand $createUserCommand): UserDto

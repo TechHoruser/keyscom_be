@@ -16,9 +16,9 @@ use App\Domain\User\Enums\PermissionType;
 class CreateMachineHandler implements CommandHandlerInterface
 {
     public function __construct(
-        private MachineRepositoryInterface $machineRepository,
-        private ProjectRepositoryInterface $projectRepository,
-        private MachineMapper $machineMapper,
+        private readonly MachineRepositoryInterface $machineRepository,
+        private readonly ProjectRepositoryInterface $projectRepository,
+        private readonly MachineMapper $machineMapper,
     ) {}
 
     public function __invoke(CreateMachineCommand $createMachineCommand): MachineDto

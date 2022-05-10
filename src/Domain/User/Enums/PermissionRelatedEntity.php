@@ -8,5 +8,5 @@ enum PermissionRelatedEntity: string
 {
     case MACHINE = 'machine';
     case PROJECT = 'project';
-    case CLIENT = 'client';
+    case CLIENT  = 'client';
 }

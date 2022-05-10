@@ -12,7 +12,7 @@ use App\Domain\Client\Entity\Client;
 class ClientMapper extends AbstractMapper
 {
     public function __construct(
-      private ProjectMapperFromClient $projectMapper,
+      private readonly ProjectMapperFromClient $projectMapper,
     ) {}
 
     public function map(Client $client, array $embeds = []): ClientDto

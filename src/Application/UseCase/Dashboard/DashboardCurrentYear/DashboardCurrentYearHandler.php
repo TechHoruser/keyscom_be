@@ -10,7 +10,7 @@ use App\Application\Shared\Repository\AnalyticsRepositoryInterface;
 class DashboardCurrentYearHandler implements QueryHandlerInterface
 {
     public function __construct(
-        private AnalyticsRepositoryInterface $analyticsRepository,
+        private readonly AnalyticsRepositoryInterface $analyticsRepository,
     ) {}
 
     public function __invoke(DashboardCurrentYearQuery $dashboardCurrentYearQuery): array

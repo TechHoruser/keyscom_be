@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\EventSubscriber;
 
+use App\Application\Shared\Config\ParametersConfigInterface;
 use App\Domain\Shared\Errors\DomainError;
 use App\UI\Http\Rest\Controller\AbstractController;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +18,9 @@ use Symfony\Component\HttpKernel\KernelEvents;
 class RequestExceptionSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-       private bool $isControllerRequest = false,
+        private readonly LoggerInterface $logger,
+        private readonly ParametersConfigInterface $parametersConfig,
+        private bool $isControllerRequest = false,
     ){}
 
     public static function getSubscribedEvents(): array
@@ -60,8 +64,11 @@ class RequestExceptionSubscriber implements EventSubscriberInterface
             ];
         }
 
-        // TODO: Log error
+        if ($this->parametersConfig->get('app.env') === 'dev') {
+            throw $error;
+        }
 
+        $this->logger->error($error);
         return [
             'code'    => Response::HTTP_INTERNAL_SERVER_ERROR,
             'message' => 'Internal Server Error',

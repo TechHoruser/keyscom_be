@@ -14,8 +14,8 @@ use App\Domain\User\Enums\PermissionType;
 class CreateClientHandler implements CommandHandlerInterface
 {
     public function __construct(
-        private ClientRepositoryInterface $clientRepository,
-        private ClientMapper $clientMapper,
+        private readonly ClientRepositoryInterface $clientRepository,
+        private readonly ClientMapper $clientMapper,
     ) {}
 
     public function __invoke(CreateClientCommand $createClientCommand): ClientDto

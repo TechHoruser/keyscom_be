@@ -13,8 +13,8 @@ use App\Domain\Project\Entity\Project;
 class ProjectMapper extends AbstractMapper
 {
     public function __construct(
-        private ClientMapperFromProject $clientMapper,
-        private MachineMapperFromProject $machineMapper,
+        private readonly ClientMapperFromProject $clientMapper,
+        private readonly MachineMapperFromProject $machineMapper,
     ) {}
 
     public function map(Project $project, array $embeds = []): ProjectDto
@@ -34,13 +34,13 @@ class ProjectMapper extends AbstractMapper
     }
 
     /**
-     * @param Project[] $projects
+     * @param Project[] $entities
      * @param string[] $embeds
      *
      * @return ProjectDto[]
      */
-    public function mapArray(array $projects, array $embeds = []): array
+    public function mapArray(array $entities, array $embeds = []): array
     {
-        return parent::mapArray($projects, $embeds);
+        return parent::mapArray($entities, $embeds);
     }
 }

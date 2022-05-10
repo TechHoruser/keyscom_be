@@ -13,7 +13,7 @@ class PaginationMapper
      * @param int|null $totalItems
      * @return PaginationDto
      */
-    public function map($results, ?int $totalItems = null): PaginationDto
+    public function map(array $results, ?int $totalItems = null): PaginationDto
     {
         return new PaginationDto(
             $results,

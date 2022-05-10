@@ -9,7 +9,7 @@ class SecurityHelper implements SecurityHelperInterface
     private const METHOD = 'aes-256-cbc';
 
     public function __construct(
-        private string $secret,
+        private readonly string $secret,
     ) {}
 
     public function encryptString(string $data): string

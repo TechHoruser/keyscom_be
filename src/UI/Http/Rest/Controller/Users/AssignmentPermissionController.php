@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  *      @OpenApi\Annotations\JsonContent(
  *        type="object",
  *          @OpenApi\Annotations\Property(property="userUuid", type="string"),
- *          @OpenApi\Annotations\Property(property="userType", type="string", nullable=true),
+ *          @OpenApi\Annotations\Property(property="userPermissionType", type="string", nullable=true),
  *          @OpenApi\Annotations\Property(property="relatedEntity", type="string"),
  *          @OpenApi\Annotations\Property(property="typeOfMachine", type="number", nullable=true),
  *          @OpenApi\Annotations\Property(property="relatedEntityUuid", type="string"),
@@ -37,7 +37,7 @@ class AssignmentPermissionController extends AbstractCommandController
             $this->getLoggedUser(),
             $this->request->request->get('userUuid'),
             PermissionType::from($this->request->request->get('userPermissionType')),
-            is_null($typeRelatedEntity = $this->request->request->get('typeRelatedEntity')) ?
+            is_null($typeRelatedEntity = $this->request->request->get('relatedEntity')) ?
                 null :
                 PermissionRelatedEntity::from($typeRelatedEntity)
             ,

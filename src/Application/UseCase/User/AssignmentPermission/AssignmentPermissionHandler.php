@@ -20,12 +20,12 @@ use Symfony\Component\Lock\LockFactory;
 class AssignmentPermissionHandler implements CommandHandlerInterface
 {
     public function __construct(
-        private PermissionRepositoryInterface $permissionRepository,
-        private UserRepositoryInterface $userRepository,
-        private MachineRepositoryInterface $machineRepository,
-        private ActionUserOnMachineRepositoryInterface $actionUserOnMachineRepository,
-        private EntityManagerInterface $entityManager,
-        private LockFactory $lockFactory,
+        private readonly PermissionRepositoryInterface $permissionRepository,
+        private readonly UserRepositoryInterface $userRepository,
+        private readonly MachineRepositoryInterface $machineRepository,
+        private readonly ActionUserOnMachineRepositoryInterface $actionUserOnMachineRepository,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly LockFactory $lockFactory,
     ) {}
 
     public function __invoke(AssignmentPermissionCommand $assignmentPermissionCommand)
@@ -86,7 +86,9 @@ class AssignmentPermissionHandler implements CommandHandlerInterface
             throw $exception;
 
         } finally {
-            $lock->release();
+            if (isset($lock)) {
+                $lock->release();
+            }
         }
     }
 

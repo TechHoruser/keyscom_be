@@ -12,8 +12,8 @@ use App\Domain\Client\Repository\ClientRepositoryInterface;
 class GetClientHandler implements QueryHandlerInterface
 {
     public function __construct(
-        private ClientRepositoryInterface $clientRepository,
-        private ClientMapper $clientMapper,
+        private readonly ClientRepositoryInterface $clientRepository,
+        private readonly ClientMapper $clientMapper,
     ) {}
 
     public function __invoke(GetClientQuery $getClientQuery): ClientDto

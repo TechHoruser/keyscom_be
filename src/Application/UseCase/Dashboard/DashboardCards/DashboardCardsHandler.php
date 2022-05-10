@@ -14,10 +14,10 @@ use App\Domain\User\Repository\UserRepositoryInterface;
 class DashboardCardsHandler implements QueryHandlerInterface
 {
     public function __construct(
-        private UserRepositoryInterface $userRepository,
-        private ClientRepositoryInterface $clientRepository,
-        private ProjectRepositoryInterface $projectRepository,
-        private MachineRepositoryInterface $machineRepository,
+        private readonly UserRepositoryInterface $userRepository,
+        private readonly ClientRepositoryInterface $clientRepository,
+        private readonly ProjectRepositoryInterface $projectRepository,
+        private readonly MachineRepositoryInterface $machineRepository,
     ) {}
 
     public function __invoke(DashboardCardsQuery $dashboardCardsQuery): DashboardCardsDto

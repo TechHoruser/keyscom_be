@@ -15,9 +15,9 @@ use App\Domain\User\Enums\PermissionType;
 class CreateProjectHandler implements CommandHandlerInterface
 {
     public function __construct(
-        private ProjectRepositoryInterface $projectRepository,
-        private ClientRepositoryInterface $clientRepository,
-        private ProjectMapper $projectMapper,
+        private readonly ProjectRepositoryInterface $projectRepository,
+        private readonly ClientRepositoryInterface $clientRepository,
+        private readonly ProjectMapper $projectMapper,
     ) {}
 
     public function __invoke(CreateProjectCommand $createProjectCommand): ProjectDto

@@ -16,10 +16,10 @@ use Symfony\Component\Lock\LockFactory;
 class RollbackPermissionHandler implements CommandHandlerInterface
 {
     public function __construct(
-        private PermissionRepositoryInterface $permissionRepository,
-        private ActionUserOnMachineRepositoryInterface $actionUserOnMachineRepository,
-        private EntityManagerInterface $entityManager,
-        private LockFactory $lockFactory,
+        private readonly PermissionRepositoryInterface $permissionRepository,
+        private readonly ActionUserOnMachineRepositoryInterface $actionUserOnMachineRepository,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly LockFactory $lockFactory,
     ) {}
 
     public function __invoke(RollbackPermissionCommand $rollbackPermissionCommand)

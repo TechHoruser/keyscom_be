@@ -12,8 +12,8 @@ use App\Domain\Machine\Repository\MachineRepositoryInterface;
 class GetMachineHandler implements QueryHandlerInterface
 {
     public function __construct(
-        private MachineRepositoryInterface $machineRepository,
-        private MachineMapper $machineMapper,
+        private readonly MachineRepositoryInterface $machineRepository,
+        private readonly MachineMapper $machineMapper,
     ) {}
 
     public function __invoke(GetMachineQuery $getMachineQuery): MachineDto

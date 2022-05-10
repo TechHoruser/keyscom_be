@@ -11,7 +11,7 @@ use App\Domain\User\Enums\PermissionType;
 class DeleteProjectHandler implements CommandHandlerInterface
 {
     public function __construct(
-        private ProjectRepositoryInterface $projectRepository,
+        private readonly ProjectRepositoryInterface $projectRepository,
     ) {}
 
     public function __invoke(DeleteProjectCommand $deleteProjectCommand): void

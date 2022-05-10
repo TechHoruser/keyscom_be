@@ -7,5 +7,5 @@ namespace App\Domain\User\Enums;
 enum PermissionType: string
 {
     case ADMIN = 'admin';
-    case SSH = 'ssh';
+    case SSH   = 'ssh';
 }

@@ -11,16 +11,16 @@ use App\Domain\User\Enums\PermissionType;
 class DeleteClientHandler implements CommandHandlerInterface
 {
     public function __construct(
-        private ClientRepositoryInterface $clientRepository,
+        private readonly ClientRepositoryInterface $clientRepository,
     ) {}
 
-    public function __invoke(DeleteClientCommand $createClientCommand): void
+    public function __invoke(DeleteClientCommand $deleteClientCommand): void
     {
-        $client = $this->clientRepository->getByUuid($createClientCommand->uuid) ??
+        $client = $this->clientRepository->getByUuid($deleteClientCommand->uuid) ??
             throw new \Exception('Bad Client Uuid');
 
-        $createClientCommand->loggedUser->checkPermissionForClient($client, PermissionType::ADMIN);
+        $deleteClientCommand->loggedUser->checkPermissionForClient($client, PermissionType::ADMIN);
 
-        $this->clientRepository->deleteByUuid($createClientCommand->uuid);
+        $this->clientRepository->deleteByUuid($deleteClientCommand->uuid);
     }
 }

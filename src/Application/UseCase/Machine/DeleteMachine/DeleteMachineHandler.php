@@ -11,7 +11,7 @@ use App\Domain\User\Enums\PermissionType;
 class DeleteMachineHandler implements CommandHandlerInterface
 {
     public function __construct(
-        private MachineRepositoryInterface $machineRepository,
+        private readonly MachineRepositoryInterface $machineRepository,
     ) {}
 
     public function __invoke(DeleteMachineCommand $deleteMachineCommand): void

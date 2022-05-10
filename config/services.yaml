@@ -74,3 +74,8 @@ services:
     App\Infrastructure\EventSubscriber\AuditableEntitySubscriber:
         tags:
             - { name: 'doctrine.event_subscriber' }
+
+    app.listener.jwt_created_listener:
+        class: App\Infrastructure\EventListener\JWTCreatedListener
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }

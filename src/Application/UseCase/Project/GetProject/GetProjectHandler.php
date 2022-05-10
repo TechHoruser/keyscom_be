@@ -12,8 +12,8 @@ use App\Domain\Project\Repository\ProjectRepositoryInterface;
 class GetProjectHandler implements QueryHandlerInterface
 {
     public function __construct(
-        private ProjectRepositoryInterface $projectRepository,
-        private ProjectMapper $projectMapper,
+        private readonly ProjectRepositoryInterface $projectRepository,
+        private readonly ProjectMapper $projectMapper,
     ) {}
 
     public function __invoke(GetProjectQuery $getProjectQuery): ProjectDto

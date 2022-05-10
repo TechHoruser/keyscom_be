@@ -94,7 +94,7 @@ class PermissionRepositoryTest extends WebTestCase
         );
 
         // THEN
-        $this->assertEquals(0, count($results));
+        $this->assertCount(0, $results);
     }
 
     public function testIfGetChildPermissionsOfUserReturnSuccessfullyV2()
@@ -109,7 +109,7 @@ class PermissionRepositoryTest extends WebTestCase
         );
 
         // THEN
-        $this->assertEquals(0, count($results));
+        $this->assertCount(0, $results);
     }
 
     public function testIfGetChildPermissionsOfUserReturnSuccessfullyV3()
@@ -124,7 +124,7 @@ class PermissionRepositoryTest extends WebTestCase
         );
 
         // THEN
-        $this->assertEquals(0, count($results));
+        $this->assertCount(0, $results);
     }
 
     public function testIfGetChildPermissionsOfUserReturnSuccessfullyV4()
@@ -139,7 +139,7 @@ class PermissionRepositoryTest extends WebTestCase
         );
 
         // THEN
-        $this->assertEquals(0, count($results));
+        $this->assertCount(0, $results);
     }
 
     public function testIfGetChildPermissionsWhitThatOfUserReturnSuccessfullyGivenAClient()
@@ -166,7 +166,7 @@ class PermissionRepositoryTest extends WebTestCase
         );
 
         // THEN
-        $this->assertEquals(1, count($results));
+        $this->assertCount(1, $results);
     }
 
     public function testIfGetChildPermissionsWhitThatOfUserReturnSuccessfullyGivenTwoProjects()
@@ -204,7 +204,7 @@ class PermissionRepositoryTest extends WebTestCase
         );
 
         // THEN
-        $this->assertEquals(2, count($results));
+        $this->assertCount(2, $results);
     }
 
     public function testIfGetChildPermissionsWhitThatOfUserReturnSuccessfullyGivenAProjectAndAClient()
@@ -231,7 +231,7 @@ class PermissionRepositoryTest extends WebTestCase
         );
 
         // THEN
-        $this->assertEquals(1, count($results));
+        $this->assertCount(1, $results);
     }
 
     public function testIfGetChildPermissionsWhitThatOfUserReturnSuccessfullyV4()
@@ -269,7 +269,7 @@ class PermissionRepositoryTest extends WebTestCase
         );
 
         // THEN
-        $this->assertEquals(2, count($results));
+        $this->assertCount(2, $results);
     }
 
     public function testIfGetChildPermissionsWhitThatOfUserReturnSuccessfullyV5()
@@ -284,7 +284,7 @@ class PermissionRepositoryTest extends WebTestCase
         );
 
         // THEN
-        $this->assertEquals(0, count($results));
+        $this->assertCount(0, $results);
     }
 
     public function testIfGetChildPermissionsWhitThatOfUserReturnSuccessfullyV6()
@@ -324,7 +324,7 @@ class PermissionRepositoryTest extends WebTestCase
         );
 
         // THEN
-        $this->assertEquals(1, count($results));
+        $this->assertCount(1, $results);
     }
 
     public function testIfGetParentPermissionWithoutParentPermissionV1()
@@ -339,7 +339,7 @@ class PermissionRepositoryTest extends WebTestCase
         );
 
         // THEN
-        $this->assertNull($result);
+        $this->assertCount(0, $result);
     }
 
     public function testIfGetParentPermissionWithoutParentPermissionV2()
@@ -354,7 +354,7 @@ class PermissionRepositoryTest extends WebTestCase
         );
 
         // THEN
-        $this->assertNull($result);
+        $this->assertCount(0, $result);
     }
 
     public function testIfGetParentPermissionWithoutParentPermissionV3()
@@ -369,7 +369,7 @@ class PermissionRepositoryTest extends WebTestCase
         );
 
         // THEN
-        $this->assertNull($result);
+        $this->assertCount(0, $result);
     }
 
     public function testIfGetParentPermissionWithoutParentPermissionV4()
@@ -384,7 +384,7 @@ class PermissionRepositoryTest extends WebTestCase
         );
 
         // THEN
-        $this->assertNull($result);
+        $this->assertCount(0, $result);
     }
 
     public function testIfGetParentPermissionWithoutParentPermissionV5()
