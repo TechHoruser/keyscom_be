@@ -6,6 +6,7 @@ namespace App\Application\UseCase\User\AssignmentPermission;
 
 use App\Application\Shared\Command\CommandHandlerInterface;
 use App\Domain\Machine\Repository\MachineRepositoryInterface;
+use App\Domain\Shared\Entities\PaginationProperties;
 use App\Domain\User\Entity\ActionUserOnMachine;
 use App\Domain\User\Entity\Permission;
 use App\Domain\User\Enums\ActionOfUserOnMachine;
@@ -49,7 +50,7 @@ class AssignmentPermissionHandler implements CommandHandlerInterface
             $permission = $this->permissionRepository->save(
                 new Permission(
                     null,
-                    $assignmentPermissionCommand->loggedUser,
+                    $this->userRepository->getByUuid($assignmentPermissionCommand->loggedUser->getUuid()),
                     $user,
                     $assignmentPermissionCommand->userPermissionType,
                     $assignmentPermissionCommand->typeRelatedEntity,
@@ -109,6 +110,6 @@ class AssignmentPermissionHandler implements CommandHandlerInterface
             throw new \Exception('Unrecognized related entity type.');
         }
 
-        return $this->machineRepository->complexFind(null, null, $filters);
+        return $this->machineRepository->complexFind(new PaginationProperties(), [], $filters);
     }
 }

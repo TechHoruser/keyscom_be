@@ -9,7 +9,6 @@
 
         <many-to-one field="permission" target-entity="App\Domain\User\Entity\Permission" inversed-by="actions">
             <join-column name="permission_uuid" referenced-column-name="uuid" on-delete="CASCADE"/>
-            <cascade><cascade-persist/></cascade>
         </many-to-one>
 
         <many-to-one field="machine" target-entity="App\Domain\Machine\Entity\Machine">

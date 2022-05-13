@@ -16,7 +16,7 @@ class UpdateUserHandler implements CommandHandlerInterface
 
     public function __invoke(UpdateUserCommand $updateUserCommand): void
     {
-        $updateUserCommand->loggedUser->isSuper(PermissionType::ADMIN);
+        $updateUserCommand->loggedUser->checkSuperPermission(PermissionType::ADMIN);
 
         $user = $this->userRepository->getByUuid($updateUserCommand->uuid) ??
             throw new \Exception('Bad User Uuid');

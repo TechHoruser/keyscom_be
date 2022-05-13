@@ -9,7 +9,6 @@
         <field name="relatedEntityUuid" type="guid" column="related_entity_uuid" nullable="true"/>
 
         <one-to-many field="actions" target-entity="App\Domain\User\Entity\ActionUserOnMachine" mapped-by="permission">
-            <cascade><cascade-persist/></cascade>
         </one-to-many>
 
         <many-to-one field="user" target-entity="App\Domain\User\Entity\User">

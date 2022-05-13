@@ -28,6 +28,7 @@ class UserPermissionMapper extends AbstractMapper
             $permission->getUuid(),
             $this->userMapper->map($permission->getUser()),
             $permission->getRelatedEntity()?->value,
+            $permission->getRelatedEntityUuid(),
             $permission->getUserPermissionType()?->value,
         );
     }
