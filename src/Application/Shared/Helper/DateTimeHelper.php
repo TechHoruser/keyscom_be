@@ -18,38 +18,30 @@ class DateTimeHelper implements DateTimeHelperInterface
         $this->searchDatesSeparator = $parametersConfig->get('app.search_dates_separator');
     }
 
-    /**
-     * @return string
-     */
     public function getFormatDateTime(): string
     {
         return $this->formatDateTime;
     }
 
-    /**
-     * @param string $dateTime
-     * @return \DateTime
-     */
-    public function getDateTimeFromString(string $dateTime): \DateTime
+    public function getDateTimeFromString(string $dateTime): ?\DateTime
     {
-        return \DateTime::createFromFormat(
+        $dateTime = \DateTime::createFromFormat(
             $this->formatDateTime,
             $dateTime
         );
+
+        if (!$dateTime) {
+            return null;
+        }
+
+        return $dateTime;
     }
 
-    /**
-     * @param \DateTime $dateTime
-     * @return string
-     */
     public function getStringFromDateTime(\DateTime $dateTime): string
     {
         return $dateTime->format($this->formatDateTime);
     }
 
-    /**
-     * @return string
-     */
     public function getSearchDatesSeparator(): string
     {
         return $this->searchDatesSeparator;

@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  * @OpenApi\Annotations\Post (
  *     path="/assigment-permission",
  *     summary="Assigment Permission to other user",
- *     tags={"Users"},
+ *     tags={"Permissions"},
  *     @OpenApi\Annotations\RequestBody (
  *      @OpenApi\Annotations\JsonContent(
  *        type="object",

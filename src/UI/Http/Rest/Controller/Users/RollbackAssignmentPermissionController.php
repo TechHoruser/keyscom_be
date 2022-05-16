@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  * @OpenApi\Annotations\Post (
  *     path="/assigment-permission/rollback/{permissionUuid}",
  *     summary="Rollback Permission to other user",
- *     tags={"Users"},
+ *     tags={"Permissions"},
  * )
  */
 class RollbackAssignmentPermissionController extends AbstractCommandController
