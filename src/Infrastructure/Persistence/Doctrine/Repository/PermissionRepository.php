@@ -68,17 +68,18 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
              *   Possible than project and machine has same uuid then error caused than extract a permission related
              *   with other entity.
             */
-            if ($childrenUuidRelatedWithCurrentEntity) {
-                $queryBuilder->andWhere(
-                    sprintf(
-                        'permissions.relatedEntityUuid IN (%s)',
-                        implode(
-                            ',',
-                            array_map(fn($entityUuid) => "'$entityUuid'", $childrenUuidRelatedWithCurrentEntity)
-                        )
-                    )
-                );
+            if (!$childrenUuidRelatedWithCurrentEntity) {
+                return [];
             }
+            $queryBuilder->andWhere(
+                sprintf(
+                    'permissions.relatedEntityUuid IN (%s)',
+                    implode(
+                        ',',
+                        array_map(fn($entityUuid) => "'$entityUuid'", $childrenUuidRelatedWithCurrentEntity)
+                    )
+                )
+            );
         }
 
         return $queryBuilder->getQuery()->getResult();
