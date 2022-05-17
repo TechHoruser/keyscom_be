@@ -42,7 +42,7 @@ class GetPermissionsRelatedToEntityController extends AbstractQueryController
 //            PermissionType::from($this->request->query->get('permissionType')),
             null,
             PermissionRelatedEntity::from($this->request->query->get('permissionRelatedEntity')),
-            $this->request->query->get('permissionRelatedEntityUuid')
+            $this->request->query->get('permissionRelatedEntityUuid'),
         ));
 
         return new JsonResponse($this->normalizer->normalize($results));

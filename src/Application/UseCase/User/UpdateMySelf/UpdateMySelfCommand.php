@@ -13,6 +13,6 @@ class UpdateMySelfCommand implements CommandInterface
         readonly User $loggedUser,
         readonly string $firstName,
         readonly string $lastName,
-        readonly string $pubKey,
+        readonly ?string $pubKey,
     ) {}
 }
