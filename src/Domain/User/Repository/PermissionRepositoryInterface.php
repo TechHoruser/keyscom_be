@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Domain\User\Repository;
 
-use App\Domain\Shared\Errors\DomainError;
 use App\Domain\User\Entity\Permission;
 use App\Domain\User\Entity\User;
 use App\Domain\User\Enums\PermissionRelatedEntity;

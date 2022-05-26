@@ -23,6 +23,7 @@ services:
       PHP_IDE_CONFIG: "serverName=localhost"
     networks:
       - keyscom
+      - keyscom-network
     depends_on:
       - postgres
   postgres:
@@ -46,3 +47,5 @@ services:
 
 networks:
   keyscom:
+  keyscom-network:
+    external: true
