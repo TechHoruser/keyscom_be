@@ -6,9 +6,13 @@ This project is the backend app for the Keyscom. This application implements and
 
 ## Installation
 
+### Files configuration
+
 Run `cp .env .env.local` and change the configuration settings in `.env.local`.
 
-If your machine use OS different to linux. You need replace the next line on `.docker/Dockerfile-php`:
+#### If you use MacOS system:
+
+You need replace the next line on `.docker/Dockerfile-php`:
 
 ```shell
     && echo "xdebug.client_host=172.17.0.1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
@@ -20,6 +24,16 @@ To
     && echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 ```
 
+### Docker Network
+
+For use the aplication in local environment with users machines and server emulation, you can use de [keyscom_cluster repository](https://github.com/mortalswat/keyscom_cluster).
+For that reason, if you want to use that repository in the future, you need to create a docker network with the following command:
+```
+docker network create -o "com.docker.network.bridge.name=keyscom-network" keyscom-network
+```
+
+### After that:
+
 Run `docker-compose up -d` to run app.
 
 Run `docker-compose exec php composer install` to install the vendors.
@@ -29,8 +43,6 @@ Run `docker-compose exec php php bin/console lexik:jwt:generate-keypair` for gen
 Run `docker-compose exec php ./.docker/utils/recreate_db.sh dev` for create a populate database
 
 The application is running in [http://localhost:8080](http://localhost:8080). You can see OpenAPI documentation on [http://localhost:8080/doc](http://localhost:8080/doc).
-
-Generate database 
 
 ## Configurations
 
@@ -83,7 +95,7 @@ Or generating html-coverage folder with
 4. Download drivers on the same window if you haven't
 
 
-## Utils
+## Util Commands
 
 ### Generate Migration
 
