@@ -37,5 +37,16 @@ interface PermissionRepositoryInterface
         ?string $relatedEntityUuid = null,
     ): array;
 
+    /**
+     * @return Permission[]
+     */
+    public function getSamePermissionOfUser(
+        ?User $user = null,
+        ?PermissionType $userPermissionType = null,
+        ?PermissionRelatedEntity $typeRelatedEntity = null,
+        ?string $typeOfMachine = null,
+        ?string $relatedEntityUuid = null,
+    ): iterable;
+
     public function save(Permission $permission): Permission;
 }

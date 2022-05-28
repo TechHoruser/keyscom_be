@@ -32,7 +32,8 @@ abstract class AbstractControllerIntegrationTest extends WebTestCase
     protected $normalizer;
     /** @var SerializerInterface */
     protected $serializer;
-    protected string $token;
+    protected ?User $userToken;
+    protected ?string $token;
 
     protected function setUp(): void
     {
@@ -50,6 +51,9 @@ abstract class AbstractControllerIntegrationTest extends WebTestCase
 
         $schemaTool->dropSchema($metadata);
         $schemaTool->createSchema($metadata);
+
+        $this->token = null;
+        $this->userToken = null;
     }
 
     private function getAuthorizationToken(): string
@@ -68,14 +72,15 @@ abstract class AbstractControllerIntegrationTest extends WebTestCase
             $user = $this->fakerFactory->newUser();
             $user->setEmail('fullAccess@user.com');
         }
-        $this->_em->persist($user);
+        $this->userToken = $user;
+        $this->_em->persist($this->userToken);
         $this->_em->flush();
 
         if (is_null($permissions)) {
             $permissions = [new Permission(
                 null,
                 null,
-                $user,
+                $this->userToken,
                 PermissionType::ADMIN,
                 null,
                 null,
@@ -101,6 +106,15 @@ abstract class AbstractControllerIntegrationTest extends WebTestCase
         );
 
         $this->token = json_decode($this->client->getResponse()->getContent(), true)['token'];
+    }
+
+    public function getUserToken(): User
+    {
+        if (is_null($this->userToken)) {
+            $this->setAuthorizationToken();
+        }
+
+        return $this->userToken;
     }
 
     protected function jsonEncodeAsHttpResponse($data): string

@@ -272,6 +272,11 @@ abstract class AbstractRepository extends ServiceEntityRepository
         return sprintf('%s = %s', $fieldName, intval($fieldValue));
     }
 
+    protected function getWhereBooleanCondition(string $fieldName, $fieldValue): string
+    {
+        return sprintf('%s = %s', $fieldName, $fieldValue ? 'TRUE' : 'FALSE');
+    }
+
     private function resetParams(): void
     {
         $this->queryBuilder = $this->createQueryBuilder($this->getAliasTable());
@@ -297,8 +302,11 @@ abstract class AbstractRepository extends ServiceEntityRepository
                 $this->getWhereUuidCondition($fieldName, $fieldValue)
             ;
         }
-        if ($fieldMapping['type'] == 'integer') {
+        if ($fieldMapping['type'] === 'integer') {
             $conditions[] = $this->getWhereIntegerCondition($fieldName, $fieldValue);
+        }
+        if ($fieldMapping['type'] === 'boolean') {
+            $conditions[] = $this->getWhereBooleanCondition($fieldName, $fieldValue);
         }
 
         return $conditions;

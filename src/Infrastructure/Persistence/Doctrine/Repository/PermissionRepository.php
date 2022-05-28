@@ -35,7 +35,8 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
     {
         return $this->complexFind(
             new PaginationProperties(),
-            ['user.uuid' => $userUuid],
+            [],
+            ['user.uuid' => $userUuid, 'reverted' => false],
         );
     }
 
@@ -145,18 +146,53 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
     }
 
     /**
+     * @return Permission[]
+     */
+    public function getSamePermissionOfUser(
+        ?User $user = null,
+        ?PermissionType $userPermissionType = null,
+        ?PermissionRelatedEntity $typeRelatedEntity = null,
+        ?string $typeOfMachine = null,
+        ?string $relatedEntityUuid = null,
+    ): iterable {
+        $conditions = ['reverted' => false];
+
+        if ($user) {
+            $conditions['user.uuid'] = $user->getUuid();
+        }
+
+        if ($typeOfMachine) {
+            $conditions['typeOfMachine'] = $typeOfMachine;
+        }
+
+        if ($userPermissionType) {
+            $conditions['userPermissionType'] = $userPermissionType->value;
+        }
+
+        if ($typeRelatedEntity) {
+            $conditions['relatedEntity'] = $typeRelatedEntity->value;
+            $conditions['relatedEntityUuid'] = $relatedEntityUuid;
+        }
+
+        return $this->complexFind(new PaginationProperties(), [], $conditions);
+    }
+
+    /**
      * @param Permission $permission
      * @return Permission
      */
     public function save(Permission $permission): Permission
     {
-        if (count($this->getParentOrSamePermissionOfUser(
-            $permission->getUser(),
-            $permission->getUserPermissionType(),
-            $permission->getRelatedEntity(),
-            $permission->getTypeOfMachine(),
-            $permission->getRelatedEntityUuid()
-        )) > 0) {
+        if (
+            !$permission->isReverted()
+            && count($this->getParentOrSamePermissionOfUser(
+                $permission->getUser(),
+                $permission->getUserPermissionType(),
+                $permission->getRelatedEntity(),
+                $permission->getTypeOfMachine(),
+                $permission->getRelatedEntityUuid()
+            )
+        ) > 0) {
             throw new DomainError('The user already have this permission.');
         }
 
@@ -201,6 +237,8 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
             $queryBuilder->andWhere(sprintf($this->getAliasTable() . '.typeOfMachine = \'%s\'', $typeOfMachine));
         }
 
+        $queryBuilder->andWhere($this->getAliasTable() . '.reverted = FALSE');
+
         return $queryBuilder;
     }
 
@@ -218,6 +256,11 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
                 ->andWhere(sprintf('projects.client = \'%s\'', $uuid))
                 ->getQuery()->getArrayResult()
             );
+
+            if (empty($projectsUuid)) {
+                return [];
+            }
+
             $machinesUuid = $extractUuid($this->_em->createQueryBuilder()
                 ->select('machines.uuid')
                 ->from(Machine::class, 'machines')

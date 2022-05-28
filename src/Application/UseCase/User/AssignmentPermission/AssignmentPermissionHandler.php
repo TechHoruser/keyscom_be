@@ -35,10 +35,10 @@ class AssignmentPermissionHandler implements CommandHandlerInterface
             throw new \Exception('Not exist the user');
 
         if (is_null($this->permissionRepository->getParentOrSamePermissionOfUser(
-            $user,
-            $assignmentPermissionCommand->userPermissionType,
+            $assignmentPermissionCommand->loggedUser,
+            PermissionType::ADMIN,
             $assignmentPermissionCommand->typeRelatedEntity,
-            $assignmentPermissionCommand->typeOfMachine,
+            null,
             $assignmentPermissionCommand->relatedEntityUuid,
         ))) {
             throw new \Exception('You has not permissions for assign this');
