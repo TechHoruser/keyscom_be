@@ -8,36 +8,41 @@ trait AuditableEntityTrait
 {
     protected ?DateTime $createdAt = null;
     protected ?DateTime $updatedAt = null;
+    protected ?DateTime $deletedAt = null;
 
-    /**
-     * @return DateTime|null
-     */
     public function getCreatedAt(): ?DateTime
     {
         return $this->createdAt;
     }
 
-    /**
-     * @param DateTime|null $createdAt
-     */
-    public function setCreatedAt(?DateTime $createdAt): void
+    public function setCreatedAt(?DateTime $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
     }
 
-    /**
-     * @return DateTime|null
-     */
     public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }
 
-    /**
-     * @param DateTime|null $updatedAt
-     */
-    public function setUpdatedAt(?DateTime $updatedAt): void
+    public function setUpdatedAt(?DateTime $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getDeletedAt(): ?DateTime
+    {
+        return $this->deletedAt;
+    }
+
+    public function setDeletedAt(?DateTime $deletedAt): static
+    {
+        $this->deletedAt = $deletedAt;
+
+        return $this;
     }
 }

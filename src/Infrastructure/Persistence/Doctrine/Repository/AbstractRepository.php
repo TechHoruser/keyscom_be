@@ -40,7 +40,9 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function deleteByUuid(string $uuid): void
     {
         $entity = $this->_em->getPartialReference($this->getClassName(), array('uuid' => $uuid));
-        $this->_em->remove($entity);
+        $entity->setDeletedAt(new \DateTime());
+        $this->_em->persist($entity);
+        $this->_em->flush();
     }
 
     public function complexFind(
@@ -280,6 +282,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     private function resetParams(): void
     {
         $this->queryBuilder = $this->createQueryBuilder($this->getAliasTable());
+        $this->queryBuilder->andWhere($this->getAliasTable() . '.deletedAt IS NULL');
         $this->appliedJoins = [];
         $this->savedConditions = [];
     }

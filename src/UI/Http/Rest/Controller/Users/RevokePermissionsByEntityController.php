@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\UI\Http\Rest\Controller\Users;
 
-use App\Application\UseCase\User\RollbackPermissionsByEntity\RevokePermissionsByEntityCommand;
+use App\Application\UseCase\User\RevokePermissionsByEntity\RevokePermissionsByEntityCommand;
 use App\Domain\User\Enums\PermissionRelatedEntity;
 use App\Domain\User\Enums\PermissionType;
 use App\UI\Http\Rest\Controller\AbstractCommandController;

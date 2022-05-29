@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Application\UseCase\User\RollbackPermissionsByEntity;
+namespace App\Application\UseCase\User\RevokePermissionsByEntity;
 
 use App\Application\Shared\Command\CommandInterface;
 use App\Domain\User\Entity\User;

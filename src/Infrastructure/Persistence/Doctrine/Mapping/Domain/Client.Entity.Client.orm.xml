@@ -9,12 +9,14 @@
 
         <field name="createdAt" type="datetime" column="created_at"/>
         <field name="updatedAt" type="datetime" column="updated_at" nullable="true"/>
+        <field name="deletedAt" type="datetime" column="deleted_at" nullable="true"/>
 
         <field name="tenantName" column="tenant_name" length="100" nullable="true"/>
         
         <indexes>
             <index columns="created_at"/>
             <index columns="updated_at"/>
+            <index columns="deleted_at"/>
         </indexes>
     </entity>
 </doctrine-mapping>

@@ -11,6 +11,6 @@ class DeleteUserCommand implements CommandInterface
 {
     public function __construct(
         readonly User $loggedUser,
-        readonly string $uuid,
+        readonly string $userUuid,
     ) {}
 }
