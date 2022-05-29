@@ -29,6 +29,7 @@ class UpdateMachineController extends AbstractCommandController
             $this->getLoggedUser(),
             $machineUuid,
             $this->request->request->get('name'),
+            $this->request->request->get('domain'),
         ));
 
         return new JsonResponse();

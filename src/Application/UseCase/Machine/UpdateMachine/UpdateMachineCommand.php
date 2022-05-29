@@ -13,5 +13,6 @@ class UpdateMachineCommand implements CommandInterface
         readonly User $loggedUser,
         readonly ?string $uuid,
         readonly string $name,
+        readonly ?string $domain,
     ) {}
 }
