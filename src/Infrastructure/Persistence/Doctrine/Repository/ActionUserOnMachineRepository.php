@@ -17,7 +17,7 @@ class ActionUserOnMachineRepository extends AbstractRepository implements Action
 
     protected function getEntityRepositoryClass(): string
     {
-        return Permission::class;
+        return ActionUserOnMachine::class;
     }
 
     public function getByUuid(string $uuid, array $embeds = []): ?ActionUserOnMachine

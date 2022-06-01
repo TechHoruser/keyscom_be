@@ -8,6 +8,7 @@
         "ext-json": "*",
         "ext-openssl": "*",
         "composer/package-versions-deprecated": "*",
+        "divineomega/php-ssh-connection": "^2.2",
         "doctrine/doctrine-bundle": "*",
         "doctrine/doctrine-migrations-bundle": "*",
         "doctrine/orm": "*",

@@ -3,10 +3,10 @@
     <entity repository-class="App\Infrastructure\Persistence\Doctrine\Repository\User\UserRepository" name="App\Domain\User\Entity\User" table="users">
         <id name="uuid" type="guid" column="uuid"/>
 
-        <field name="email" column="email" unique="true"/>
+        <field name="email" column="email"/>
         <field name="firstName" column="firstName"/>
         <field name="lastName" column="lastName"/>
-        <field name="pubKey" column="pub_key" nullable="true"/>
+        <field name="pubKey" column="pub_key" nullable="true" length="2048"/>
 
         <field name="password" column="password"/>
 
@@ -23,5 +23,11 @@
             <index columns="updated_at"/>
             <index columns="deleted_at"/>
         </indexes>
+
+        <unique-constraints>
+<!--            <unique-constraint fields="email, deletedAt">-->
+<!--                <options>WITH ALLOW_ONLY_ONE_NULL</options>-->
+<!--            </unique-constraint>-->
+        </unique-constraints>
     </entity>
 </doctrine-mapping>

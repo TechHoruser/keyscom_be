@@ -18,6 +18,7 @@ services:
     volumes:
       - .:/var/www/html
       - ./vendor:/var/www/html/vendor
+      - ./.docker/config:/opt/config
       - /var/www/html/var/cache
     environment:
       PHP_IDE_CONFIG: "serverName=localhost"
