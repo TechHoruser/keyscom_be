@@ -39,7 +39,7 @@ class AssignmentPermissionHandler implements CommandHandlerInterface
         $user = $this->userRepository->getByUuid($assignmentPermissionCommand->userUuid) ??
             throw new DomainError('Not exist the user');
 
-        if (is_null($this->permissionRepository->getParentOrSamePermissionOfUser(
+        if (empty($this->permissionRepository->getParentOrSamePermissionOfUser(
             $assignmentPermissionCommand->loggedUser,
             PermissionType::ADMIN,
             $assignmentPermissionCommand->typeRelatedEntity,

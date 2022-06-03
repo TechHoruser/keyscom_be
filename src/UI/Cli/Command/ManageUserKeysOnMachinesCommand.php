@@ -32,15 +32,17 @@ class ManageUserKeysOnMachinesCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        // TODO: Check already exist same process =>      ps -a | grep 'app:update-pub-keys'
         $actions = $this->getActionsToProcess();
 
         foreach ($actions as $action) {
             $lock = $this->lockFactory->createLock($action->getPermission()->getUuid());
             $lock->acquire(true);
             try {
+                $output->writeln(sprintf('Action "%s"', $action->getActionToDo()->value));
                 $this->doAction($action);
-//                $this->actionUserOnMachineRepository->save($action->setProcessed(true));
-                $output->writeln('Action completed Successfully');
+                $this->actionUserOnMachineRepository->save($action->setProcessed(true));
+                $output->writeln('Completed Successfully');
                 $output->writeln(sprintf('User: %s', $action->getPermission()->getUser()->getEmail()));
                 $output->writeln(sprintf('Machine IP: %s', $action->getMachine()->getIp()));
             } catch (\Exception $exception) {

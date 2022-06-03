@@ -31,7 +31,7 @@ class ManagePublicKeysService implements \App\Application\Shared\Service\ManageP
     {
         $connection = $this->getConnection($machineIp);
         try {
-            $connection->run(sprintf("sed -i -r '/^%s$/d' ~/.ssh/authorized_keys", $publicKey));
+            $connection->run(sprintf("sed -i.bak 's#%s##' ~/.ssh/authorized_keys", $publicKey));
         } finally {
             $connection->disconnect();
         }
@@ -44,6 +44,7 @@ class ManagePublicKeysService implements \App\Application\Shared\Service\ManageP
             ->onPort($this->port)
             ->as($this->username)
             ->withPrivateKey($this->privateKey)
+//            ->timeout(0)
             ->connect();
     }
 }
