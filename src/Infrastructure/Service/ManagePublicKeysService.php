@@ -18,10 +18,7 @@ class ManagePublicKeysService implements \App\Application\Shared\Service\ManageP
     {
         $connection = $this->getConnection($machineIp);
         try {
-            $connection->run("mkdir -p ~/.ssh/");
-            $connection->run(sprintf('echo "%s" >> ~/.ssh/authorized_keys', $publicKey));
-            $connection->run("chmod 644 ~/.ssh/authorized_keys");
-            $connection->run("chmod 700 ~/.ssh/");
+            $this->runAddCommands($connection, $publicKey);
         } finally {
             $connection->disconnect();
         }
@@ -31,7 +28,7 @@ class ManagePublicKeysService implements \App\Application\Shared\Service\ManageP
     {
         $connection = $this->getConnection($machineIp);
         try {
-            $connection->run(sprintf("sed -i.bak 's#%s##' ~/.ssh/authorized_keys", $publicKey));
+            $this->runRemoveCommands($connection, $publicKey);
         } finally {
             $connection->disconnect();
         }
@@ -46,5 +43,18 @@ class ManagePublicKeysService implements \App\Application\Shared\Service\ManageP
             ->withPrivateKey($this->privateKey)
 //            ->timeout(0)
             ->connect();
+    }
+
+    private function runAddCommands(SSHConnection $connection, string $publicKey): void
+    {
+        $connection->run("mkdir -p ~/.ssh/");
+        $connection->run("chmod 700 ~/.ssh/");
+        $connection->run(sprintf('echo "%s" >> ~/.ssh/authorized_keys', $publicKey));
+        $connection->run("chmod 644 ~/.ssh/authorized_keys");
+    }
+
+    private function runRemoveCommands(SSHConnection $connection, string $publicKey): void
+    {
+        $connection->run(sprintf("sed -i.bak 's#%s##' ~/.ssh/authorized_keys", $publicKey));
     }
 }
