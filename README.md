@@ -38,6 +38,8 @@ Run `docker-compose up -d` to run app.
 
 Run `docker-compose exec php composer install` to install the vendors.
 
+Run `docker-compose exec php php bin/console assets:install` to install the assets.
+
 Run `docker-compose exec php php bin/console lexik:jwt:generate-keypair` for generate pair of keys for JWT library.
 
 Run `docker-compose exec php ./.docker/utils/recreate_db.sh dev` for create a populate database
