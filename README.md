@@ -36,7 +36,7 @@ docker network create -o "com.docker.network.bridge.name=keyscom-network" keysco
 
 Run `docker-compose up -d` to run app.
 
-Run `docker-compose exec php composer install --lock` to install the vendors.
+Run `docker-compose exec php composer install` to install the vendors.
 
 Run `docker-compose exec php php bin/console assets:install` to install the assets.
 
