@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\Persistence\Doctrine\Repository;
 
 use App\Domain\Shared\Entities\PaginationProperties;
+use App\Domain\Shared\Errors\MoreThanOneEntityError;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\QueryBuilder;
@@ -27,14 +28,30 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
     public function getByUuid(string $uuid, array $embeds = [])
     {
-        $this->resetParams();
+        return $this->getOneOrNullByComplexFind(
+            $embeds,
+            [
+                'uuid' => $uuid,
+            ]
+        );
+    }
 
-        $this->addEmbeds($embeds);
+    public function getOneOrNullByComplexFind(
+        array $embeds = [],
+        array $filtersWithAnds = [],
+        array $filtersWithOrs = [],
+    ) {
+        $entities = $this->complexFind(
+            embeds: $embeds,
+            filtersWithAnds: $filtersWithAnds,
+            filtersWithOrs: $filtersWithOrs,
+        );
 
-        return $this->queryBuilder
-            ->where($this->getAliasTable().'.uuid = :uuid')
-            ->setParameter('uuid', $uuid)
-            ->getQuery()->getOneOrNullResult();
+        if (isset($entities[1])) {
+            throw new MoreThanOneEntityError();
+        }
+
+        return $entities[0] ?? null;
     }
 
     public function deleteByUuid(string $uuid): void

@@ -23,10 +23,12 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
 
     public function getByEmail(string $email, array $embeds = []): ?User
     {
-        return $this->queryBuilder
-            ->where($this->getAliasTable().'.email = :email')
-            ->setParameter('email', $email)
-            ->getQuery()->getOneOrNullResult();
+        return $this->getOneOrNullByComplexFind(
+            $embeds,
+            [
+                'email' => $email,
+            ],
+        );
     }
 
     public function getByUuid(string $uuid, array $embeds = []): ?User
