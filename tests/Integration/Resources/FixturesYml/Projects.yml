@@ -3,14 +3,17 @@ App\Domain\Project\Entity\Project:
     __construct: false
     uuid: <uuid3()>
     name: project_1_1
+    start_date: <dateTime()>
     client: "@client_1"
   project_1_2:
     __construct: false
     uuid: <uuid3()>
     name: project_1_2
+    start_date: <dateTime()>
     client: "@client_1"
   project_2_1:
     __construct: false
     uuid: <uuid3()>
     name: project_2_1
+    start_date: <dateTime()>
     client: "@client_2"

@@ -5,20 +5,21 @@ namespace App\Tests\Integration\UI\Http\Rest\Controller\Clients;
 use App\Tests\Integration\UI\Http\Rest\Controller\AbstractControllerIntegrationTest;
 use Symfony\Component\HttpFoundation\Response;
 
-class CreateClientsControllerTest extends AbstractControllerIntegrationTest
+class CreateClientControllerTest extends AbstractControllerIntegrationTest
 {
+    const PATH = '/client';
+    const METHOD = self::POST;
+
     public function testCreateClientSuccessfully()
     {
         // GIVEN
-        $method = self::POST;
-        $path = '/client';
+        $client = $this->fakerFactory->newClient();
 
         // WHEN
-        $client = $this->fakerFactory->newClient();
-        $response = $this->sendRequest($method, $path, [], $client);
-        $responseData = json_decode($response->getContent(), true);
+        $response = $this->sendRequest(self::METHOD, self::PATH, [], $client);
 
         // THEN
+        $responseData = json_decode($response->getContent(), true);
         $this->assertEquals(Response::HTTP_CREATED, $response->getStatusCode());
         $this->assertEquals($client->getUuid(), $responseData['uuid']);
         $this->assertEquals($client->getName(), $responseData['name']);
@@ -27,17 +28,15 @@ class CreateClientsControllerTest extends AbstractControllerIntegrationTest
     public function testCreateClientSuccessfullyWithEmptyUuid()
     {
         // GIVEN
-        $method = self::POST;
-        $path = '/client';
-
-        // WHEN
         $client = ($this->fakerFactory->newClient());
         $clientArray = $this->normalizer->normalize($client, self::REQUEST_FORMAT);
         unset($clientArray['uuid']);
-        $response = $this->sendRequest($method, $path, [], $clientArray);
-        $responseData = json_decode($response->getContent(), true);
+
+        // WHEN
+        $response = $this->sendRequest(self::METHOD, self::PATH, [], $clientArray);
 
         // THEN
+        $responseData = json_decode($response->getContent(), true);
         $this->assertEquals(Response::HTTP_CREATED, $response->getStatusCode());
         $this->assertArrayHasKey('uuid', $responseData);
         $this->assertEquals($client->getName(), $responseData['name']);

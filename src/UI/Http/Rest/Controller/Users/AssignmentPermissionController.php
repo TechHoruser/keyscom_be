@@ -9,6 +9,7 @@ use App\Domain\User\Enums\PermissionRelatedEntity;
 use App\Domain\User\Enums\PermissionType;
 use App\UI\Http\Rest\Controller\AbstractCommandController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @Symfony\Component\Routing\Annotation\Route ("/assigment-permission", methods={"POST"})
@@ -45,6 +46,9 @@ class AssignmentPermissionController extends AbstractCommandController
             $this->request->request->get('relatedEntityUuid'),
         ));
 
-        return new JsonResponse($this->normalizer->normalize($results));
+        return new JsonResponse(
+            $this->normalizer->normalize($results),
+            Response::HTTP_CREATED,
+        );
     }
 }

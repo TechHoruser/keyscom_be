@@ -8,6 +8,7 @@ use App\Application\Shared\Dto\Machine\MachineDto;
 use App\Application\Shared\Mapper\Machine\MachineMapper;
 use App\Application\Shared\Query\QueryHandlerInterface;
 use App\Domain\Machine\Repository\MachineRepositoryInterface;
+use App\Domain\Shared\Errors\NotFoundError;
 
 class GetMachineHandler implements QueryHandlerInterface
 {
@@ -21,7 +22,7 @@ class GetMachineHandler implements QueryHandlerInterface
         $machine = $this->machineRepository->getByUuid(
             $getMachineQuery->uuid,
             $getMachineQuery->embeds,
-        ) ?? throw new \Exception('Bad Machine Uuid');
+        ) ?? throw new NotFoundError('Bad Machine Uuid');
 
         $getMachineQuery->loggedUser->checkPermissionForMachine($machine);
 

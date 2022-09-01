@@ -8,25 +8,25 @@ use App\Application\Shared\Config\ParametersConfigInterface;
 
 class DateTimeHelper implements DateTimeHelperInterface
 {
-    private string $formatDateTime;
+    private string $formatDate;
     private string $searchDatesSeparator;
 
     public function __construct(
         ParametersConfigInterface $parametersConfig
     ) {
-        $this->formatDateTime = $parametersConfig->get('app.date_format');
+        $this->formatDate = $parametersConfig->get('app.date_format');
         $this->searchDatesSeparator = $parametersConfig->get('app.search_dates_separator');
     }
 
-    public function getFormatDateTime(): string
+    public function getFormatDate(): string
     {
-        return $this->formatDateTime;
+        return $this->formatDate;
     }
 
     public function getDateTimeFromString(string $dateTime): ?\DateTime
     {
         $dateTime = \DateTime::createFromFormat(
-            $this->formatDateTime,
+            $this->formatDate,
             $dateTime
         );
 
@@ -37,9 +37,9 @@ class DateTimeHelper implements DateTimeHelperInterface
         return $dateTime;
     }
 
-    public function getStringFromDateTime(\DateTime $dateTime): string
+    public function getDateStringFromDateTime(\DateTime $dateTime): string
     {
-        return $dateTime->format($this->formatDateTime);
+        return $dateTime->format($this->formatDate);
     }
 
     public function getSearchDatesSeparator(): string

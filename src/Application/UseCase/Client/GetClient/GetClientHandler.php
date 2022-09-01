@@ -8,6 +8,7 @@ use App\Application\Shared\Dto\Client\ClientDto;
 use App\Application\Shared\Mapper\Client\ClientMapper;
 use App\Application\Shared\Query\QueryHandlerInterface;
 use App\Domain\Client\Repository\ClientRepositoryInterface;
+use App\Domain\Shared\Errors\NotFoundError;
 
 class GetClientHandler implements QueryHandlerInterface
 {
@@ -21,7 +22,7 @@ class GetClientHandler implements QueryHandlerInterface
         $client = $this->clientRepository->getByUuid(
             $getClientQuery->uuid,
             $getClientQuery->embeds,
-        ) ?? throw new \Exception('Bad Client Uuid');
+        ) ?? throw new NotFoundError('Bad Client Uuid');
 
         $getClientQuery->loggedUser->checkPermissionForClient($client);
 

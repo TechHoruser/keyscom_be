@@ -6,6 +6,7 @@ namespace App\Application\UseCase\Machine\DeleteMachine;
 
 use App\Application\Shared\Command\CommandHandlerInterface;
 use App\Domain\Machine\Repository\MachineRepositoryInterface;
+use App\Domain\Shared\Errors\NotFoundError;
 use App\Domain\User\Enums\PermissionType;
 
 class DeleteMachineHandler implements CommandHandlerInterface
@@ -17,7 +18,7 @@ class DeleteMachineHandler implements CommandHandlerInterface
     public function __invoke(DeleteMachineCommand $deleteMachineCommand): void
     {
         $machine = $this->machineRepository->getByUuid($deleteMachineCommand->uuid) ??
-            throw new \Exception('Bad Machine Uuid');
+            throw new NotFoundError('Bad Machine Uuid');
 
         $deleteMachineCommand->loggedUser->checkPermissionForMachine($machine, PermissionType::ADMIN);
 

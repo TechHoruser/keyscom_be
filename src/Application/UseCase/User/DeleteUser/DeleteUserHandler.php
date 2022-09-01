@@ -7,6 +7,7 @@ namespace App\Application\UseCase\User\DeleteUser;
 use App\Application\Shared\Command\CommandBusInterface;
 use App\Application\Shared\Command\CommandHandlerInterface;
 use App\Application\UseCase\User\RevokePermissionsByEntity\RevokePermissionsByEntityCommand;
+use App\Domain\Shared\Errors\NotFoundError;
 use App\Domain\User\Repository\UserRepositoryInterface;
 use App\Domain\User\Enums\PermissionType;
 
@@ -19,6 +20,9 @@ class DeleteUserHandler implements CommandHandlerInterface
 
     public function __invoke(DeleteUserCommand $deleteUserCommand): void
     {
+        $this->userRepository->getByUuid($deleteUserCommand->userUuid) ??
+            throw new NotFoundError('Bad Project Uuid');
+
         $deleteUserCommand->loggedUser->checkSuperPermission(PermissionType::ADMIN);
 
         $this->commandBus->dispatch(new RevokePermissionsByEntityCommand(

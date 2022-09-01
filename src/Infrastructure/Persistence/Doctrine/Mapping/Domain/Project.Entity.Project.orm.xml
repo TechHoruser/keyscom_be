@@ -5,7 +5,7 @@
 
         <field name="name" column="name"/>
 
-        <field name="startDate" type="datetime" column="start_date" nullable="true"/>
+        <field name="startDate" type="datetime" column="start_date"/>
         <field name="endDate" type="datetime" column="end_date" nullable="true"/>
 
         <one-to-many field="machines" target-entity="App\Domain\Machine\Entity\Machine" mapped-by="project" index-by="uuid"/>

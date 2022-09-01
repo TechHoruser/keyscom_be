@@ -5,6 +5,14 @@
     <include>
       <directory suffix=".php">src</directory>
     </include>
+    <exclude>
+      <file>src/Kernel.php</file>
+      <directory suffix=".php">src/Domain/Tenant</directory>
+      <directory suffix=".php">src/Infrastructure/Tenant</directory>
+      <directory suffix=".php">src/Infrastructure/Persistence/Connection</directory>
+      <directory suffix=".php">src/Infrastructure/Persistence/Doctrine/Connection</directory>
+      <directory suffix=".php">src/Infrastructure/Persistence/Doctrine/Migrations</directory>
+    </exclude>
     <report>
       <html outputDirectory="html-coverage" lowUpperBound="50" highLowerBound="90"/>
     </report>

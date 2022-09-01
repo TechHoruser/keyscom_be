@@ -8,6 +8,7 @@ use App\Application\Shared\Dto\Project\ProjectDto;
 use App\Application\Shared\Mapper\Project\ProjectMapper;
 use App\Application\Shared\Query\QueryHandlerInterface;
 use App\Domain\Project\Repository\ProjectRepositoryInterface;
+use App\Domain\Shared\Errors\NotFoundError;
 
 class GetProjectHandler implements QueryHandlerInterface
 {
@@ -21,7 +22,7 @@ class GetProjectHandler implements QueryHandlerInterface
         $project = $this->projectRepository->getByUuid(
             $getProjectQuery->uuid,
             $getProjectQuery->embeds,
-        ) ?? throw new \Exception('Bad Project Uuid');
+        ) ?? throw new NotFoundError('Bad Project Uuid');
 
         $getProjectQuery->loggedUser->checkPermissionForProject($project);
 
