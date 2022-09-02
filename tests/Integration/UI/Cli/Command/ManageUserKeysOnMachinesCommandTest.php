@@ -4,6 +4,7 @@ namespace App\Tests\Integration\UI\Http\Rest\Controller\Clients;
 
 use App\Domain\Client\Entity\Client;
 use App\Domain\User\Entity\User;
+use App\Domain\User\Enums\ActionOfUserOnMachine;
 use App\Domain\User\Enums\PermissionRelatedEntity;
 use App\Domain\User\Enums\PermissionType;
 use App\Tests\Integration\UI\Http\Rest\Controller\AbstractControllerIntegrationTest;
@@ -28,20 +29,37 @@ class ManageUserKeysOnMachinesCommandTest extends AbstractControllerIntegrationT
 
     public function testExecute()
     {
+        // GIVEN
         $this->_em->persist($user = $this->fakerFactory->newUser());
         $this->_em->flush();
         $this->_em->persist($client = $this->fakerFactory->newClient());
         $this->_em->flush();
         $this->_em->persist($project = $this->fakerFactory->newProject($client));
         $this->_em->flush();
-        $this->_em->persist($this->fakerFactory->newMachine($project));
+        $this->_em->persist($machine = $this->fakerFactory->newMachine($project));
         $this->_em->flush();
 
         $this->assignSshPermission($user, $client);
 
+        // WHEN
         $this->commandTester->execute([]);
 
+        // THEN
         $this->assertEquals(0, $this->commandTester->getStatusCode());
+        $this->assertEquals(
+            trim(sprintf(
+                'Action "%s"
+Completed Successfully
+User: %s
+Machine IP: %s
+Finishing action...
+We process all actions (1)',
+                ActionOfUserOnMachine::ADD->value,
+                $user->getEmail(),
+                $machine->getIp(),
+            )),
+            trim($this->commandTester->getDisplay()),
+        );
     }
 
     private function assignSshPermission(User $user, Client $client): void
