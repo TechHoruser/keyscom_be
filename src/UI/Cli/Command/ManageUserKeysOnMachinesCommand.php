@@ -53,7 +53,7 @@ class ManageUserKeysOnMachinesCommand extends Command
             }
         }
 
-        $output->writeln(sprintf('We process all actions (%s)', count($actions)));
+        $output->writeln(sprintf('Processed all actions (%s)', count($actions)));
         return Command::SUCCESS;
     }
 
