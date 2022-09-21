@@ -16,10 +16,8 @@ services:
       context: ./
       dockerfile: ./.docker/Dockerfile-php
     volumes:
-      - .:/var/www/html
-      - ./vendor:/var/www/html/vendor
-      - ./.docker/config:/opt/config
-      - /var/www/html/var/cache
+      - symfony-docker-vendor-sync:/var/www/html/vendor:nocopy
+      - symfony-docker-app-sync:/var/www/html:nocopy
     environment:
       PHP_IDE_CONFIG: "serverName=localhost"
     networks:
@@ -49,4 +47,9 @@ services:
 networks:
   keyscom:
   keyscom-network:
+    external: true
+volumes:
+  symfony-docker-vendor-sync:
+    external: true
+  symfony-docker-app-sync:
     external: true

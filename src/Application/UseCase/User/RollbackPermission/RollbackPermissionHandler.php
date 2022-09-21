@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Application\UseCase\User\RollbackPermission;
 
 use App\Application\Shared\Command\CommandHandlerInterface;
+use App\Domain\Shared\Errors\DomainError;
 use App\Domain\User\Entity\ActionUserOnMachine;
 use App\Domain\User\Enums\ActionOfUserOnMachine;
 use App\Domain\User\Enums\PermissionType;
@@ -27,14 +28,14 @@ class RollbackPermissionHandler implements CommandHandlerInterface
         $permission = $this->permissionRepository->getByUuid($rollbackPermissionCommand->permissionUuid) ??
             throw new \Exception('Not exist the permission');
 
-        if (is_null($this->permissionRepository->getParentOrSamePermissionOfUser(
+        if (empty($this->permissionRepository->getParentOrSamePermissionOfUser(
             $rollbackPermissionCommand->loggedUser,
             PermissionType::ADMIN,
             $permission->getRelatedEntity(),
             $permission->getTypeOfMachine(),
             $permission->getRelatedEntityUuid()
         ))) {
-            throw new \Exception('You has not permissions for assign this');
+            throw new DomainError('You has not permissions for rollback this');
         }
 
         $lock = $this->lockFactory->createLock($permission->getUuid());
@@ -50,6 +51,7 @@ class RollbackPermissionHandler implements CommandHandlerInterface
                         null,
                         $action->getPermission(),
                         $action->getMachine(),
+                        $permission->getUser()->getPubKey(),
                         $action->getActionToDo() === ActionOfUserOnMachine::ADD ?
                             ActionOfUserOnMachine::REMOVE :
                             ActionOfUserOnMachine::ADD

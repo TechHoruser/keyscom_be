@@ -11,6 +11,8 @@
             <join-column name="permission_uuid" referenced-column-name="uuid" on-delete="CASCADE"/>
         </many-to-one>
 
+        <field name="pubKey" column="pub_key" length="2048"/>
+
         <many-to-one field="machine" target-entity="App\Domain\Machine\Entity\Machine">
             <join-column name="machine_uuid" referenced-column-name="uuid" on-delete="CASCADE"/>
         </many-to-one>

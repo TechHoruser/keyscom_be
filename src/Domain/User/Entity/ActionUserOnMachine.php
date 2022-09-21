@@ -21,6 +21,7 @@ class ActionUserOnMachine
         ?string $uuid,
         private Permission $permission,
         private Machine $machine,
+        private string $pubKey,
         private ActionOfUserOnMachine $actionToDo,
         private bool $skipped = false,
         private bool $processed = false,
@@ -61,6 +62,18 @@ class ActionUserOnMachine
     public function setMachine(Machine $machine): static
     {
         $this->machine = $machine;
+
+        return $this;
+    }
+
+    public function getPubKey(): string
+    {
+        return $this->pubKey;
+    }
+
+    public function setPubKey(string $pubKey): static
+    {
+        $this->pubKey = $pubKey;
 
         return $this;
     }

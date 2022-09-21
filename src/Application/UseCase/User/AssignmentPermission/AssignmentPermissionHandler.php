@@ -75,24 +75,28 @@ class AssignmentPermissionHandler implements CommandHandlerInterface
                 )
             );
 
-            $lock = $this->lockFactory->createLock($permission->getUuid());
-            $lock->acquire(true);
+            if ($user->getPubKey()) {
 
-            if ($assignmentPermissionCommand->userPermissionType === PermissionType::SSH) {
-                $machinesLinkedToCurrentPermissions = $this->getMachines(
-                    $assignmentPermissionCommand->typeRelatedEntity,
-                    $assignmentPermissionCommand->relatedEntityUuid,
-                );
+                $lock = $this->lockFactory->createLock($permission->getUuid());
+                $lock->acquire(true);
 
-                foreach ($machinesLinkedToCurrentPermissions as $machine) {
-                    $this->actionUserOnMachineRepository->save(
-                        new ActionUserOnMachine(
-                            null,
-                            $permission,
-                            $machine,
-                            ActionOfUserOnMachine::ADD
-                        )
+                if ($assignmentPermissionCommand->userPermissionType === PermissionType::SSH) {
+                    $machinesLinkedToCurrentPermissions = $this->getMachines(
+                        $assignmentPermissionCommand->typeRelatedEntity,
+                        $assignmentPermissionCommand->relatedEntityUuid,
                     );
+
+                    foreach ($machinesLinkedToCurrentPermissions as $machine) {
+                        $this->actionUserOnMachineRepository->save(
+                            new ActionUserOnMachine(
+                                null,
+                                $permission,
+                                $machine,
+                                $user->getPubKey(),
+                                ActionOfUserOnMachine::ADD
+                            )
+                        );
+                    }
                 }
             }
 
@@ -109,10 +113,10 @@ class AssignmentPermissionHandler implements CommandHandlerInterface
         }
     }
 
-    private function getMachines(?PermissionRelatedEntity $typeRelatedEntity, ?string $relatedEntityUuid): iterable
+    public function getMachines(?PermissionRelatedEntity $typeRelatedEntity, ?string $relatedEntityUuid): iterable
     {
         if (is_null($typeRelatedEntity)) {
-            return $this->machineRepository->complexFind(null);
+            return $this->machineRepository->complexFind();
         }
 
         $filters = [];

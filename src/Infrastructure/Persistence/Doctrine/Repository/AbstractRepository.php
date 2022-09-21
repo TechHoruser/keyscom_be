@@ -10,7 +10,6 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Serializer\SerializerInterface;
 
 abstract class AbstractRepository extends ServiceEntityRepository
 {
@@ -20,7 +19,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     protected QueryBuilder $queryBuilder;
     protected array $savedConditions;
 
-    public function __construct(ManagerRegistry $registry, SerializerInterface $serializer)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, $this->getEntityRepositoryClass());
         $this->resetParams();
@@ -220,8 +219,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     private function _callbackOrder(
         string $fieldName,
         $value,
-        string $alias,
-        ClassMetadata $classMetadata
+        string $alias
     ) {
         // TODO: Check $value if it's different to ASC or DESC, then throw certain exception
 

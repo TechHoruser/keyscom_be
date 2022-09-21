@@ -10,9 +10,10 @@
 ###< symfony/framework-bundle ###
 
 /.docker/db/data
+/.docker-sync
 .idea/
 
-/tests/Integration/Resources/Config/IniFiles/values.ini
+/tests/Resources/Config/IniFiles/values.ini
 
 ###< phpunit/phpunit ###
 .phpunit

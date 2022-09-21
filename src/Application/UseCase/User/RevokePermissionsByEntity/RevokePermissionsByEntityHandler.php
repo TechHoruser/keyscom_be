@@ -7,6 +7,7 @@ namespace App\Application\UseCase\User\RevokePermissionsByEntity;
 use App\Application\Shared\Command\CommandBusInterface;
 use App\Application\Shared\Command\CommandHandlerInterface;
 use App\Application\UseCase\User\RollbackPermission\RollbackPermissionCommand;
+use App\Domain\Shared\Errors\DomainError;
 use App\Domain\User\Enums\PermissionType;
 use App\Domain\User\Repository\PermissionRepositoryInterface;
 use App\Domain\User\Repository\UserRepositoryInterface;
@@ -24,14 +25,14 @@ class RevokePermissionsByEntityHandler implements CommandHandlerInterface
         $user = $this->userRepository->getByUuid($revokePermissionsByEntityCommand->userToRevokePermissionUuid) ??
             throw new \Exception('Not exist the user');
 
-        if (is_null($this->permissionRepository->getParentOrSamePermissionOfUser(
+        if (empty($this->permissionRepository->getParentOrSamePermissionOfUser(
             $revokePermissionsByEntityCommand->loggedUser,
             PermissionType::ADMIN,
             $revokePermissionsByEntityCommand->entity,
             null,
             $revokePermissionsByEntityCommand->entityUuid,
         ))) {
-            throw new \Exception('You has not permissions for assign this');
+            throw new DomainError('You has not permissions for revoke this');
         }
 
         foreach (array_merge(

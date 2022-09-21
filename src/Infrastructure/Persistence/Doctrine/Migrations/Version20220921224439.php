@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20220806091731 extends AbstractMigration
+final class Version20220921224439 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,7 +20,7 @@ final class Version20220806091731 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE TABLE action_user_on_machine (uuid UUID NOT NULL, permission_uuid UUID DEFAULT NULL, machine_uuid UUID DEFAULT NULL, action_to_do VARCHAR(255) NOT NULL, processed BOOLEAN NOT NULL, canceled BOOLEAN NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, tenant_name VARCHAR(100) DEFAULT NULL, PRIMARY KEY(uuid))');
+        $this->addSql('CREATE TABLE action_user_on_machine (uuid UUID NOT NULL, permission_uuid UUID DEFAULT NULL, machine_uuid UUID DEFAULT NULL, action_to_do VARCHAR(255) NOT NULL, processed BOOLEAN NOT NULL, canceled BOOLEAN NOT NULL, pub_key VARCHAR(2048) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, tenant_name VARCHAR(100) DEFAULT NULL, PRIMARY KEY(uuid))');
         $this->addSql('CREATE INDEX IDX_97DD1CB680B1CB06 ON action_user_on_machine (permission_uuid)');
         $this->addSql('CREATE INDEX IDX_97DD1CB68775BBDF ON action_user_on_machine (machine_uuid)');
         $this->addSql('CREATE INDEX IDX_97DD1CB68B8E8428 ON action_user_on_machine (created_at)');
@@ -44,7 +44,7 @@ final class Version20220806091731 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_2DEDCC6F8B8E8428 ON permissions (created_at)');
         $this->addSql('CREATE INDEX IDX_2DEDCC6F43625D9F ON permissions (updated_at)');
         $this->addSql('CREATE INDEX IDX_2DEDCC6F4AF38FD1 ON permissions (deleted_at)');
-        $this->addSql('CREATE TABLE projects (uuid UUID NOT NULL, client_uuid UUID DEFAULT NULL, name VARCHAR(255) NOT NULL, start_date TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, end_date TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, tenant_name VARCHAR(100) DEFAULT NULL, PRIMARY KEY(uuid))');
+        $this->addSql('CREATE TABLE projects (uuid UUID NOT NULL, client_uuid UUID DEFAULT NULL, name VARCHAR(255) NOT NULL, start_date TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, end_date TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, tenant_name VARCHAR(100) DEFAULT NULL, PRIMARY KEY(uuid))');
         $this->addSql('CREATE INDEX IDX_5C93B3A4E393C4 ON projects (client_uuid)');
         $this->addSql('CREATE INDEX IDX_5C93B3A48B8E8428 ON projects (created_at)');
         $this->addSql('CREATE INDEX IDX_5C93B3A443625D9F ON projects (updated_at)');

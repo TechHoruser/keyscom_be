@@ -34,26 +34,49 @@ class ManageUserKeysOnMachinesCommand extends Command
     {
         // TODO: Check already exist same process =>      ps -a | grep 'app:update-pub-keys'
         $actions = $this->getActionsToProcess();
+        $processedActions = 0;
 
         foreach ($actions as $action) {
             $lock = $this->lockFactory->createLock($action->getPermission()->getUuid());
             $lock->acquire(true);
             try {
-                $output->writeln(sprintf('Action "%s"', $action->getActionToDo()->value));
+                $output->writeln(
+                    sprintf('Action "%s"', $action->getActionToDo()->value),
+                    OutputInterface::VERBOSITY_VERBOSE,
+                );
                 $this->doAction($action);
                 $this->actionUserOnMachineRepository->save($action->setProcessed(true));
-                $output->writeln('Completed Successfully');
-                $output->writeln(sprintf('User: %s', $action->getPermission()->getUser()->getEmail()));
-                $output->writeln(sprintf('Machine IP: %s', $action->getMachine()->getIp()));
+                $output->writeln(
+                    'Completed Successfully',
+                    OutputInterface::VERBOSITY_VERBOSE,
+                );
+                $output->writeln(
+                    sprintf('User: %s', $action->getPermission()->getUser()->getEmail()),
+                    OutputInterface::VERBOSITY_VERBOSE,
+                );
+                $output->writeln(
+                    sprintf('Machine IP: %s', $action->getMachine()->getIp()),
+                    OutputInterface::VERBOSITY_VERBOSE,
+                );
+                ++$processedActions;
             } catch (\Exception $exception) {
-                $output->writeln($exception->getMessage());
+                $output->writeln(
+                    $exception->getMessage(),
+                    OutputInterface::VERBOSITY_VERBOSE,
+                );
             } finally {
-                $output->writeln('Finishing action...');
+                $output->writeln(
+                    'Finishing action...',
+                    OutputInterface::VERBOSITY_VERBOSE,
+                );
                 $lock->release();
             }
         }
 
-        $output->writeln(sprintf('Processed all actions (%s)', count($actions)));
+        $output->writeln(
+            sprintf('Processed all actions (%s)', $processedActions),
+            OutputInterface::VERBOSITY_VERBOSE,
+        );
         return Command::SUCCESS;
     }
 
@@ -79,7 +102,7 @@ class ManageUserKeysOnMachinesCommand extends Command
 
     private function doAction(mixed $action): void
     {
-        $publicKey = $action->getPermission()->getUser()->getPubKey();
+        $publicKey = $action->getPubKey();
 
         if (is_null($publicKey)) {
             return;

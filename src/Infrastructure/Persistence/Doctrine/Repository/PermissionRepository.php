@@ -74,11 +74,12 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
             }
             $queryBuilder->andWhere(
                 sprintf(
-                    'permissions.relatedEntityUuid IN (%s)',
+                    '%s.relatedEntityUuid IN (%s)',
+                    $this->getAliasTable(),
                     implode(
                         ',',
                         array_map(fn($entityUuid) => "'$entityUuid'", $childrenUuidRelatedWithCurrentEntity)
-                    )
+                    ),
                 )
             );
         }
@@ -142,7 +143,8 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
             implode(' OR ', $additionalConditions)
         ));
 
-        return $queryBuilder->getQuery()->getResult();
+        $result = $queryBuilder->getQuery()->getResult();
+        return $result;
     }
 
     /**

@@ -11,7 +11,7 @@ class ManagePublicKeysService implements \App\Application\Shared\Service\ManageP
     public function __construct(
         private readonly int $port = 2222,
         private readonly string $username = 'keyscom',
-        private readonly string $privateKey = '/opt/config/id_rsa_keyscom',
+        private readonly string $privateKey = '/root/.ssh/keyscom',
     ) {}
 
     public function add(string $machineIp, string $publicKey): void

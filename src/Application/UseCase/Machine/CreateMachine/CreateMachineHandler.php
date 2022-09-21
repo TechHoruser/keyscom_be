@@ -11,11 +11,20 @@ use App\Domain\Machine\Entity\Machine;
 use App\Domain\Machine\Repository\MachineRepositoryInterface;
 use App\Domain\Project\Repository\ProjectRepositoryInterface;
 use App\Domain\Shared\Errors\DomainError;
+use App\Domain\User\Entity\ActionUserOnMachine;
+use App\Domain\User\Enums\ActionOfUserOnMachine;
+use App\Domain\User\Enums\PermissionRelatedEntity;
 use App\Domain\User\Enums\PermissionType;
+use App\Domain\User\Repository\ActionUserOnMachineRepositoryInterface;
+use App\Domain\User\Repository\PermissionRepositoryInterface;
+use App\Domain\User\Repository\UserRepositoryInterface;
 
 class CreateMachineHandler implements CommandHandlerInterface
 {
     public function __construct(
+        private readonly UserRepositoryInterface $userRepository,
+        private readonly PermissionRepositoryInterface $permissionRepository,
+        private readonly ActionUserOnMachineRepositoryInterface $actionUserOnMachineRepository,
         private readonly MachineRepositoryInterface $machineRepository,
         private readonly ProjectRepositoryInterface $projectRepository,
         private readonly MachineMapper $machineMapper,
@@ -36,6 +45,31 @@ class CreateMachineHandler implements CommandHandlerInterface
             $createMachineCommand->type,
             $project,
         ));
+
+        $users = $this->userRepository->complexFind();
+
+        foreach ($users as $user) {
+            $permissions = $this->permissionRepository->getParentOrSamePermissionOfUser(
+                $user,
+                PermissionType::SSH,
+                PermissionRelatedEntity::MACHINE,
+                null,
+                $machine->getUuid(),
+            );
+            foreach ($permissions as $permission) {
+                if ($user->getPubKey()) {
+                    $this->actionUserOnMachineRepository->save(
+                        new ActionUserOnMachine(
+                            null,
+                            $permission,
+                            $machine,
+                            $user->getPubKey(),
+                            ActionOfUserOnMachine::ADD
+                        )
+                    );
+                }
+            }
+        }
 
         return $this->machineMapper->map($machine);
     }
